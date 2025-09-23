@@ -249,7 +249,7 @@ export default function HomePage() {
                         <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
                         <div className="mb-2">
                           <span className="text-3xl font-bold">{plan.price}</span>
-                          <span className="text-gray-600">/{plan.period}</span>
+                          {plan.period && <span className="text-gray-600">/{plan.period}</span>}
                         </div>
                       </div>
                       

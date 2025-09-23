@@ -17,7 +17,7 @@ export const services: Service[] = [
       {
         name: "免费版代开通",
         price: "¥35",
-        period: "月",
+        period: "",
         features: [
           "代开通ChatGPT免费账号",
           "赠送VPN 1个月",
