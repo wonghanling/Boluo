@@ -266,12 +266,10 @@ export default function HomePage() {
                 </div>
                 
                 <div className="mt-8 text-center">
-                  <Button 
+                  <Button
                     className="text-lg px-8 py-4 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 font-normal"
                     onClick={() => {
-                      if (selectedService?.id === 'others') {
-                        window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
-                      }
+                      window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
                       setServiceModalOpen(false)
                     }}
                     disabled={selectedService?.id !== 'others' && selectedPlan === null}
