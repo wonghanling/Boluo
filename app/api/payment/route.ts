@@ -66,9 +66,19 @@ export async function POST(request: NextRequest) {
 
     // 构建请求参数
     const requestParams = new URLSearchParams({
-      ...params,
+      version: params.version,
+      appid: params.appid,
+      trade_order_id: params.trade_order_id,
+      total_fee: params.total_fee,
+      title: params.title,
+      time: params.time.toString(),
+      notify_url: params.notify_url,
+      nonce_str: params.nonce_str,
+      type: params.type,
+      wap_url: params.wap_url,
+      wap_name: params.wap_name,
       hash,
-    } as Record<string, string>)
+    })
 
     // 发起支付请求
     const response = await fetch('https://api.xunhupay.com/payment/do.html', {
