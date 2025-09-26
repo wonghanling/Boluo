@@ -44,6 +44,59 @@ export default function HomePage() {
     alert("微信号已复制到剪贴板")
   }
 
+  const handlePayment = async () => {
+    if (!selectedService || selectedPlan === null) {
+      alert('请先选择套餐')
+      return
+    }
+
+    const plan = selectedService.pricing[selectedPlan]
+
+    // 解析价格（去掉 ¥ 符号和 /月 等后缀）
+    const priceStr = plan.price.replace(/[¥￥]/g, '').replace(/\/.*$/, '')
+    const amount = parseFloat(priceStr)
+
+    if (isNaN(amount) || amount <= 0) {
+      alert('价格信息异常，请联系客服')
+      return
+    }
+
+    try {
+      // 生成订单号
+      const orderId = `${selectedService.id}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+      // 构建订单标题
+      const title = `${selectedService.name} - ${plan.name}`
+
+      const response = await fetch('/api/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId,
+          amount: amount.toString(),
+          title,
+          serviceType: selectedService.id,
+          planIndex: selectedPlan,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        // 跳转到支付页面
+        window.open(result.payUrl, '_blank')
+        setServiceModalOpen(false)
+      } else {
+        alert(result.error || '支付创建失败')
+      }
+    } catch (error) {
+      console.error('支付错误:', error)
+      alert('支付接口异常，请稍后重试')
+    }
+  }
+
   const handleServiceClick = (service: any) => {
     // 暂时禁用网络云加速服务的弹窗
     if (service.id === 'network') {
@@ -98,8 +151,25 @@ export default function HomePage() {
               >
                 {heroContent.primaryCta}
               </Button>
-              <Button size="lg" className="text-lg px-8 py-4 bg-transparent text-gray-800 border-2 border-gray-700 hover:bg-gray-100" asChild>
-                <Link href="#services">{heroContent.secondaryCta}</Link>
+              <Button
+                size="lg"
+                className={`text-lg px-8 py-6 bg-transparent border-2 font-normal transition-all ${
+                  true ? // 开发阶段设为true，部署时改为false或真实支付状态
+                  'text-white border-white hover:bg-white hover:text-gray-800' :
+                  'text-gray-400 border-gray-400 cursor-not-allowed opacity-60'
+                }`}
+                onClick={() => {
+                  if (true) { // 开发阶段设为true，部署时改为false或真实支付状态检查
+                    // 跳转到会员领取页面
+                    window.open('/claim-membership', '_blank')
+                  }
+                }}
+                disabled={!true} // 开发阶段设为true，部署时改为false或真实支付状态检查
+              >
+                <div className="flex flex-col items-center justify-center space-y-1">
+                  <span className="font-semibold text-base">领取购买的会员</span>
+                  <span className="text-xs opacity-80 font-light">用户付款成功可点击领取</span>
+                </div>
               </Button>
             </motion.div>
           </motion.div>
@@ -269,12 +339,16 @@ export default function HomePage() {
                   <Button
                     className="text-lg px-8 py-4 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 font-normal"
                     onClick={() => {
-                      window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
-                      setServiceModalOpen(false)
+                      if (selectedService?.id === 'others') {
+                        window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
+                        setServiceModalOpen(false)
+                      } else {
+                        handlePayment()
+                      }
                     }}
                     disabled={selectedService?.id !== 'others' && selectedPlan === null}
                   >
-                    {selectedService?.id === 'others' ? '联系微信' : '立即购买'}
+                    {selectedService?.id === 'others' ? '联系微信' : '立即支付'}
                   </Button>
                 </div>
               </div>
