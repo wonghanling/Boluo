@@ -361,11 +361,11 @@ export default function HomePage() {
               </DialogHeader>
               
               <div className="mt-6">
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {selectedService.pricing?.map((plan: any, index: number) => (
                     <div
                       key={index}
-                      className={`relative p-6 rounded-2xl text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
+                      className={`relative p-4 rounded-2xl text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
                         selectedPlan === index
                           ? 'bg-yellow-400 border-2 border-blue-600'
                           : 'bg-yellow-400 hover:shadow-xl'
@@ -374,25 +374,25 @@ export default function HomePage() {
                     >
                       {plan.popular && (
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                          <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
                             热门
                           </span>
                         </div>
                       )}
-                      
-                      <div className="text-center mb-6">
-                        <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+
+                      <div className="text-center mb-4">
+                        <h3 className="text-lg font-bold mb-1">{plan.name}</h3>
                         <div className="mb-2">
-                          <span className="text-3xl font-bold">{plan.price}</span>
-                          {plan.period && <span className="text-gray-600">/{plan.period}</span>}
+                          <span className="text-2xl sm:text-3xl font-bold">{plan.price}</span>
+                          {plan.period && <span className="text-gray-600 text-sm">/{plan.period}</span>}
                         </div>
                       </div>
-                      
-                      <ul className="space-y-3">
+
+                      <ul className="space-y-2">
                         {plan.features?.map((feature: string, idx: number) => (
-                          <li key={idx} className="flex items-center text-sm">
-                            <Icons.Check className="h-4 w-4 text-blue-600 mr-2 flex-shrink-0" />
-                            <span>{feature}</span>
+                          <li key={idx} className="flex items-start text-xs sm:text-sm">
+                            <Icons.Check className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                            <span className="leading-tight">{feature}</span>
                           </li>
                         ))}
                       </ul>
