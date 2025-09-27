@@ -2,11 +2,25 @@
 
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle, BookOpen, Play, FileText, ExternalLink } from "lucide-react"
-import React from "react"
-import Script from "next/script"
+import React, { useEffect } from "react"
 
 export default function ClaimMembershipPage() {
   const [showTutorialOptions, setShowTutorialOptions] = React.useState(false)
+
+  // 简化的脚本加载
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://server.fillout.com/embed/v1/'
+    script.async = true
+    document.head.appendChild(script)
+
+    return () => {
+      // 清理脚本
+      if (document.head.contains(script)) {
+        document.head.removeChild(script)
+      }
+    }
+  }, [])
 
   const handleTutorialClick = () => {
     setShowTutorialOptions(!showTutorialOptions)
@@ -135,6 +149,15 @@ export default function ClaimMembershipPage() {
               <p className="text-lg text-white opacity-90">
                 请填写以下信息，我们将为您快速开通服务
               </p>
+
+              {/* 添加标注信息 */}
+              <div className="mt-6 mb-6 text-left max-w-3xl mx-auto">
+                <p className="text-sm text-white opacity-90 mb-2 font-medium">标注：</p>
+                <div className="text-sm text-white opacity-80 space-y-2">
+                  <p>1. ChatGPT独享代充 ¥169/月 需要提供您的ChatGPT账号和ChatGPT支付链接URL可以点击获取填写。</p>
+                  <p>2. 其它业务请填写好信息为您开通发送邮件给您。</p>
+                </div>
+              </div>
             </div>
 
             {/* 第三方表单 - 缩小尺寸 */}
@@ -152,12 +175,6 @@ export default function ClaimMembershipPage() {
           </div>
         </div>
       </div>
-
-      {/* 加载第三方表单脚本 */}
-      <Script
-        src="https://server.fillout.com/embed/v1/"
-        strategy="afterInteractive"
-      />
     </div>
   )
 }

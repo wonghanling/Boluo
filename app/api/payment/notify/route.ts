@@ -48,15 +48,32 @@ export async function POST(request: NextRequest) {
         transactionId: body.transaction_id
       })
 
-      // 这里可以添加订单处理逻辑
-      // 1. 根据订单号查询数据库
-      // 2. 更新订单状态
-      // 3. 发送服务开通通知等
+      // 生成安全令牌
+      try {
+        const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderId: body.trade_order_id
+          })
+        })
 
-      // TODO: 添加具体的业务处理逻辑
-      // - 更新订单状态为已支付
-      // - 根据服务类型开通对应服务
-      // - 发送邮件/微信通知用户
+        const tokenResult = await tokenResponse.json()
+
+        if (tokenResult.success) {
+          console.log('✅ 令牌生成成功:', tokenResult.token)
+
+          // 注意：虎皮椒回调不能直接跳转用户页面
+          // 实际跳转需要在支付接口的return_url中处理
+          // 这里只是生成令牌供后续使用
+        } else {
+          console.error('❌ 生成令牌失败:', tokenResult.error)
+        }
+      } catch (tokenError) {
+        console.error('❌ 令牌生成接口调用失败:', tokenError)
+      }
 
     } else {
       console.log('支付未成功:', {

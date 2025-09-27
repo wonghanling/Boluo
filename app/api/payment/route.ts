@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
       title: title,
       time: nowDate(),
       notify_url: `${notifyUrl}/api/payment/notify`,
+      return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}`, // 支付成功跳转
       nonce_str: generateUUID(),
       type: 'WAP',
       wap_url: notifyUrl,

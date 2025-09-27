@@ -33,6 +33,43 @@ const staggerContainer = {
 }
 
 export default function HomePage() {
+  // 检查令牌状态
+  const [canClaimMembership, setCanClaimMembership] = React.useState(false)
+  const [currentToken, setCurrentToken] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    // 检查URL参数中的token
+    const urlParams = new URLSearchParams(window.location.search)
+    const token = urlParams.get('token')
+
+    if (token) {
+      // 验证令牌
+      fetch(`/api/token?token=${token}`)
+        .then(response => response.json())
+        .then(result => {
+          if (result.valid) {
+            setCanClaimMembership(true)
+            setCurrentToken(token)
+            console.log('✅ 令牌验证成功，订单号:', result.orderId)
+          } else {
+            setCanClaimMembership(false)
+            setCurrentToken(null)
+            console.log('❌ 令牌验证失败:', result.reason)
+          }
+        })
+        .catch(error => {
+          console.error('令牌验证请求失败:', error)
+          setCanClaimMembership(false)
+          setCurrentToken(null)
+        })
+    } else {
+      // 没有令牌，检查是否已经使用过（防止重复）
+      const claimed = localStorage.getItem('membershipClaimed')
+      if (claimed === 'true') {
+        setCanClaimMembership(false)
+      }
+    }
+  }, [])
 
   const [openFAQ, setOpenFAQ] = React.useState<number | null>(null)
   const [selectedService, setSelectedService] = React.useState<any>(null)
@@ -154,17 +191,45 @@ export default function HomePage() {
               <Button
                 size="lg"
                 className={`text-lg px-8 py-6 bg-transparent border-2 font-normal transition-all ${
-                  true ? // 开发阶段设为true，部署时改为false或真实支付状态
+                  canClaimMembership ?
                   'text-white border-white hover:bg-white hover:text-gray-800' :
                   'text-gray-400 border-gray-400 cursor-not-allowed opacity-60'
                 }`}
-                onClick={() => {
-                  if (true) { // 开发阶段设为true，部署时改为false或真实支付状态检查
-                    // 跳转到会员领取页面
-                    window.open('/claim-membership', '_blank')
+                onClick={async () => {
+                  if (canClaimMembership && currentToken) {
+                    try {
+                      // 使用令牌（标记为已使用）
+                      const response = await fetch('/api/token', {
+                        method: 'DELETE',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ token: currentToken })
+                      })
+
+                      const result = await response.json()
+
+                      if (result.success) {
+                        // 令牌使用成功，立即禁用按钮
+                        setCanClaimMembership(false)
+                        setCurrentToken(null)
+                        localStorage.setItem('membershipClaimed', 'true')
+
+                        // 跳转到会员领取页面
+                        window.open('/claim-membership', '_blank')
+
+                        console.log('✅ 令牌已使用，订单号:', result.orderId)
+                      } else {
+                        alert('令牌已失效，请重新支付')
+                        console.error('❌ 令牌使用失败:', result.error)
+                      }
+                    } catch (error) {
+                      console.error('令牌使用请求失败:', error)
+                      alert('网络错误，请稍后重试')
+                    }
                   }
                 }}
-                disabled={!true} // 开发阶段设为true，部署时改为false或真实支付状态检查
+                disabled={!canClaimMembership}
               >
                 <div className="flex flex-col items-center justify-center space-y-1">
                   <span className="font-semibold text-base">领取购买的会员</span>
