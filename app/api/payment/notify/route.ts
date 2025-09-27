@@ -15,6 +15,9 @@ function getHash(params: Record<string, any>, appSecret: string): string {
     .join('&')
   const stringSignTemp = sortedParams + appSecret
   const hash = md5(stringSignTemp)
+  console.log('回调验签参数:', sortedParams)
+  console.log('回调验签字符串:', stringSignTemp)
+  console.log('回调生成的签名:', hash)
   return hash
 }
 

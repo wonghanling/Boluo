@@ -15,6 +15,9 @@ function getHash(params: Record<string, any>, appSecret: string): string {
     .join('&')
   const stringSignTemp = sortedParams + appSecret
   const hash = md5(stringSignTemp)
+  console.log('签名参数:', sortedParams)
+  console.log('签名字符串:', stringSignTemp)
+  console.log('生成的签名:', hash)
   return hash
 }
 
@@ -55,12 +58,16 @@ export async function POST(request: NextRequest) {
       title: title,
       time: nowDate(),
       notify_url: `${notifyUrl}/api/payment/notify`,
-      return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}`, // 支付成功跳转
+      return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}`,
       nonce_str: generateUUID(),
       type: 'WAP',
       wap_url: notifyUrl,
-      wap_name: 'BoLuo支付',
+      wap_name: 'BoLuo支付'
     }
+
+    console.log('支付参数:', params)
+    console.log('AppId:', appId)
+    console.log('AppSecret长度:', appSecret?.length)
 
     // 生成签名
     const hash = getHash(params, appSecret)
@@ -74,6 +81,7 @@ export async function POST(request: NextRequest) {
       title: params.title,
       time: params.time.toString(),
       notify_url: params.notify_url,
+      return_url: params.return_url,
       nonce_str: params.nonce_str,
       type: params.type,
       wap_url: params.wap_url,
