@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
+// 强制动态渲染
+export const dynamic = 'force-dynamic'
+
 // 简单的内存存储，生产环境应该使用数据库
 const tokenStore = new Map<string, {
   orderId: string

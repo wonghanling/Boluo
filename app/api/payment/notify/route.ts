@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
+// 强制动态渲染
+export const dynamic = 'force-dynamic'
+
 // 生成MD5哈希
 function md5(text: string): string {
   return crypto.createHash('md5').update(text).digest('hex')

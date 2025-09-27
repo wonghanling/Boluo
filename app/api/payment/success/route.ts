@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// 强制动态渲染
+export const dynamic = 'force-dynamic'
+
 // 用于存储订单到令牌的映射关系
 const orderTokenMap = new Map<string, string>()
 
