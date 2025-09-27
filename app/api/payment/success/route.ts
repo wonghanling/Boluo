@@ -6,7 +6,7 @@ const orderTokenMap = new Map<string, string>()
 // 支付成功后，根据订单号获取令牌跳转链接
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const orderId = searchParams.get('orderId')
 
     if (!orderId) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 生成令牌
-    const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/token`, {
+    const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://boluo.onrender.com'}/api/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,15 +26,15 @@ export async function GET(request: NextRequest) {
 
     if (tokenResult.success) {
       // 跳转到带令牌的首页
-      const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}?token=${tokenResult.token}`
+      const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://boluo.onrender.com'}?token=${tokenResult.token}`
       return NextResponse.redirect(successUrl)
     } else {
       console.error('令牌生成失败:', tokenResult.error)
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/`)
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://boluo.onrender.com'}/`)
     }
 
   } catch (error) {
     console.error('支付成功跳转处理错误:', error)
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/`)
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://boluo.onrender.com'}/`)
   }
 }
