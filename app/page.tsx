@@ -237,6 +237,60 @@ export default function HomePage() {
                 </div>
               </Button>
             </motion.div>
+
+            {/* 动态提示 - 移到按钮外层确保居中 */}
+            <motion.div
+              className="mt-4 flex flex-col items-center space-y-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.5 }}
+            >
+              {/* 向上的三个箭头动画 */}
+              <div className="flex space-x-1">
+                {[0, 1, 2].map((index) => (
+                  <motion.div
+                    key={index}
+                    className="text-black text-3xl font-black"
+                    style={{ fontWeight: 900 }}
+                    animate={{
+                      y: [0, -8, 0],
+                      opacity: [0.5, 1, 0.5]
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      delay: index * 0.2
+                    }}
+                  >
+                    ▲
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* 提示文案 */}
+              <div className="text-center text-black">
+                <div
+                  className="text-sm font-black"
+                  style={{
+                    fontWeight: 900,
+                    fontFamily: '"Impact", "Franklin Gothic Heavy", "Arial Black", "黑体", "SimHei", "Microsoft YaHei Heavy", sans-serif',
+                    letterSpacing: '-0.5px'
+                  }}
+                >
+                  完成支付按钮可点击
+                </div>
+                <div
+                  className="text-sm font-black"
+                  style={{
+                    fontWeight: 900,
+                    fontFamily: '"Impact", "Franklin Gothic Heavy", "Arial Black", "黑体", "SimHei", "Microsoft YaHei Heavy", sans-serif',
+                    letterSpacing: '-0.5px'
+                  }}
+                >
+                  一次进入
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -350,22 +404,22 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto p-4">
           {selectedService && (
             <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold">{selectedService.name}</DialogTitle>
-                <DialogDescription className="text-lg">
+              <DialogHeader className="pb-2">
+                <DialogTitle className="text-lg sm:text-xl font-bold">{selectedService.name}</DialogTitle>
+                <DialogDescription className="text-sm sm:text-base">
                   {selectedService.description}
                 </DialogDescription>
               </DialogHeader>
-              
-              <div className="mt-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+              <div className="mt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedService.pricing?.map((plan: any, index: number) => (
                     <div
                       key={index}
-                      className={`relative p-4 rounded-2xl text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
+                      className={`relative p-2 rounded-lg text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
                         selectedPlan === index
                           ? 'bg-yellow-400 border-2 border-blue-600'
                           : 'bg-yellow-400 hover:shadow-xl'
@@ -373,36 +427,36 @@ export default function HomePage() {
                       onClick={() => handlePlanSelect(index)}
                     >
                       {plan.popular && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+                        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2">
+                          <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-medium">
                             热门
                           </span>
                         </div>
                       )}
 
-                      <div className="text-center mb-4">
-                        <h3 className="text-lg font-bold mb-1">{plan.name}</h3>
-                        <div className="mb-2">
-                          <span className="text-2xl sm:text-3xl font-bold">{plan.price}</span>
-                          {plan.period && <span className="text-gray-600 text-sm">/{plan.period}</span>}
+                      <div className="text-center mb-2">
+                        <h3 className="text-sm sm:text-base font-bold mb-0.5">{plan.name}</h3>
+                        <div className="mb-1">
+                          <span className="text-lg sm:text-xl font-bold">{plan.price}</span>
+                          {plan.period && <span className="text-gray-600 text-xs">/{plan.period}</span>}
                         </div>
                       </div>
 
-                      <ul className="space-y-2">
-                        {plan.features?.map((feature: string, idx: number) => (
-                          <li key={idx} className="flex items-start text-xs sm:text-sm">
-                            <Icons.Check className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                            <span className="leading-tight">{feature}</span>
+                      <ul className="space-y-0.5">
+                        {plan.features?.slice(0, 5).map((feature: string, idx: number) => (
+                          <li key={idx} className="flex items-start text-xs leading-tight">
+                            <Icons.Check className="h-2.5 w-2.5 text-blue-600 mr-1 mt-0.5 flex-shrink-0" />
+                            <span>{feature}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   ))}
                 </div>
-                
-                <div className="mt-8 text-center">
+
+                <div className="mt-4 text-center">
                   <Button
-                    className="text-lg px-8 py-4 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 font-normal"
+                    className="text-sm sm:text-base px-4 py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 font-normal"
                     onClick={() => {
                       if (selectedService?.id === 'others') {
                         window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')

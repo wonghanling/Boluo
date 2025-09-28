@@ -157,13 +157,13 @@ export const services: Service[] = [
   {
     id: "network",
     name: "网络云加速服务",
-    description: "VPN科学上网魔法服务，网络云加速服务，套餐便宜，速度更快，专业稳定的网络解决方案",
+    description: "不提供境内",
     icon: "Zap",
     href: "#",
     features: [
       "套餐便宜，速度更快",
       "专业稳定的网络解决方案",
-      "全球节点覆盖",
+      "银行级别安全",
       "7×24小时技术支持"
     ],
     pricing: [
