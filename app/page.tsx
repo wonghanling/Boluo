@@ -177,6 +177,12 @@ export default function HomePage() {
             >
               {heroContent.description}
             </motion.p>
+            <motion.p
+              variants={fadeInUp}
+              className="text-base md:text-lg text-black mb-8 max-w-2xl mx-auto font-medium"
+            >
+              领取您的会员/无密码接触充值您的账号
+            </motion.p>
             <motion.div
               variants={fadeInUp}
               className="flex flex-col sm:flex-row gap-4 justify-center"
@@ -193,7 +199,7 @@ export default function HomePage() {
                 className={`text-lg px-8 py-6 bg-transparent border-2 font-normal transition-all ${
                   canClaimMembership ?
                   'text-white border-white hover:bg-white hover:text-gray-800' :
-                  'text-gray-400 border-gray-400 cursor-not-allowed opacity-60'
+                  'text-white/60 border-white/60 cursor-not-allowed'
                 }`}
                 onClick={async () => {
                   if (canClaimMembership && currentToken) {
@@ -232,8 +238,8 @@ export default function HomePage() {
                 disabled={!canClaimMembership}
               >
                 <div className="flex flex-col items-center justify-center space-y-1">
-                  <span className="font-semibold text-base">领取购买的会员</span>
-                  <span className="text-xs opacity-80 font-light">用户付款成功可点击领取</span>
+                  <span className="font-semibold text-sm sm:text-base">填写您的ChatGPT账号信息/系统会自动充值</span>
+                  <span className="text-xs font-light">进去领取您购买的服务</span>
                 </div>
               </Button>
             </motion.div>
