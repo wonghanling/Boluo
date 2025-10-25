@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User, AuthError } from '@supabase/supabase-js'
-import { supabase, userProfile, UserProfile } from '@/lib/supabase'
+import { supabase, userProfile as userProfileAPI, UserProfile } from '@/lib/supabase'
 
 // 认证上下文类型定义
 interface AuthContextType {
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 获取用户资料
   const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await userProfile.get(userId)
+      const { data, error } = await userProfileAPI.get(userId)
       if (error) {
         console.error('Error fetching user profile:', error)
         return
@@ -223,7 +223,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const { error } = await userProfile.update(user.id, updates)
+      const { error } = await userProfileAPI.update(user.id, updates)
 
       if (!error) {
         // 刷新本地资料
