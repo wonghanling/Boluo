@@ -17,6 +17,7 @@ export interface UserProfile {
   id: string
   email: string
   qq_email: string
+  display_name?: string
   created_at: string
   updated_at: string
   email_verified: boolean
