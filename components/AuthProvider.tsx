@@ -123,7 +123,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
 
       if (error) {
-        return { error }
+        return { error: error || undefined }
       }
 
       // 如果用户创建成功，创建用户资料
@@ -151,7 +151,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
 
       if (error) {
-        return { error }
+        return { error: error || undefined }
       }
 
       if (data.user) {
@@ -179,7 +179,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUserProfile(null)
       }
 
-      return { error }
+      return { error: error || undefined }
     } catch (error) {
       console.error('SignOut error:', error)
       return { error: error as AuthError }
@@ -195,7 +195,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/auth/callback`
       })
 
-      return { error }
+      return { error: error || undefined }
     } catch (error) {
       console.error('Reset password error:', error)
       return { error: error as AuthError }
@@ -209,7 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password
       })
 
-      return { error }
+      return { error: error || undefined }
     } catch (error) {
       console.error('Update password error:', error)
       return { error: error as AuthError }
