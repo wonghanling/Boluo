@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { createClient } from '@supabase/supabase-js'
 
 // 强制动态渲染
 export const dynamic = 'force-dynamic'
+
+// 初始化 Supabase 客户端（用于服务端）
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 // 生成MD5哈希
 function md5(text: string): string {
@@ -79,6 +85,30 @@ export async function POST(request: NextRequest) {
         }
       } catch (tokenError) {
         console.error('❌ 令牌生成接口调用失败:', tokenError)
+      }
+
+      // 【新增】保存订单信息到 user_orders 表
+      // 注意：这个操作独立进行，即使失败也不影响上面的token生成
+      try {
+        const { error: saveError } = await supabase
+          .from('user_orders')
+          .insert({
+            order_id: body.trade_order_id,
+            service_type: body.title || '未知服务',
+            amount: parseFloat(body.total_fee),
+            status: 'completed',
+            payment_method: 'xunhupay',
+            transaction_id: body.transaction_id,
+            user_id: null // 此时还没有user_id，后续用户提交表单时可以关联
+          })
+
+        if (saveError) {
+          console.error('❌ 保存订单信息失败（不影响支付流程）:', saveError)
+        } else {
+          console.log('✅ 订单信息已保存到 user_orders 表')
+        }
+      } catch (saveOrderError) {
+        console.error('❌ 保存订单信息异常（不影响支付流程）:', saveOrderError)
       }
 
     } else {
