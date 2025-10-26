@@ -80,7 +80,7 @@ export function Header() {
               </div>
             ) : user ? (
               // 已登录用户菜单
-              <div className="relative hidden md:block">
+              <div className="relative">
                 <Button
                   variant="ghost"
                   className="flex items-center space-x-2 px-3 py-2 h-auto"
@@ -151,7 +151,7 @@ export function Header() {
               </div>
             ) : (
               // 未登录状态 - 登录/注册按钮
-              <div className="hidden md:flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -276,30 +276,7 @@ export function Header() {
                     </button>
                   </div>
                 </div>
-              ) : (
-                // 未登录状态 - 登录/注册按钮
-                <div className="pt-4 border-t space-y-2">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => {
-                      router.push('/auth/login')
-                      setMobileMenuOpen(false)
-                    }}
-                  >
-                    登录
-                  </Button>
-                  <Button
-                    className="w-full"
-                    onClick={() => {
-                      router.push('/auth/signup')
-                      setMobileMenuOpen(false)
-                    }}
-                  >
-                    注册
-                  </Button>
-                </div>
-              )}
+              ) : null}
 
               {/* 立即联系按钮 */}
               <div className="pt-4 border-t">
