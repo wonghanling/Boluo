@@ -122,8 +122,36 @@ export default function HomePage() {
       const result = await response.json()
 
       if (result.success) {
-        // 跳转到支付页面
-        window.open(result.payUrl, '_blank')
+        // 根据设备类型处理支付
+        if (deviceType === 'pc') {
+          // PC端：显示支付提示模态框
+          const paymentModal = document.createElement('div')
+          paymentModal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
+            justify-content: center; align-items: center;
+          `
+          paymentModal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 10px; max-width: 400px; text-align: center;">
+              <h3 style="margin-bottom: 20px; font-size: 18px; font-weight: bold;">📱 手机端支付提示</h3>
+              <p style="margin-bottom: 20px; color: #666;">检测到您正在使用电脑访问，当前支付需要在手机端完成。</p>
+              <div style="text-align: left; margin-bottom: 20px;">
+                <p style="font-weight: bold; margin-bottom: 10px;">请按以下步骤操作：</p>
+                <p style="margin: 5px 0;">1️⃣ 点击下方"复制支付链接"按钮</p>
+                <p style="margin: 5px 0;">2️⃣ 在手机浏览器中粘贴并打开链接</p>
+                <p style="margin: 5px 0;">3️⃣ 完成支付宝付款</p>
+              </div>
+              <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="navigator.clipboard.writeText('${result.payUrl}').then(() => alert('支付链接已复制到剪贴板！'))" style="background: #1976d2; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">复制支付链接</button>
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #ccc; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">取消</button>
+              </div>
+            </div>
+          `
+          document.body.appendChild(paymentModal)
+        } else {
+          // 移动端：新窗口打开
+          window.open(result.payUrl, '_blank')
+        }
         setServiceModalOpen(false)
       } else {
         alert(result.error || '支付创建失败')
