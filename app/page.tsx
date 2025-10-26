@@ -105,6 +105,10 @@ export default function HomePage() {
       // 构建订单标题
       const title = `${selectedService.name} - ${plan.name}`
 
+      // 检测设备类型
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      const deviceType = isMobile ? 'mobile' : 'pc'
+
       const response = await fetch('/api/payment', {
         method: 'POST',
         headers: {
