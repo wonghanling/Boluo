@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       notify_url: `${notifyUrl}/api/payment/notify`,
       return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}`,
       nonce_str: generateUUID(),
-      type: 'WAP',
+      type: 'NATIVE',
       wap_url: notifyUrl,
       wap_name: 'BoLuo支付'
     }
