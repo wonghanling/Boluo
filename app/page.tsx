@@ -270,8 +270,7 @@ export default function HomePage() {
                 disabled={!canClaimMembership}
               >
                 <div className="flex flex-col items-center justify-center space-y-1">
-                  <span className="font-semibold text-sm sm:text-base">填写您的ChatGPT账号信息/系统会自动充值</span>
-                  <span className="text-xs font-light">进去领取您购买的服务</span>
+                  <span className="font-semibold text-sm sm:text-base">进入领取</span>
                 </div>
               </Button>
             </motion.div>
