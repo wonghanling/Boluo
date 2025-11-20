@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight, MessageCircle, BookOpen, Play, FileText, ExternalLink } from "lucide-react"
+import { ArrowRight, MessageCircle, BookOpen, ExternalLink } from "lucide-react"
 import ServiceSubmissionForm from "@/components/ServiceSubmissionForm"
 
 type PageProps = {
