@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle, BookOpen, Play, FileText, ExternalLink } from "lucide-react"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import ServiceSubmissionForm from "@/components/ServiceSubmissionForm"
 
-export default function ClaimMembershipPage() {
+function ClaimMembershipContent() {
   const searchParams = useSearchParams()
   const [showTutorialOptions, setShowTutorialOptions] = useState(false)
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
@@ -48,6 +48,7 @@ export default function ClaimMembershipPage() {
     // 后期添加视频教程链接
     alert('视频教程即将推出，敬请期待！')
   }
+
   return (
     <div className="min-h-screen">
       <div className="bg-gradient-to-b from-yellow-400 via-yellow-400 to-blue-600 pb-6">
@@ -177,5 +178,13 @@ export default function ClaimMembershipPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ClaimMembershipPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">加载中...</div>}>
+      <ClaimMembershipContent />
+    </Suspense>
   )
 }

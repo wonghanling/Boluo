@@ -52,6 +52,34 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '支付配置缺失' }, { status: 500 })
     }
 
+    // 获取请求IP和User Agent
+    const forwardedFor = request.headers.get('x-forwarded-for')
+    const realIP = request.headers.get('x-real-ip')
+    const clientIP = forwardedFor?.split(',')[0] || realIP || '未知'
+    const userAgent = request.headers.get('user-agent') || '未知'
+
+    // 保存订单到数据库
+    const { supabase } = await import('@/lib/supabase')
+    const { error: insertError } = await supabase
+      .from('orders')
+      .insert({
+        order_id: orderId,
+        amount: parseFloat(amount),
+        service_type: title,
+        payment_status: 'pending',
+        processing_status: 'waiting_for_info',
+        payment_method: 'xunhupay',
+        ip_address: clientIP,
+        user_agent: userAgent
+      })
+
+    if (insertError) {
+      console.error('保存订单失败:', insertError)
+      return NextResponse.json({ error: '订单创建失败' }, { status: 500 })
+    }
+
+    console.log('✅ 订单已保存到数据库:', orderId)
+
     // 构建支付参数
     const params = {
       version: '1.1',
