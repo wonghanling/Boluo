@@ -36,9 +36,6 @@ const staggerContainer = {
 export default function HomePage() {
   const { user, loading } = useAuth()
 
-  // 检查令牌状态
-  const [canClaimMembership, setCanClaimMembership] = React.useState(false) // 改为false，锁定按钮
-  const [currentToken, setCurrentToken] = React.useState<string | null>(null)
 
   // 注册引导弹窗状态
   const [showRegisterModal, setShowRegisterModal] = React.useState(false)
@@ -61,39 +58,6 @@ export default function HomePage() {
     }
   }, [user, loading, hasShownRegisterPrompt])
 
-  React.useEffect(() => {
-    // 检查URL参数中的token
-    const urlParams = new URLSearchParams(window.location.search)
-    const token = urlParams.get('token')
-
-    if (token) {
-      // 验证令牌
-      fetch(`/api/token?token=${token}`)
-        .then(response => response.json())
-        .then(result => {
-          if (result.valid) {
-            setCanClaimMembership(true)
-            setCurrentToken(token)
-            console.log('✅ 令牌验证成功，订单号:', result.orderId)
-          } else {
-            setCanClaimMembership(false)
-            setCurrentToken(null)
-            console.log('❌ 令牌验证失败:', result.reason)
-          }
-        })
-        .catch(error => {
-          console.error('令牌验证请求失败:', error)
-          setCanClaimMembership(false)
-          setCurrentToken(null)
-        })
-    } else {
-      // 没有令牌，检查是否已经使用过（防止重复）
-      const claimed = localStorage.getItem('membershipClaimed')
-      if (claimed === 'true') {
-        setCanClaimMembership(false)
-      }
-    }
-  }, [])
 
   const [openFAQ, setOpenFAQ] = React.useState<number | null>(null)
   const [selectedService, setSelectedService] = React.useState<any>(null)
@@ -248,36 +212,14 @@ export default function HomePage() {
             </motion.p>
             <motion.div
               variants={fadeInUp}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              className="flex justify-center"
             >
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="text-lg px-8 py-4 bg-transparent text-blue-600 hover:bg-blue-50 border-2 border-blue-600 font-normal"
                 onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
               >
                 {heroContent.primaryCta}
-              </Button>
-              <Button
-                size="lg"
-                className={`text-lg px-8 py-6 bg-transparent border-2 font-normal transition-all ${
-                  canClaimMembership ?
-                  'text-white border-white hover:bg-white hover:text-gray-800' :
-                  'text-white/40 border-white/40 cursor-not-allowed'
-                }`}
-                onClick={() => {
-                  if (!user) {
-                    setShowRegisterModal(true)
-                    return
-                  }
-
-                  // 即使登录也需要先支付才能进入
-                  alert('请先选择并支付相应的服务套餐后再进入')
-                }}
-                disabled={!canClaimMembership} // 始终禁用
-              >
-                <div className="flex flex-col items-center justify-center space-y-1">
-                  <span className="font-semibold text-sm sm:text-base">领取会员</span>
-                </div>
               </Button>
             </motion.div>
 

@@ -11,11 +11,13 @@ export default function ClaimMembershipPage() {
   const [showTutorialOptions, setShowTutorialOptions] = useState(false)
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
   const [serviceName, setServiceName] = useState<string | null>(null)
+  const [orderId, setOrderId] = useState<string | null>(null)
 
   useEffect(() => {
-    // Read URL parameters for payment amount and service name
+    // Read URL parameters for payment amount, service name, and order ID
     const amount = searchParams.get('amount')
     const service = searchParams.get('service')
+    const orderIdParam = searchParams.get('orderId')
 
     if (amount) {
       const numAmount = parseFloat(amount)
@@ -26,6 +28,10 @@ export default function ClaimMembershipPage() {
 
     if (service) {
       setServiceName(service)
+    }
+
+    if (orderIdParam) {
+      setOrderId(orderIdParam)
     }
   }, [searchParams])
 
@@ -164,6 +170,7 @@ export default function ClaimMembershipPage() {
               <ServiceSubmissionForm
                 paymentAmount={paymentAmount}
                 serviceName={serviceName}
+                orderId={orderId}
               />
             </div>
           </div>

@@ -7,9 +7,10 @@ import { useAuth } from "@/components/AuthProvider"
 interface ServiceSubmissionFormProps {
   paymentAmount?: number | null
   serviceName?: string | null
+  orderId?: string | null
 }
 
-export default function ServiceSubmissionForm({ paymentAmount, serviceName }: ServiceSubmissionFormProps) {
+export default function ServiceSubmissionForm({ paymentAmount, serviceName, orderId }: ServiceSubmissionFormProps) {
   const { user } = useAuth()
   const [formData, setFormData] = useState({
     chatgpt_account: '',
@@ -123,27 +124,63 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName }: Se
     setMessage('')
 
     try {
-      const { error } = await supabase
-        .from('service_submissions')
-        .insert({
-          user_id: user?.id || null,
-          chatgpt_account: formData.chatgpt_account || null,
-          chatgpt_payment_url: formData.chatgpt_payment_url || null,
-          claude_email: formData.claude_email || null,
-          service_type: formData.service_type
-        })
+      if (orderId) {
+        // 如果有orderId，更新现有订单记录
+        const { error } = await supabase
+          .from('orders')
+          .update({
+            user_id: user?.id || null,
+            user_email: user?.email || null,
+            chatgpt_account: formData.chatgpt_account || null,
+            chatgpt_payment_url: formData.chatgpt_payment_url || null,
+            claude_email: formData.claude_email || null,
+            processing_status: 'info_submitted',
+            updated_at: new Date().toISOString()
+          })
+          .eq('order_id', orderId)
 
-      if (error) {
-        console.error('Supabase error:', error)
-        setMessage('提交失败，请稍后重试')
+        if (error) {
+          console.error('Supabase update error:', error)
+          setMessage('提交失败，请稍后重试')
+        } else {
+          setMessage('提交成功！我们将尽快为您处理服务')
+          // 清空表单
+          setFormData({
+            chatgpt_account: '',
+            chatgpt_payment_url: '',
+            claude_email: '',
+            service_type: getServiceTypeFromAmount(paymentAmount || 35)
+          })
+        }
       } else {
-        setMessage('提交成功！我们将尽快为您处理')
-        setFormData({
-          chatgpt_account: '',
-          chatgpt_payment_url: '',
-          claude_email: '',
-          service_type: 'ChatGPT免费版代开通35'
-        })
+        // 如果没有orderId，创建新的订单记录（兼容旧流程）
+        const { error } = await supabase
+          .from('orders')
+          .insert({
+            user_id: user?.id || null,
+            user_email: user?.email || null,
+            order_id: `manual_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            amount: paymentAmount || 0,
+            service_type: formData.service_type,
+            payment_status: 'pending',
+            processing_status: 'info_submitted',
+            chatgpt_account: formData.chatgpt_account || null,
+            chatgpt_payment_url: formData.chatgpt_payment_url || null,
+            claude_email: formData.claude_email || null
+          })
+
+        if (error) {
+          console.error('Supabase insert error:', error)
+          setMessage('提交失败，请稍后重试')
+        } else {
+          setMessage('提交成功！我们将尽快为您处理')
+          setFormData({
+            chatgpt_account: '',
+            chatgpt_payment_url: '',
+            claude_email: '',
+            service_type: 'ChatGPT免费版代开通35'
+          })
+        }
       }
     } catch (error) {
       console.error('Catch error:', error)

@@ -87,28 +87,51 @@ export async function POST(request: NextRequest) {
         console.error('❌ 令牌生成接口调用失败:', tokenError)
       }
 
-      // 【新增】保存订单信息到 user_orders 表
-      // 注意：这个操作独立进行，即使失败也不影响上面的token生成
+      // 【更新】保存/更新订单信息到新的统一 orders 表
       try {
-        const { error: saveError } = await supabase
-          .from('user_orders')
-          .insert({
-            order_id: body.trade_order_id,
-            service_type: body.title || '未知服务',
-            amount: parseFloat(body.total_fee),
-            status: 'completed',
-            payment_method: 'xunhupay',
-            transaction_id: body.transaction_id,
-            user_id: null // 此时还没有user_id，后续用户提交表单时可以关联
-          })
+        // 先检查订单是否已存在
+        const { data: existingOrder } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('order_id', body.trade_order_id)
+          .single()
 
-        if (saveError) {
-          console.error('❌ 保存订单信息失败（不影响支付流程）:', saveError)
+        if (existingOrder) {
+          // 订单存在，更新支付状态
+          const { error: updateError } = await supabase
+            .from('orders')
+            .update({
+              payment_status: 'paid',
+              updated_at: new Date().toISOString()
+            })
+            .eq('order_id', body.trade_order_id)
+
+          if (updateError) {
+            console.error('❌ 更新订单支付状态失败:', updateError)
+          } else {
+            console.log('✅ 订单支付状态已更新为已支付')
+          }
         } else {
-          console.log('✅ 订单信息已保存到 user_orders 表')
+          // 订单不存在，创建新订单记录
+          const { error: insertError } = await supabase
+            .from('orders')
+            .insert({
+              order_id: body.trade_order_id,
+              amount: parseFloat(body.total_fee),
+              service_type: body.title || '未知服务',
+              payment_status: 'paid',
+              processing_status: 'waiting_for_info',
+              payment_method: 'xunhupay'
+            })
+
+          if (insertError) {
+            console.error('❌ 创建订单记录失败:', insertError)
+          } else {
+            console.log('✅ 新订单记录已创建并标记为已支付')
+          }
         }
       } catch (saveOrderError) {
-        console.error('❌ 保存订单信息异常（不影响支付流程）:', saveOrderError)
+        console.error('❌ 处理订单信息异常（不影响支付流程）:', saveOrderError)
       }
 
     } else {
