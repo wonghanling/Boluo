@@ -13,104 +13,61 @@ export default function AuthCallbackPage() {
   const [message, setMessage] = useState('')
 
   useEffect(() => {
-    const handleAuthCallback = async () => {
+    const handleEmailVerification = async () => {
       try {
-        // 检查URL中的令牌参数
-        const access_token = searchParams.get('access_token')
-        const refresh_token = searchParams.get('refresh_token')
-        const type = searchParams.get('type')
-        const error = searchParams.get('error')
-        const error_description = searchParams.get('error_description')
+        console.log('🔍 开始处理邮箱验证...')
 
-        // 如果有错误参数，直接显示错误
+        // 等待一下让Supabase处理完成
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
+        // 直接检查当前用户状态
+        const { data: { user }, error } = await supabase.auth.getUser()
+
+        console.log('📧 当前用户状态:', user ? '已登录' : '未登录', error)
+
         if (error) {
-          console.error('URL error:', error, error_description)
+          console.error('❌ 获取用户状态失败:', error)
           setStatus('error')
-          setMessage(error_description || '验证链接无效或已过期')
+          setMessage('验证过程中发生错误，请重新注册')
           return
         }
 
-        if (type === 'signup') {
-          // 邮箱验证回调
-          if (access_token && refresh_token) {
-            // 设置会话（新式验证）
-            const { data, error } = await supabase.auth.setSession({
-              access_token,
-              refresh_token,
-            })
+        if (user) {
+          console.log('✅ 用户已登录，邮箱:', user.email)
 
-            if (error) {
-              console.error('Session error:', error)
-              setStatus('error')
-              setMessage('邮箱验证失败，请稍后重试')
-              return
-            }
-
-            if (data.user) {
-              setStatus('success')
-              setMessage('邮箱验证成功！您的账户已激活，可以正常使用所有功能。')
-            }
-          } else {
-            // 尝试获取当前会话（老式验证可能已经设置了会话）
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-
-            if (sessionError) {
-              console.error('Session check error:', sessionError)
-              setStatus('error')
-              setMessage('验证链接无效或已过期')
-              return
-            }
-
-            if (session?.user) {
-              setStatus('success')
-              setMessage('邮箱验证成功！您的账户已激活，可以正常使用所有功能。')
-            } else {
-              setStatus('error')
-              setMessage('验证链接无效或已过期')
-            }
-          }
-        } else if (type === 'recovery') {
-          // 密码重置回调
-          if (access_token && refresh_token) {
-            const { error } = await supabase.auth.setSession({
-              access_token,
-              refresh_token,
-            })
-
-            if (error) {
-              setStatus('error')
-              setMessage('密码重置链接无效或已过期')
-              return
-            }
-
+          // 检查邮箱是否已验证
+          if (user.email_confirmed_at) {
+            console.log('✅ 邮箱已验证，时间:', user.email_confirmed_at)
             setStatus('success')
-            setMessage('身份验证成功！请设置您的新密码。')
-
-            // 跳转到密码重置页面
-            setTimeout(() => {
-              router.push('/auth/reset-password')
-            }, 2000)
+            setMessage('邮箱验证成功！您的账户已激活。')
+          } else {
+            console.log('⚠️ 邮箱未验证')
+            setStatus('error')
+            setMessage('邮箱验证未完成，请检查邮件并重新点击验证链接')
           }
         } else {
-          // 其他类型的回调
+          console.log('❌ 用户未登录')
           setStatus('error')
-          setMessage('无效的验证链接')
+          setMessage('验证链接无效或已过期，请重新注册')
         }
+
       } catch (error) {
-        console.error('Auth callback error:', error)
+        console.error('❌ 验证处理异常:', error)
         setStatus('error')
         setMessage('验证过程中发生错误，请稍后重试')
       }
     }
 
-    handleAuthCallback()
-  }, [searchParams, router])
+    // 延迟执行，让页面完全加载
+    const timer = setTimeout(handleEmailVerification, 500)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleContinue = () => {
     if (status === 'success') {
       router.push('/')
     } else {
-      router.push('/auth/login')
+      router.push('/auth/signup')
     }
   }
 
@@ -146,7 +103,7 @@ export default function AuthCallbackPage() {
 
           {/* 消息 */}
           <p className="text-gray-600 mb-8 leading-relaxed">
-            {message || '正在处理您的验证请求，请稍候...'}
+            {message || '正在处理您的邮箱验证，请稍候...'}
           </p>
 
           {/* 操作按钮 */}
@@ -166,26 +123,9 @@ export default function AuthCallbackPage() {
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </>
                 ) : (
-                  '返回登录'
+                  '重新注册'
                 )}
               </Button>
-
-              {status === 'error' && (
-                <Button
-                  variant="outline"
-                  onClick={() => router.push('/auth/signup')}
-                  className="w-full py-3 text-lg font-medium"
-                >
-                  重新注册
-                </Button>
-              )}
-            </div>
-          )}
-
-          {/* 加载状态的额外信息 */}
-          {status === 'loading' && (
-            <div className="mt-6 text-sm text-gray-500">
-              <p>这通常只需要几秒钟时间</p>
             </div>
           )}
         </div>
