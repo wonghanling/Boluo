@@ -4,6 +4,18 @@ import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 import { useAuth } from "@/components/AuthProvider"
 
+// ✅ 把 serviceOptions 提到最前面
+const serviceOptions = [
+  "ChatGPT免费版代开通35",
+  "ChatGPT共享版 ¥65/月",
+  "ChatGPT独享代充 ¥169/月",
+  "ChatGPTPro专业版 ¥1500/月",
+  "Claude code 新号申请 ¥29/一次性",
+  "Claude code 日付套餐 ¥13/天",
+  "Claude code 周付套餐 ¥130/周",
+  "Claude code月付套餐 ¥320/月"
+]
+
 interface ServiceSubmissionFormProps {
   paymentAmount?: number | null
   serviceName?: string | null
@@ -106,17 +118,6 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
   }, [paymentAmount])
 
   const fieldAccess = getFieldAccess(paymentAmount ?? null)
-
-  const serviceOptions = [
-    "ChatGPT免费版代开通35",
-    "ChatGPT共享版 ¥65/月",
-    "ChatGPT独享代充 ¥169/月",
-    "ChatGPTPro专业版 ¥1500/月",
-    "Claude code 新号申请 ¥29/一次性",
-    "Claude code 日付套餐 ¥13/天",
-    "Claude code 周付套餐 ¥130/周",
-    "Claude code月付套餐 ¥320/月"
-  ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
