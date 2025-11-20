@@ -37,15 +37,11 @@ export default function AuthCallbackPage() {
 
           // 检查邮箱是否已验证
           if (user.email_confirmed_at) {
-            console.log('✅ 邮箱已验证，时间:', user.email_confirmed_at)
+            console.log('✅ 邮箱已验证，直接跳转到首页')
 
-            // 强制刷新页面状态，确保AuthProvider更新
-            setTimeout(() => {
-              window.location.href = '/'
-            }, 2000) // 2秒后跳转
-
-            setStatus('success')
-            setMessage('邮箱验证成功！您的账户已激活。正在跳转到首页...')
+            // 直接跳转到首页，不显示验证成功页面
+            window.location.href = '/'
+            return
           } else {
             console.log('⚠️ 邮箱未验证')
             setStatus('error')
