@@ -49,6 +49,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error('Error fetching user profile:', error)
         return
       }
+
+      // 检查并同步邮箱验证状态
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      if (currentUser && data) {
+        const authVerified = !!currentUser.email_confirmed_at
+        const profileVerified = data.email_verified
+
+        // 如果auth已验证但profile未验证，更新profile
+        if (authVerified && !profileVerified) {
+          console.log('📧 同步邮箱验证状态到user_profiles...')
+          const { error: updateError } = await supabase
+            .from('user_profiles')
+            .update({ email_verified: true })
+            .eq('id', userId)
+
+          if (!updateError) {
+            data.email_verified = true
+            console.log('✅ 邮箱验证状态同步成功')
+          }
+        }
+      }
+
       setUserProfile(data)
     } catch (error) {
       console.error('Error fetching user profile:', error)
