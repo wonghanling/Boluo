@@ -104,7 +104,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName }: Se
     }
   }, [paymentAmount])
 
-  const fieldAccess = getFieldAccess(paymentAmount)
+  const fieldAccess = getFieldAccess(paymentAmount ?? null)
 
   const serviceOptions = [
     "ChatGPT免费版代开通35",
