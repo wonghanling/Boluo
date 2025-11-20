@@ -1,53 +1,38 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle, BookOpen, Play, FileText, ExternalLink } from "lucide-react"
-import React, { useEffect, useState, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
 import ServiceSubmissionForm from "@/components/ServiceSubmissionForm"
 
-function ClaimMembershipContent() {
-  const searchParams = useSearchParams()
-  const [showTutorialOptions, setShowTutorialOptions] = useState(false)
-  const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
-  const [serviceName, setServiceName] = useState<string | null>(null)
-  const [orderId, setOrderId] = useState<string | null>(null)
+type PageProps = {
+  searchParams: {
+    amount?: string
+    service?: string
+    orderId?: string
+    paymentSuccess?: string
+  }
+}
 
-  useEffect(() => {
-    // Read URL parameters for payment amount, service name, and order ID
-    const amount = searchParams.get('amount')
-    const service = searchParams.get('service')
-    const orderIdParam = searchParams.get('orderId')
+export default function ClaimMembershipPage({ searchParams }: PageProps) {
+  const { amount, service, orderId, paymentSuccess } = searchParams
 
-    if (amount) {
-      const numAmount = parseFloat(amount)
-      if (!isNaN(numAmount)) {
-        setPaymentAmount(numAmount)
-      }
-    }
-
-    if (service) {
-      setServiceName(service)
-    }
-
-    if (orderIdParam) {
-      setOrderId(orderIdParam)
-    }
-  }, [searchParams])
-
-  const handleTutorialClick = () => {
-    setShowTutorialOptions(!showTutorialOptions)
+  // 只允许 paymentSuccess === 'true' 的人看到表单
+  if (paymentSuccess !== 'true') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-yellow-400 to-blue-600">
+        <div className="text-center bg-white p-8 rounded-lg shadow-lg max-w-md mx-4">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">访问受限</h1>
+          <p className="text-gray-700 mb-6">
+            请先完成支付后再访问此页面。
+          </p>
+          <a href="/" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
+            返回首页
+          </a>
+        </div>
+      </div>
+    )
   }
 
-  const handleImageTutorial = () => {
-    // 跳转到图文教程页面
-    window.open('/tutorial', '_blank')
-  }
-
-  const handleVideoTutorial = () => {
-    // 后期添加视频教程链接
-    alert('视频教程即将推出，敬请期待！')
-  }
+  const paymentAmount = amount ? parseFloat(amount) : null
+  const serviceName = service ? decodeURIComponent(service) : null
 
   return (
     <div className="min-h-screen">
@@ -57,8 +42,21 @@ function ClaimMembershipContent() {
 
           {/* 主标题 */}
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            一键代充<br />ChatGPT Plus
+            ✅ 支付成功<br />请填写服务信息
           </h1>
+
+          {/* 支付信息显示 */}
+          {paymentAmount && serviceName && (
+            <div className="bg-green-500 text-white p-4 rounded-lg mb-8 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center mb-2">
+                <span className="text-2xl mr-2">🎉</span>
+                <span className="font-bold text-lg">支付成功！</span>
+              </div>
+              <p className="text-sm">
+                服务：{serviceName} | 金额：¥{paymentAmount} | 订单号：{orderId}
+              </p>
+            </div>
+          )}
 
           {/* 副标题 */}
           <div className="max-w-3xl mx-auto mb-8">
@@ -81,58 +79,34 @@ function ClaimMembershipContent() {
 
           {/* 按钮 - 更紧凑排列 */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              size="lg"
-              className="text-base px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 border-2 border-white font-semibold"
-              onClick={handleTutorialClick}
+            <a
+              href="/tutorial"
+              target="_blank"
+              className="inline-flex items-center text-base px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 border-2 border-white font-semibold rounded"
             >
               <BookOpen className="mr-2 h-4 w-4" />
               查看获取会员教程
               <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            </a>
 
-            <Button
-              size="lg"
-              className="text-base px-5 py-3 bg-black text-white hover:bg-gray-800 border-2 border-black font-semibold"
-              onClick={() => window.open('https://chatgpt.com/#pricing', '_blank')}
+            <a
+              href="https://chatgpt.com/#pricing"
+              target="_blank"
+              className="inline-flex items-center text-base px-5 py-3 bg-black text-white hover:bg-gray-800 border-2 border-black font-semibold rounded"
             >
               <ExternalLink className="mr-2 h-4 w-4" />
               获取ChatGPT URL
-            </Button>
+            </a>
 
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-base px-5 py-3 bg-transparent text-white border-2 border-white hover:bg-white hover:text-blue-600 font-normal"
-              onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
+            <a
+              href="https://work.weixin.qq.com/ca/cawcdeac58029da582"
+              target="_blank"
+              className="inline-flex items-center text-base px-5 py-3 bg-transparent text-white border-2 border-white hover:bg-white hover:text-blue-600 font-normal rounded"
             >
               <MessageCircle className="mr-2 h-4 w-4" />
               立即联系微信客服
-            </Button>
+            </a>
           </div>
-
-          {/* 教程选择弹出 */}
-          {showTutorialOptions && (
-            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                size="lg"
-                className="text-base px-5 py-2 bg-black text-white hover:bg-gray-800 border-2 border-black font-medium"
-                onClick={handleImageTutorial}
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                图文教程
-              </Button>
-
-              <Button
-                size="lg"
-                className="text-base px-5 py-2 bg-black text-white hover:bg-gray-800 border-2 border-black font-medium"
-                onClick={handleVideoTutorial}
-              >
-                <Play className="mr-2 h-4 w-4" />
-                视频教程
-              </Button>
-            </div>
-          )}
 
           {/* 底部提示 */}
           <p className="text-sm opacity-80 mt-6">
@@ -150,7 +124,7 @@ function ClaimMembershipContent() {
             {/* 表单区域标题 */}
             <div className="text-center mb-6">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-3">
-                填写领取信息
+                填写服务信息
               </h2>
               <p className="text-base text-white opacity-90">
                 请填写以下信息，我们将为您快速开通服务
@@ -166,7 +140,7 @@ function ClaimMembershipContent() {
               </div>
             </div>
 
-            {/* 自定义表单 - 替换 Fillout */}
+            {/* 自定义表单 - 保持原有功能 */}
             <div className="max-w-2xl mx-auto">
               <ServiceSubmissionForm
                 paymentAmount={paymentAmount}
@@ -178,13 +152,5 @@ function ClaimMembershipContent() {
         </div>
       </div>
     </div>
-  )
-}
-
-export default function ClaimMembershipPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">加载中...</div>}>
-      <ClaimMembershipContent />
-    </Suspense>
   )
 }
