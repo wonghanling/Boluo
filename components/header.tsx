@@ -17,6 +17,23 @@ export function Header() {
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [userMenuOpen, setUserMenuOpen] = React.useState(false)
+  const [showAuthButtons, setShowAuthButtons] = React.useState(false)
+
+  // 添加超时机制，防止loading状态卡住
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        setShowAuthButtons(true) // 强制显示登录按钮
+      }
+    }, 3000) // 3秒后强制显示
+
+    if (!loading) {
+      setShowAuthButtons(true)
+      clearTimeout(timer)
+    }
+
+    return () => clearTimeout(timer)
+  }, [loading])
 
   const navigation = [
     { name: "首页", href: "#hero" },
@@ -73,8 +90,8 @@ export function Header() {
             </Button>
 
             {/* 用户认证区域 */}
-            {loading ? (
-              // 加载状态
+            {loading && !showAuthButtons ? (
+              // 加载状态（3秒内）
               <div className="hidden md:flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
               </div>
@@ -209,7 +226,7 @@ export function Header() {
               ))}
 
               {/* 用户认证区域 */}
-              {loading ? (
+              {loading && !showAuthButtons ? (
                 <div className="pt-4 px-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse"></div>
@@ -276,7 +293,32 @@ export function Header() {
                     </button>
                   </div>
                 </div>
-              ) : null}
+              ) : (
+                // 未登录状态 - 移动端登录/注册按钮
+                <div className="pt-4 border-t">
+                  <div className="space-y-2 px-4">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => {
+                        router.push('/auth/login')
+                        setMobileMenuOpen(false)
+                      }}
+                    >
+                      登录
+                    </Button>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        router.push('/auth/signup')
+                        setMobileMenuOpen(false)
+                      }}
+                    >
+                      注册
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {/* 立即联系按钮 */}
               <div className="pt-4 border-t">
