@@ -86,25 +86,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 监听认证状态变化
   useEffect(() => {
+    let mounted = true // 防止组件卸载后的状态更新
+
     // 获取初始会话
     const getInitialSession = async () => {
       try {
+        console.log('🔍 获取初始会话...')
         const { data: { session }, error } = await supabase.auth.getSession()
 
+        if (!mounted) return // 组件已卸载，不更新状态
+
         if (error) {
-          console.error('Error getting session:', error)
+          console.error('❌ 获取会话失败:', error)
           setLoading(false)
           return
         }
 
         if (session?.user) {
+          console.log('✅ 找到用户会话:', session.user.email)
           setUser(session.user)
           await fetchUserProfile(session.user.id)
+        } else {
+          console.log('🚫 未找到用户会话')
+          setUser(null)
+          setUserProfile(null)
         }
       } catch (error) {
-        console.error('Error in getInitialSession:', error)
+        console.error('❌ 初始会话检查异常:', error)
+        if (mounted) {
+          setUser(null)
+          setUserProfile(null)
+        }
       } finally {
-        setLoading(false)
+        if (mounted) {
+          setLoading(false)
+        }
       }
     }
 
@@ -113,21 +129,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 监听认证状态变化
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.email)
+        if (!mounted) return // 组件已卸载，不处理
 
-        if (session?.user) {
-          setUser(session.user)
-          await fetchUserProfile(session.user.id)
-        } else {
-          setUser(null)
-          setUserProfile(null)
+        console.log('🔄 认证状态变化:', event, session?.user?.email)
+
+        try {
+          if (event === 'SIGNED_OUT') {
+            console.log('👋 用户已登出')
+            setUser(null)
+            setUserProfile(null)
+            setLoading(false)
+            return
+          }
+
+          if (session?.user) {
+            console.log('👤 用户已登录:', session.user.email)
+            setUser(session.user)
+
+            // 异步获取用户资料，不阻塞状态更新
+            fetchUserProfile(session.user.id).catch(error => {
+              console.error('❌ 获取用户资料失败:', error)
+            })
+          } else {
+            console.log('🚫 用户未登录')
+            setUser(null)
+            setUserProfile(null)
+          }
+
+          setLoading(false)
+        } catch (error) {
+          console.error('❌ 认证状态变化处理异常:', error)
+          if (mounted) {
+            setLoading(false)
+          }
         }
-
-        setLoading(false)
       }
     )
 
+    // 清理函数
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
   }, [])
@@ -192,21 +233,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 登出
   const signOut = async () => {
-    setLoading(true)
     try {
+      setLoading(true)
+
+      // 清理本地状态
+      setUser(null)
+      setUserProfile(null)
+
+      // 清理localStorage缓存
+      localStorage.removeItem('hasShownRegisterPrompt')
+      localStorage.removeItem('membershipClaimed')
+
+      // 调用Supabase登出
       const { error } = await supabase.auth.signOut()
 
-      if (!error) {
-        setUser(null)
-        setUserProfile(null)
+      if (error) {
+        console.error('SignOut error:', error)
+        // 即使Supabase登出失败，也要清理本地状态
       }
+
+      // 强制刷新页面，确保状态完全重置
+      window.location.href = '/'
 
       return { error: error || undefined }
     } catch (error) {
-      console.error('SignOut error:', error)
+      console.error('SignOut exception:', error)
+
+      // 发生异常时也要清理状态
+      setUser(null)
+      setUserProfile(null)
+      localStorage.removeItem('hasShownRegisterPrompt')
+      localStorage.removeItem('membershipClaimed')
+
+      // 强制刷新页面
+      window.location.href = '/'
+
       return { error: error as AuthError }
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -293,7 +355,53 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, userProfile, loading } = useAuth()
 
-  if (loading) {
+  // 添加超时保护，防止无限加载
+  const [timeoutReached, setTimeoutReached] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        console.warn('⚠️ ProtectedRoute加载超时，强制显示内容')
+        setTimeoutReached(true)
+      }
+    }, 5000) // 5秒超时
+
+    if (!loading) {
+      clearTimeout(timer)
+    }
+
+    return () => clearTimeout(timer)
+  }, [loading])
+
+  // 如果超时了，显示错误状态
+  if (timeoutReached && loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md mx-auto p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">加载超时</h2>
+          <p className="text-gray-600 mb-6">
+            页面加载时间过长，请尝试刷新页面或重新登录。
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              刷新页面
+            </button>
+            <a
+              href="/auth/login"
+              className="block w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              重新登录
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (loading && !timeoutReached) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>

@@ -17,23 +17,23 @@ export function Header() {
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [userMenuOpen, setUserMenuOpen] = React.useState(false)
-  const [showAuthButtons, setShowAuthButtons] = React.useState(false)
 
-  // 添加超时机制，防止loading状态卡住
+  // 修复认证状态显示逻辑
+  const shouldShowAuthContent = !loading || user !== undefined
+
+  // 自动关闭用户菜单
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (loading) {
-        setShowAuthButtons(true) // 强制显示登录按钮
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuOpen) {
+        setUserMenuOpen(false)
       }
-    }, 3000) // 3秒后强制显示
-
-    if (!loading) {
-      setShowAuthButtons(true)
-      clearTimeout(timer)
     }
 
-    return () => clearTimeout(timer)
-  }, [loading])
+    if (userMenuOpen) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [userMenuOpen])
 
   const navigation = [
     { name: "首页", href: "#hero" },
@@ -90,10 +90,11 @@ export function Header() {
             </Button>
 
             {/* 用户认证区域 */}
-            {loading && !showAuthButtons ? (
-              // 加载状态（3秒内）
+            {!shouldShowAuthContent ? (
+              // 加载状态
               <div className="hidden md:flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="w-16 h-4 bg-gray-200 rounded animate-pulse"></div>
               </div>
             ) : user ? (
               // 已登录用户菜单
@@ -101,7 +102,10 @@ export function Header() {
                 <Button
                   variant="ghost"
                   className="flex items-center space-x-2 px-3 py-2 h-auto"
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setUserMenuOpen(!userMenuOpen)
+                  }}
                 >
                   <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                     <User className="w-4 h-4 text-white" />
@@ -226,7 +230,7 @@ export function Header() {
               ))}
 
               {/* 用户认证区域 */}
-              {loading && !showAuthButtons ? (
+              {!shouldShowAuthContent ? (
                 <div className="pt-4 px-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse"></div>

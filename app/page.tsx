@@ -16,6 +16,7 @@ import { services } from "@/content/services"
 import { heroContent, advantages } from "@/content/general"
 import { faqs } from "@/content/faq"
 import { contactInfo } from "@/content/general"
+import { useAuth } from "@/components/AuthProvider"
 import Image from "next/image"
 
 const fadeInUp = {
@@ -33,9 +34,32 @@ const staggerContainer = {
 }
 
 export default function HomePage() {
+  const { user, loading } = useAuth()
+
   // 检查令牌状态
-  const [canClaimMembership, setCanClaimMembership] = React.useState(true) // 临时设为true
-  const [currentToken, setCurrentToken] = React.useState<string | null>('test-token') // 临时设置假token
+  const [canClaimMembership, setCanClaimMembership] = React.useState(false) // 改为false，锁定按钮
+  const [currentToken, setCurrentToken] = React.useState<string | null>(null)
+
+  // 注册引导弹窗状态
+  const [showRegisterModal, setShowRegisterModal] = React.useState(false)
+  const [hasShownRegisterPrompt, setHasShownRegisterPrompt] = React.useState(false)
+
+  // 页面加载时显示注册提醒（仅对未登录用户显示一次）
+  React.useEffect(() => {
+    if (!loading) {
+      const hasShownBefore = localStorage.getItem('hasShownRegisterPrompt')
+
+      if (!user && !hasShownBefore && !hasShownRegisterPrompt) {
+        const timer = setTimeout(() => {
+          setShowRegisterModal(true)
+          setHasShownRegisterPrompt(true)
+          localStorage.setItem('hasShownRegisterPrompt', 'true')
+        }, 3000) // 3秒后显示注册提醒
+
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [user, loading, hasShownRegisterPrompt])
 
   React.useEffect(() => {
     // 检查URL参数中的token
@@ -126,7 +150,7 @@ export default function HomePage() {
       const result = await response.json()
 
       if (result.success) {
-        // 根据设备类型处理支付
+        // 直接跳转虎皮椒支付，不再检查登录
         if (deviceType === 'pc') {
           // PC端：显示支付提示模态框
           const paymentModal = document.createElement('div')
@@ -153,7 +177,7 @@ export default function HomePage() {
           `
           document.body.appendChild(paymentModal)
         } else {
-          // 移动端：新窗口打开
+          // 移动端：直接跳转支付宝
           window.open(result.payUrl, '_blank')
         }
         setServiceModalOpen(false)
@@ -171,6 +195,13 @@ export default function HomePage() {
     if (service.id === 'network') {
       return
     }
+
+    // 检查用户登录状态
+    if (!user) {
+      setShowRegisterModal(true)
+      return
+    }
+
     setSelectedService(service)
     setSelectedPlan(null) // 重置选中的套餐
     setServiceModalOpen(true)
@@ -231,51 +262,21 @@ export default function HomePage() {
                 className={`text-lg px-8 py-6 bg-transparent border-2 font-normal transition-all ${
                   canClaimMembership ?
                   'text-white border-white hover:bg-white hover:text-gray-800' :
-                  'text-white/60 border-white/60 cursor-not-allowed'
+                  'text-white/40 border-white/40 cursor-not-allowed'
                 }`}
-                onClick={async () => {
-                  // 临时取消支付验证，直接跳转到会员领取页面
-                  window.open('/claim-membership', '_blank')
-
-                  /* 原来的支付验证逻辑 - 临时注释
-                  if (canClaimMembership && currentToken) {
-                    try {
-                      // 使用令牌（标记为已使用）
-                      const response = await fetch('/api/token', {
-                        method: 'DELETE',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ token: currentToken })
-                      })
-
-                      const result = await response.json()
-
-                      if (result.success) {
-                        // 令牌使用成功，立即禁用按钮
-                        setCanClaimMembership(false)
-                        setCurrentToken(null)
-                        localStorage.setItem('membershipClaimed', 'true')
-
-                        // 跳转到会员领取页面
-                        window.open('/claim-membership', '_blank')
-
-                        console.log('✅ 令牌已使用，订单号:', result.orderId)
-                      } else {
-                        alert('令牌已失效，请重新支付')
-                        console.error('❌ 令牌使用失败:', result.error)
-                      }
-                    } catch (error) {
-                      console.error('令牌使用请求失败:', error)
-                      alert('网络错误，请稍后重试')
-                    }
+                onClick={() => {
+                  if (!user) {
+                    setShowRegisterModal(true)
+                    return
                   }
-                  */
+
+                  // 即使登录也需要先支付才能进入
+                  alert('请先选择并支付相应的服务套餐后再进入')
                 }}
-                // disabled={!canClaimMembership} // 临时取消禁用
+                disabled={!canClaimMembership} // 始终禁用
               >
                 <div className="flex flex-col items-center justify-center space-y-1">
-                  <span className="font-semibold text-sm sm:text-base">进入领取</span>
+                  <span className="font-semibold text-sm sm:text-base">领取会员</span>
                 </div>
               </Button>
             </motion.div>
@@ -319,7 +320,7 @@ export default function HomePage() {
                     letterSpacing: '-0.5px'
                   }}
                 >
-                  完成支付按钮可点击
+                  请先注册并选择服务套餐
                 </div>
                 <div
                   className="text-sm font-black"
@@ -329,7 +330,7 @@ export default function HomePage() {
                     letterSpacing: '-0.5px'
                   }}
                 >
-                  一次进入
+                  支付完成后自动开通
                 </div>
               </div>
             </motion.div>
@@ -515,6 +516,70 @@ export default function HomePage() {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* 注册引导弹窗 */}
+      <Dialog open={showRegisterModal} onOpenChange={setShowRegisterModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-center">
+              🎉 欢迎来到BoLuo AI服务平台
+            </DialogTitle>
+            <DialogDescription className="text-center text-base">
+              注册账户，享受专业的AI工具代充服务
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6">
+            <div className="text-center mb-6">
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-4">
+                <h3 className="font-semibold text-gray-800 mb-2">✨ 注册即享优惠</h3>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p>• ChatGPT Plus 专业代充服务</p>
+                  <p>• Claude Code 官方申请服务</p>
+                  <p>• 安全快速，无需密码</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Button
+                className="w-full py-3 text-base bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  setShowRegisterModal(false)
+                  window.open('/auth/signup', '_blank')
+                }}
+              >
+                立即注册账户
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full py-3 text-base"
+                onClick={() => {
+                  setShowRegisterModal(false)
+                  window.open('/auth/login', '_blank')
+                }}
+              >
+                已有账户？登录
+              </Button>
+
+              <Button
+                variant="ghost"
+                className="w-full py-2 text-sm text-gray-500 hover:text-gray-700"
+                onClick={() => setShowRegisterModal(false)}
+              >
+                稍后再说
+              </Button>
+            </div>
+
+            <div className="mt-4 text-center">
+              <p className="text-xs text-gray-500">
+                注册完成后，请选择相应服务套餐进行购买
+              </p>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -2,11 +2,32 @@
 
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle, BookOpen, Play, FileText, ExternalLink } from "lucide-react"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import ServiceSubmissionForm from "@/components/ServiceSubmissionForm"
 
 export default function ClaimMembershipPage() {
-  const [showTutorialOptions, setShowTutorialOptions] = React.useState(false)
+  const searchParams = useSearchParams()
+  const [showTutorialOptions, setShowTutorialOptions] = useState(false)
+  const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
+  const [serviceName, setServiceName] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Read URL parameters for payment amount and service name
+    const amount = searchParams.get('amount')
+    const service = searchParams.get('service')
+
+    if (amount) {
+      const numAmount = parseFloat(amount)
+      if (!isNaN(numAmount)) {
+        setPaymentAmount(numAmount)
+      }
+    }
+
+    if (service) {
+      setServiceName(service)
+    }
+  }, [searchParams])
 
   const handleTutorialClick = () => {
     setShowTutorialOptions(!showTutorialOptions)
@@ -140,7 +161,10 @@ export default function ClaimMembershipPage() {
 
             {/* 自定义表单 - 替换 Fillout */}
             <div className="max-w-2xl mx-auto">
-              <ServiceSubmissionForm />
+              <ServiceSubmissionForm
+                paymentAmount={paymentAmount}
+                serviceName={serviceName}
+              />
             </div>
           </div>
         </div>
