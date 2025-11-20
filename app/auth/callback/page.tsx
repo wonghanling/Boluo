@@ -19,11 +19,21 @@ export default function AuthCallbackPage() {
         const access_token = searchParams.get('access_token')
         const refresh_token = searchParams.get('refresh_token')
         const type = searchParams.get('type')
+        const error = searchParams.get('error')
+        const error_description = searchParams.get('error_description')
+
+        // 如果有错误参数，直接显示错误
+        if (error) {
+          console.error('URL error:', error, error_description)
+          setStatus('error')
+          setMessage(error_description || '验证链接无效或已过期')
+          return
+        }
 
         if (type === 'signup') {
           // 邮箱验证回调
           if (access_token && refresh_token) {
-            // 设置会话
+            // 设置会话（新式验证）
             const { data, error } = await supabase.auth.setSession({
               access_token,
               refresh_token,
@@ -41,8 +51,23 @@ export default function AuthCallbackPage() {
               setMessage('邮箱验证成功！您的账户已激活，可以正常使用所有功能。')
             }
           } else {
-            setStatus('error')
-            setMessage('验证链接无效或已过期')
+            // 尝试获取当前会话（老式验证可能已经设置了会话）
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+
+            if (sessionError) {
+              console.error('Session check error:', sessionError)
+              setStatus('error')
+              setMessage('验证链接无效或已过期')
+              return
+            }
+
+            if (session?.user) {
+              setStatus('success')
+              setMessage('邮箱验证成功！您的账户已激活，可以正常使用所有功能。')
+            } else {
+              setStatus('error')
+              setMessage('验证链接无效或已过期')
+            }
           }
         } else if (type === 'recovery') {
           // 密码重置回调
