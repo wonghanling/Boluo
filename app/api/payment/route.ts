@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       title: title,
       time: nowDate(),
       notify_url: `${notifyUrl}/api/payment/notify`,
-      return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}`,
+      return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}&amount=${amount}&service=${encodeURIComponent(title)}`,
       nonce_str: generateUUID(),
       type: 'WAP',
       wap_url: notifyUrl,
