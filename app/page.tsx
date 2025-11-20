@@ -34,8 +34,8 @@ const staggerContainer = {
 
 export default function HomePage() {
   // 检查令牌状态
-  const [canClaimMembership, setCanClaimMembership] = React.useState(false)
-  const [currentToken, setCurrentToken] = React.useState<string | null>(null)
+  const [canClaimMembership, setCanClaimMembership] = React.useState(true) // 临时设为true
+  const [currentToken, setCurrentToken] = React.useState<string | null>('test-token') // 临时设置假token
 
   React.useEffect(() => {
     // 检查URL参数中的token
@@ -234,6 +234,10 @@ export default function HomePage() {
                   'text-white/60 border-white/60 cursor-not-allowed'
                 }`}
                 onClick={async () => {
+                  // 临时取消支付验证，直接跳转到会员领取页面
+                  window.open('/claim-membership', '_blank')
+
+                  /* 原来的支付验证逻辑 - 临时注释
                   if (canClaimMembership && currentToken) {
                     try {
                       // 使用令牌（标记为已使用）
@@ -266,8 +270,9 @@ export default function HomePage() {
                       alert('网络错误，请稍后重试')
                     }
                   }
+                  */
                 }}
-                disabled={!canClaimMembership}
+                // disabled={!canClaimMembership} // 临时取消禁用
               >
                 <div className="flex flex-col items-center justify-center space-y-1">
                   <span className="font-semibold text-sm sm:text-base">进入领取</span>
