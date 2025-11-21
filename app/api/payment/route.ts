@@ -75,19 +75,19 @@ export async function POST(request: NextRequest) {
 
       if (existingOrder) {
         console.log('⚠️ 用户已有pending订单，使用已存在的订单:', existingOrder.order_id)
-        // 直接使用已存在的订单ID
-        orderId = existingOrder.order_id
+        // 使用已存在的订单ID生成支付链接
+        const existingOrderId = existingOrder.order_id
 
         // 跳过创建新订单，直接生成支付链接
         const params = {
           version: '1.1',
           appid: appId,
-          trade_order_id: orderId,
+          trade_order_id: existingOrderId,
           total_fee: parseFloat(amount).toFixed(2),
           title: title,
           time: nowDate(),
           notify_url: `${notifyUrl}/api/payment/notify`,
-          return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}&amount=${amount}&service=${encodeURIComponent(title)}`,
+          return_url: `${notifyUrl}/api/payment/success?orderId=${existingOrderId}&amount=${amount}&service=${encodeURIComponent(title)}`,
           nonce_str: generateUUID(),
           type: 'WAP',
           wap_url: notifyUrl,
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
         const hash = MD5(`${paramsStr}${appSecret}`).toString()
         const paymentUrl = `${apiUrl}?${paramsStr}&hash=${hash}`
 
-        console.log('✅ 使用已存在订单生成支付链接:', orderId)
+        console.log('✅ 使用已存在订单生成支付链接:', existingOrderId)
         return NextResponse.json({ url: paymentUrl })
       }
     }
