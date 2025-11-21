@@ -20,7 +20,6 @@ export const services: Service[] = [
         period: "",
         features: [
           "代开通ChatGPT免费账号",
-          "赠送VPN 1个月",
           "基础功能使用"
         ]
       },
