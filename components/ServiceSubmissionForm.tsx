@@ -32,6 +32,8 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState('')
+  const [isAlreadySubmitted, setIsAlreadySubmitted] = useState(false)
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true)
 
   // Service type mapping based on payment amount
   const getServiceTypeFromAmount = (amount: number): string => {
@@ -116,6 +118,48 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
       }))
     }
   }, [paymentAmount])
+
+  // 检查订单是否已经提交过
+  useEffect(() => {
+    const checkOrderStatus = async () => {
+      if (!orderId) {
+        setIsCheckingStatus(false)
+        return
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('processing_status, claude_email, chatgpt_account, chatgpt_payment_url')
+          .eq('order_id', orderId)
+          .single()
+
+        if (error) {
+          console.error('查询订单状态失败:', error)
+          setIsCheckingStatus(false)
+          return
+        }
+
+        if (data && data.processing_status === 'info_submitted') {
+          setIsAlreadySubmitted(true)
+          setMessage('✅ 此订单已提交！请勿重复填写。')
+          // 显示已提交的信息
+          setFormData({
+            chatgpt_account: data.chatgpt_account || '',
+            chatgpt_payment_url: data.chatgpt_payment_url || '',
+            claude_email: data.claude_email || '',
+            service_type: formData.service_type
+          })
+        }
+      } catch (error) {
+        console.error('检查订单状态异常:', error)
+      } finally {
+        setIsCheckingStatus(false)
+      }
+    }
+
+    checkOrderStatus()
+  }, [orderId])
 
   const fieldAccess = getFieldAccess(paymentAmount ?? null)
 
@@ -293,14 +337,16 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
                 value={formData.chatgpt_account}
                 onChange={(e) => setFormData(prev => ({...prev, chatgpt_account: e.target.value}))}
                 placeholder="填写你的ChatGPT的账号："
+                readOnly={isAlreadySubmitted}
                 style={{
                   flex: 1,
                   padding: '12px 15px',
                   fontSize: '16px',
                   border: 'none',
                   outline: 'none',
-                  backgroundColor: 'transparent',
-                  color: '#999'
+                  backgroundColor: isAlreadySubmitted ? '#f5f5f5' : 'transparent',
+                  color: isAlreadySubmitted ? '#666' : '#999',
+                  cursor: isAlreadySubmitted ? 'not-allowed' : 'text'
                 }}
               />
             </div>
@@ -332,15 +378,17 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
               onChange={(e) => setFormData(prev => ({...prev, chatgpt_payment_url: e.target.value}))}
               placeholder="登录ChatGPT账号购买Plus 支付页面链接&#10;https://pay.openai.com/c/pay/cs_live_a1Em0yetbv1wEunBgqpunNEIBy1bQI8LyPDe7BeQX7A5z5WN1xw8vB4pAl#fidpamzKaWAnPyd%2FbScp3ZwZ3Zmd2x1cWxqaTBrbHRwYGtqdnZAa2RhaWBnJz9jZGI2YCknZHVsTnB8Jz8nd3WEaaWyqeFgwM1k2KdfzJ3BtNNGhQQepsf4NelJDGlYB1o138gvXVA2XbNIxZGWi%2FnFGQaXtdKgVgVoOjP8PvVtgIJhO..."
               rows={6}
+              readOnly={isAlreadySubmitted}
               style={{
                 width: '100%',
                 padding: '12px 15px',
                 fontSize: '14px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '6px',
-                backgroundColor: 'white',
+                backgroundColor: isAlreadySubmitted ? '#f5f5f5' : 'white',
                 resize: 'vertical',
                 fontFamily: 'inherit',
+                cursor: isAlreadySubmitted ? 'not-allowed' : 'text'
                 outline: 'none',
                 color: '#333'
               }}
@@ -377,14 +425,16 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
                 value={formData.claude_email}
                 onChange={(e) => setFormData(prev => ({...prev, claude_email: e.target.value}))}
                 placeholder="购买claude code 请填写你的邮箱QQ/Googel/微信"
+                readOnly={isAlreadySubmitted}
                 style={{
                   flex: 1,
                   padding: '12px 15px',
                   fontSize: '16px',
                   border: 'none',
                   outline: 'none',
-                  backgroundColor: 'transparent',
-                  color: '#999'
+                  backgroundColor: isAlreadySubmitted ? '#f5f5f5' : 'transparent',
+                  color: isAlreadySubmitted ? '#666' : '#999',
+                  cursor: isAlreadySubmitted ? 'not-allowed' : 'text'
                 }}
               />
             </div>
@@ -492,20 +542,20 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
         {/* 提交按钮 */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isAlreadySubmitted}
           style={{
-            backgroundColor: isSubmitting ? '#6c757d' : '#ffc107',
+            backgroundColor: (isSubmitting || isAlreadySubmitted) ? '#6c757d' : '#ffc107',
             color: '#000',
             padding: '12px 24px',
             fontSize: '16px',
             fontWeight: 'bold',
             border: 'none',
             borderRadius: '6px',
-            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            cursor: (isSubmitting || isAlreadySubmitted) ? 'not-allowed' : 'pointer',
             transition: 'background-color 0.2s'
           }}
         >
-          {isSubmitting ? '提交中...' : '提交'}
+          {isSubmitting ? '提交中...' : isAlreadySubmitted ? '已提交' : '提交'}
         </button>
       </form>
     </div>
