@@ -81,6 +81,7 @@ export default function ClaimMembershipPage({ searchParams }: PageProps) {
             <a
               href="/tutorial"
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-base px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 border-2 border-white font-semibold rounded"
             >
               <BookOpen className="mr-2 h-4 w-4" />
@@ -91,6 +92,7 @@ export default function ClaimMembershipPage({ searchParams }: PageProps) {
             <a
               href="https://chatgpt.com/#pricing"
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-base px-5 py-3 bg-black text-white hover:bg-gray-800 border-2 border-black font-semibold rounded"
             >
               <ExternalLink className="mr-2 h-4 w-4" />
@@ -100,6 +102,7 @@ export default function ClaimMembershipPage({ searchParams }: PageProps) {
             <a
               href="https://work.weixin.qq.com/ca/cawcdeac58029da582"
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-base px-5 py-3 bg-transparent text-white border-2 border-white hover:bg-white hover:text-blue-600 font-normal rounded"
             >
               <MessageCircle className="mr-2 h-4 w-4" />
