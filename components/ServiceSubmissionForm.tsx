@@ -388,7 +388,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
                 backgroundColor: isAlreadySubmitted ? '#f5f5f5' : 'white',
                 resize: 'vertical',
                 fontFamily: 'inherit',
-                cursor: isAlreadySubmitted ? 'not-allowed' : 'text'
+                cursor: isAlreadySubmitted ? 'not-allowed' : 'text',
                 outline: 'none',
                 color: '#333'
               }}
