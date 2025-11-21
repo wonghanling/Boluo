@@ -63,17 +63,29 @@ function OrdersPageContent() {
       }
 
       // 转换数据格式以匹配界面
-      const formattedOrders = (data || []).map(order => ({
-        id: order.id,
-        chatgpt_account: order.chatgpt_account,
-        chatgpt_payment_url: order.chatgpt_payment_url,
-        claude_email: order.claude_email,
-        service_type: order.service_type,
-        status: order.processing_status === 'info_submitted' ? 'submitted' :
-                order.processing_status === 'processing' ? 'processing' :
-                order.processing_status === 'completed' ? 'completed' : 'submitted',
-        created_at: order.created_at
-      }))
+      const formattedOrders = (data || []).map(order => {
+        let status: 'submitted' | 'processing' | 'completed' | 'cancelled' = 'submitted'
+
+        if (order.processing_status === 'info_submitted') {
+          status = 'submitted'
+        } else if (order.processing_status === 'processing') {
+          status = 'processing'
+        } else if (order.processing_status === 'completed') {
+          status = 'completed'
+        } else if (order.processing_status === 'cancelled') {
+          status = 'cancelled'
+        }
+
+        return {
+          id: order.id,
+          chatgpt_account: order.chatgpt_account,
+          chatgpt_payment_url: order.chatgpt_payment_url,
+          claude_email: order.claude_email,
+          service_type: order.service_type,
+          status,
+          created_at: order.created_at
+        }
+      })
 
       setOrders(formattedOrders)
     } catch (error) {
