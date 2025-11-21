@@ -59,7 +59,9 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || '未知'
 
     // 获取当前登录用户信息
-    const { supabase } = await import('@/lib/supabase')
+    const { createRouteHandlerClient } = await import('@supabase/auth-helpers-nextjs')
+    const { cookies } = await import('next/headers')
+    const supabase = createRouteHandlerClient({ cookies })
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     // 保存订单到数据库

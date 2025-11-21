@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useAuth } from "@/components/AuthProvider"
 
 // ✅ 把 serviceOptions 提到最前面
@@ -24,6 +24,7 @@ interface ServiceSubmissionFormProps {
 
 export default function ServiceSubmissionForm({ paymentAmount, serviceName, orderId }: ServiceSubmissionFormProps) {
   const { user } = useAuth()
+  const supabase = createClientComponentClient()
   const [formData, setFormData] = useState({
     chatgpt_account: '',
     chatgpt_payment_url: '',
