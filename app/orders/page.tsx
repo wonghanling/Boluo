@@ -52,7 +52,7 @@ function OrdersPageContent() {
 
     try {
       const { data, error } = await supabase
-        .from('service_submissions')
+        .from('orders')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
@@ -62,7 +62,20 @@ function OrdersPageContent() {
         return
       }
 
-      setOrders(data || [])
+      // 转换数据格式以匹配界面
+      const formattedOrders = (data || []).map(order => ({
+        id: order.id,
+        chatgpt_account: order.chatgpt_account,
+        chatgpt_payment_url: order.chatgpt_payment_url,
+        claude_email: order.claude_email,
+        service_type: order.service_type,
+        status: order.processing_status === 'info_submitted' ? 'submitted' :
+                order.processing_status === 'processing' ? 'processing' :
+                order.processing_status === 'completed' ? 'completed' : 'submitted',
+        created_at: order.created_at
+      }))
+
+      setOrders(formattedOrders)
     } catch (error) {
       console.error('Error fetching orders:', error)
     } finally {
