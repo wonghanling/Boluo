@@ -58,8 +58,11 @@ export async function POST(request: NextRequest) {
     const clientIP = forwardedFor?.split(',')[0] || realIP || '未知'
     const userAgent = request.headers.get('user-agent') || '未知'
 
-    // 保存订单到数据库
+    // 获取当前登录用户信息
     const { supabase } = await import('@/lib/supabase')
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    // 保存订单到数据库
     const { error: insertError } = await supabase
       .from('orders')
       .insert({
@@ -70,7 +73,9 @@ export async function POST(request: NextRequest) {
         processing_status: 'waiting_for_info',
         payment_method: 'xunhupay',
         ip_address: clientIP,
-        user_agent: userAgent
+        user_agent: userAgent,
+        user_id: user?.id || null,
+        user_email: user?.email || null
       })
 
     if (insertError) {
