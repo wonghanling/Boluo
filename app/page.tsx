@@ -63,6 +63,7 @@ export default function HomePage() {
   const [selectedService, setSelectedService] = React.useState<any>(null)
   const [serviceModalOpen, setServiceModalOpen] = React.useState(false)
   const [selectedPlan, setSelectedPlan] = React.useState<number | null>(null)
+  const [isPaying, setIsPaying] = React.useState(false) // 🛡️ 防重复支付
 
   const copyWechatId = () => {
     navigator.clipboard.writeText(contactInfo.wechat)
@@ -70,6 +71,12 @@ export default function HomePage() {
   }
 
   const handlePayment = async () => {
+    // 🛡️ 防重复点击
+    if (isPaying) {
+      console.log('⚠️ 支付正在进行中，请勿重复点击')
+      return
+    }
+
     if (!selectedService || selectedPlan === null) {
       alert('请先选择套餐')
       return
@@ -85,6 +92,8 @@ export default function HomePage() {
       alert('价格信息异常，请联系客服')
       return
     }
+
+    setIsPaying(true) // 🛡️ 开始支付，禁用按钮
 
     try {
       // 生成订单号
@@ -151,6 +160,8 @@ export default function HomePage() {
     } catch (error) {
       console.error('支付错误:', error)
       alert('支付接口异常，请稍后重试')
+    } finally {
+      setIsPaying(false) // 🛡️ 支付结束，恢复按钮
     }
   }
 
@@ -450,9 +461,13 @@ export default function HomePage() {
                         handlePayment()
                       }
                     }}
-                    disabled={selectedService?.id !== 'others' && selectedPlan === null}
+                    disabled={selectedService?.id !== 'others' && (selectedPlan === null || isPaying)}
                   >
-                    {selectedService?.id === 'others' ? '联系微信' : '立即支付'}
+                    {selectedService?.id === 'others'
+                      ? '联系微信'
+                      : isPaying
+                        ? '创建订单中...'
+                        : '立即支付'}
                   </Button>
                 </div>
               </div>

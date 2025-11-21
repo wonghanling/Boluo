@@ -62,6 +62,51 @@ export async function POST(request: NextRequest) {
     const { supabase } = await import('@/lib/supabase')
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
+    // 🛡️ 防重复：检查是否已有pending订单
+    if (user?.id) {
+      const { data: existingOrder } = await supabase
+        .from('orders')
+        .select('order_id')
+        .eq('user_id', user.id)
+        .eq('payment_status', 'pending')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (existingOrder) {
+        console.log('⚠️ 用户已有pending订单，使用已存在的订单:', existingOrder.order_id)
+        // 直接使用已存在的订单ID
+        orderId = existingOrder.order_id
+
+        // 跳过创建新订单，直接生成支付链接
+        const params = {
+          version: '1.1',
+          appid: appId,
+          trade_order_id: orderId,
+          total_fee: parseFloat(amount).toFixed(2),
+          title: title,
+          time: nowDate(),
+          notify_url: `${notifyUrl}/api/payment/notify`,
+          return_url: `${notifyUrl}/api/payment/success?orderId=${orderId}&amount=${amount}&service=${encodeURIComponent(title)}`,
+          nonce_str: generateUUID(),
+          type: 'WAP',
+          wap_url: notifyUrl,
+          wap_name: 'BoLuo支付'
+        }
+
+        const paramsStr = Object.keys(params)
+          .sort()
+          .map(key => `${key}=${params[key as keyof typeof params]}`)
+          .join('&')
+
+        const hash = MD5(`${paramsStr}${appSecret}`).toString()
+        const paymentUrl = `${apiUrl}?${paramsStr}&hash=${hash}`
+
+        console.log('✅ 使用已存在订单生成支付链接:', orderId)
+        return NextResponse.json({ url: paymentUrl })
+      }
+    }
+
     // 保存订单到数据库
     const { error: insertError } = await supabase
       .from('orders')
