@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
           .map(key => `${key}=${params[key as keyof typeof params]}`)
           .join('&')
 
-        const hash = MD5(`${paramsStr}${appSecret}`).toString()
+        const hash = md5(`${paramsStr}${appSecret}`)
         const paymentUrl = `${apiUrl}?${paramsStr}&hash=${hash}`
 
         console.log('✅ 使用已存在订单生成支付链接:', existingOrderId)
