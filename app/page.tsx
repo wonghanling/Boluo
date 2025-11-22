@@ -398,64 +398,72 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-md w-[90vw] max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-md mx-auto">
           {selectedService && (
             <>
-              <DialogHeader className="space-y-3">
+              <DialogHeader>
                 <DialogTitle className="text-lg font-bold text-center">{selectedService.name}</DialogTitle>
                 <DialogDescription className="text-sm text-center text-gray-600">
                   {selectedService.description}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-6 space-y-4">
+              <div className="mt-4 space-y-2">
                 {selectedService.pricing?.map((plan: any, index: number) => (
                   <div
                     key={index}
-                    className={`relative p-4 rounded-lg cursor-pointer border-2 transition-all ${
+                    className={`relative p-3 rounded-lg cursor-pointer border transition-all ${
                       selectedPlan === index
-                        ? 'bg-yellow-400 border-blue-600 shadow-md'
+                        ? 'bg-yellow-400 border-blue-600 border-2'
                         : 'bg-yellow-400 border-yellow-300 hover:border-yellow-400'
                     }`}
                     onClick={() => handlePlanSelect(index)}
                   >
                     {plan.popular && (
-                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
                           热门
                         </span>
                       </div>
                     )}
 
-                    <div className="text-center space-y-2">
-                      <h3 className="font-bold text-lg text-gray-800">{plan.name}</h3>
-                      <div className="font-bold text-2xl text-gray-900">
-                        {plan.price}
-                        {plan.period && <span className="text-sm text-gray-600">/{plan.period}</span>}
-                      </div>
-                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3">
+                          <div>
+                            <h3 className="font-bold text-base text-gray-800">{plan.name}</h3>
+                            <div className="font-bold text-xl text-gray-900">
+                              {plan.price}
+                              {plan.period && <span className="text-xs text-gray-600">/{plan.period}</span>}
+                            </div>
+                          </div>
 
-                    <div className="mt-3 space-y-1">
-                      {plan.features?.slice(0, 4).map((feature: string, idx: number) => (
-                        <div key={idx} className="flex items-center text-sm text-gray-700">
-                          <span className="text-green-600 mr-2 text-base">✓</span>
-                          <span>{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {selectedPlan === index && (
-                      <div className="absolute top-3 right-3">
-                        <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">✓</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="grid grid-cols-1 gap-0.5 text-xs text-gray-700">
+                              {plan.features?.slice(0, 2).map((feature: string, idx: number) => (
+                                <div key={idx} className="flex items-center">
+                                  <span className="text-green-600 mr-1">✓</span>
+                                  <span className="truncate">{feature}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    )}
+
+                      {selectedPlan === index && (
+                        <div className="ml-2">
+                          <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
 
                 <Button
-                  className="w-full mt-6 py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-medium rounded-lg"
+                  className="w-full mt-4 py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-medium rounded-lg"
                   onClick={() => {
                     if (selectedService?.id === 'others') {
                       window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
