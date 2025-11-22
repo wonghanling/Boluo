@@ -398,59 +398,67 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto p-4 w-[95vw]">
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto p-3 w-[92vw]">
           {selectedService && (
             <>
-              <DialogHeader className="pb-2">
-                <DialogTitle className="text-lg sm:text-xl font-bold">{selectedService.name}</DialogTitle>
-                <DialogDescription className="text-sm sm:text-base">
+              <DialogHeader className="pb-3">
+                <DialogTitle className="text-lg font-bold text-center">{selectedService.name}</DialogTitle>
+                <DialogDescription className="text-sm text-center">
                   {selectedService.description}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {selectedService.pricing?.map((plan: any, index: number) => (
-                    <div
-                      key={index}
-                      className={`relative p-3 sm:p-4 rounded-lg text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
-                        selectedPlan === index
-                          ? 'bg-yellow-400 border-2 border-blue-600'
-                          : 'bg-yellow-400 hover:shadow-xl'
-                      }`}
-                      onClick={() => handlePlanSelect(index)}
-                    >
-                      {plan.popular && (
-                        <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                            热门
-                          </span>
-                        </div>
-                      )}
+              <div className="space-y-3">
+                {selectedService.pricing?.map((plan: any, index: number) => (
+                  <div
+                    key={index}
+                    className={`relative p-3 rounded-lg text-gray-800 cursor-pointer transition-all duration-300 ${
+                      selectedPlan === index
+                        ? 'bg-yellow-400 border-2 border-blue-600 shadow-lg'
+                        : 'bg-yellow-400 hover:shadow-md border border-yellow-500'
+                    }`}
+                    onClick={() => handlePlanSelect(index)}
+                  >
+                    {plan.popular && (
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+                        <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
+                          热门
+                        </span>
+                      </div>
+                    )}
 
-                      <div className="text-center mb-3">
-                        <h3 className="text-base sm:text-lg font-bold mb-1">{plan.name}</h3>
-                        <div className="mb-2">
-                          <span className="text-xl sm:text-2xl font-bold">{plan.price}</span>
-                          {plan.period && <span className="text-gray-600 text-sm">/{plan.period}</span>}
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="text-base font-bold mb-1">{plan.name}</h3>
+                        <div className="text-2xl font-bold mb-2">
+                          {plan.price}
+                          {plan.period && <span className="text-sm text-gray-600">/{plan.period}</span>}
                         </div>
+                        <ul className="space-y-1">
+                          {plan.features?.slice(0, 4).map((feature: string, idx: number) => (
+                            <li key={idx} className="flex items-start text-xs">
+                              <Icons.Check className="h-3 w-3 text-blue-600 mr-1 mt-0.5 flex-shrink-0" />
+                              <span className="break-words leading-relaxed">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
 
-                      <ul className="space-y-1">
-                        {plan.features?.slice(0, 5).map((feature: string, idx: number) => (
-                          <li key={idx} className="flex items-start text-sm leading-relaxed">
-                            <Icons.Check className="h-3 w-3 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                            <span className="break-words">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {selectedPlan === index && (
+                        <div className="ml-2 flex-shrink-0">
+                          <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                            <Icons.Check className="h-4 w-4 text-white" />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
 
-                <div className="mt-6 text-center">
+                {/* 立即支付按钮 - 固定在底部 */}
+                <div className="sticky bottom-0 bg-white pt-4 pb-2">
                   <Button
-                    className="text-lg px-8 py-4 bg-green-600 hover:bg-green-700 text-white border-none font-medium rounded-lg w-full sm:w-auto"
+                    className="w-full text-lg py-3 bg-green-600 hover:bg-green-700 text-white border-none font-medium rounded-lg"
                     onClick={() => {
                       if (selectedService?.id === 'others') {
                         window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
