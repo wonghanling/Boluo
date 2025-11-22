@@ -449,7 +449,7 @@ export default function HomePage() {
 
                 <div className="mt-4 text-center">
                   <Button
-                    className="text-sm sm:text-base px-4 py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 font-normal"
+                    className="text-lg px-8 py-4 bg-green-600 hover:bg-green-700 text-white border-none font-medium rounded-lg"
                     onClick={() => {
                       if (selectedService?.id === 'others') {
                         window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
@@ -475,21 +475,24 @@ export default function HomePage() {
 
       {/* 注册引导弹窗 */}
       <Dialog open={showRegisterModal} onOpenChange={setShowRegisterModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md bg-yellow-300">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center">
+            <DialogTitle className="text-xl font-bold text-center text-black">
               🎉 欢迎来到BoLuo AI服务平台
             </DialogTitle>
-            <DialogDescription className="text-center text-base">
+            <DialogDescription className="text-center text-base text-black">
               注册账户，享受专业的AI工具代充服务
+            </DialogDescription>
+            <DialogDescription className="text-center text-lg font-medium text-black mt-2">
+              代充海外最先进AI
             </DialogDescription>
           </DialogHeader>
 
           <div className="mt-6">
             <div className="text-center mb-6">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-4">
-                <h3 className="font-semibold text-gray-800 mb-2">✨ 注册即享优惠</h3>
-                <div className="text-sm text-gray-600 space-y-1">
+              <div className="bg-black bg-opacity-10 p-4 rounded-lg mb-4">
+                <h3 className="font-semibold text-black mb-2">✨ 注册即享优惠</h3>
+                <div className="text-sm text-black space-y-1">
                   <p>• ChatGPT Plus 专业代充服务</p>
                   <p>• Claude Code 官方申请服务</p>
                   <p>• 安全快速，无需密码</p>
@@ -510,7 +513,7 @@ export default function HomePage() {
 
               <Button
                 variant="outline"
-                className="w-full py-3 text-base"
+                className="w-full py-3 text-base bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700"
                 onClick={() => {
                   setShowRegisterModal(false)
                   window.open('/auth/login', '_blank')
@@ -521,7 +524,7 @@ export default function HomePage() {
 
               <Button
                 variant="ghost"
-                className="w-full py-2 text-sm text-gray-500 hover:text-gray-700"
+                className="w-full py-2 text-sm text-black hover:bg-black hover:bg-opacity-10"
                 onClick={() => setShowRegisterModal(false)}
               >
                 稍后再说
@@ -529,7 +532,7 @@ export default function HomePage() {
             </div>
 
             <div className="mt-4 text-center">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-black">
                 注册完成后，请选择相应服务套餐进行购买
               </p>
             </div>
