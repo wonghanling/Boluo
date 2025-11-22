@@ -217,8 +217,8 @@ export default function HomePage() {
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-base md:text-lg text-white mb-8 max-w-2xl mx-auto font-medium shadow-lg shadow-white/50 drop-shadow-lg px-4"
-              style={{ wordBreak: 'keep-all', whiteSpace: 'nowrap' }}
+              className="text-base md:text-lg text-white mb-8 max-w-3xl mx-auto font-medium shadow-lg shadow-white/50 drop-shadow-lg px-2 text-center"
+              style={{ wordBreak: 'keep-all' }}
             >
               领取您的会员/无密码接触充值您的账号
             </motion.p>
@@ -277,7 +277,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center justify-center">
                   <Icons.Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mr-2" />
-                  <p className="text-yellow-300 font-medium text-lg">3000+用户信赖享用全球最先进的AI能力。</p>
+                  <p className="text-yellow-300 font-medium text-sm md:text-lg whitespace-nowrap">3000+用户信赖享用全球最先进的AI能力。</p>
                 </div>
                 <div className="flex items-center justify-center">
                   <Icons.Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mr-2" />
