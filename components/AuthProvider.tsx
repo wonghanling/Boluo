@@ -146,10 +146,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             console.log('👤 用户已登录:', session.user.email)
             setUser(session.user)
 
-            // 异步获取用户资料，不阻塞状态更新
-            fetchUserProfile(session.user.id).catch(error => {
+            // 同步获取用户资料和验证状态
+            try {
+              await fetchUserProfile(session.user.id)
+            } catch (error) {
               console.error('❌ 获取用户资料失败:', error)
-            })
+            }
           } else {
             console.log('🚫 用户未登录')
             setUser(null)
