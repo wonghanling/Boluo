@@ -217,7 +217,8 @@ export default function HomePage() {
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-base md:text-lg text-white mb-8 max-w-2xl mx-auto font-medium shadow-lg shadow-white/50 drop-shadow-lg"
+              className="text-base md:text-lg text-white mb-8 max-w-2xl mx-auto font-medium shadow-lg shadow-white/50 drop-shadow-lg px-4"
+              style={{ wordBreak: 'keep-all', whiteSpace: 'nowrap' }}
             >
               领取您的会员/无密码接触充值您的账号
             </motion.p>
@@ -397,7 +398,7 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto p-4">
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto p-4 w-[95vw]">
           {selectedService && (
             <>
               <DialogHeader className="pb-2">
@@ -408,11 +409,11 @@ export default function HomePage() {
               </DialogHeader>
 
               <div className="mt-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {selectedService.pricing?.map((plan: any, index: number) => (
                     <div
                       key={index}
-                      className={`relative p-2 rounded-lg text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
+                      className={`relative p-3 sm:p-4 rounded-lg text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
                         selectedPlan === index
                           ? 'bg-yellow-400 border-2 border-blue-600'
                           : 'bg-yellow-400 hover:shadow-xl'
@@ -420,26 +421,26 @@ export default function HomePage() {
                       onClick={() => handlePlanSelect(index)}
                     >
                       {plan.popular && (
-                        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2">
-                          <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-medium">
+                        <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+                          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
                             热门
                           </span>
                         </div>
                       )}
 
-                      <div className="text-center mb-2">
-                        <h3 className="text-sm sm:text-base font-bold mb-0.5">{plan.name}</h3>
-                        <div className="mb-1">
-                          <span className="text-lg sm:text-xl font-bold">{plan.price}</span>
-                          {plan.period && <span className="text-gray-600 text-xs">/{plan.period}</span>}
+                      <div className="text-center mb-3">
+                        <h3 className="text-base sm:text-lg font-bold mb-1">{plan.name}</h3>
+                        <div className="mb-2">
+                          <span className="text-xl sm:text-2xl font-bold">{plan.price}</span>
+                          {plan.period && <span className="text-gray-600 text-sm">/{plan.period}</span>}
                         </div>
                       </div>
 
-                      <ul className="space-y-0.5">
+                      <ul className="space-y-1">
                         {plan.features?.slice(0, 5).map((feature: string, idx: number) => (
-                          <li key={idx} className="flex items-start text-xs leading-tight">
-                            <Icons.Check className="h-2.5 w-2.5 text-blue-600 mr-1 mt-0.5 flex-shrink-0" />
-                            <span>{feature}</span>
+                          <li key={idx} className="flex items-start text-sm leading-relaxed">
+                            <Icons.Check className="h-3 w-3 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                            <span className="break-words">{feature}</span>
                           </li>
                         ))}
                       </ul>
@@ -447,9 +448,9 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                <div className="mt-4 text-center">
+                <div className="mt-6 text-center">
                   <Button
-                    className="text-lg px-8 py-4 bg-green-600 hover:bg-green-700 text-white border-none font-medium rounded-lg"
+                    className="text-lg px-8 py-4 bg-green-600 hover:bg-green-700 text-white border-none font-medium rounded-lg w-full sm:w-auto"
                     onClick={() => {
                       if (selectedService?.id === 'others') {
                         window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
