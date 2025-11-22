@@ -408,11 +408,11 @@ export default function HomePage() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-1">
                 {selectedService.pricing?.map((plan: any, index: number) => (
                   <div
                     key={index}
-                    className={`relative px-3 py-2 rounded-lg cursor-pointer border transition-all ${
+                    className={`relative px-2 py-1.5 rounded-md cursor-pointer border transition-all ${
                       selectedPlan === index
                         ? 'bg-yellow-400 border-blue-600 border-2'
                         : 'bg-yellow-400 border-yellow-300 hover:border-yellow-400'
@@ -420,19 +420,17 @@ export default function HomePage() {
                     onClick={() => handlePlanSelect(index)}
                   >
                     {plan.popular && (
-                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
+                      <div className="absolute -top-0.5 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-blue-600 text-white text-xs px-1 py-0.5 rounded-full">
                           热门
                         </span>
                       </div>
                     )}
 
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div>
-                          <h3 className="font-bold text-sm text-gray-800">{plan.name}</h3>
-                        </div>
-                        <div className="font-bold text-lg text-gray-900">
+                      <div className="flex items-center space-x-3">
+                        <h3 className="font-bold text-sm text-gray-800">{plan.name}</h3>
+                        <div className="font-bold text-base text-gray-900">
                           {plan.price}
                           {plan.period && <span className="text-xs text-gray-600">/{plan.period}</span>}
                         </div>
@@ -449,7 +447,7 @@ export default function HomePage() {
                         </div>
 
                         {selectedPlan === index && (
-                          <div className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
+                          <div className="w-3 h-3 bg-blue-600 rounded-full flex items-center justify-center">
                             <span className="text-white text-xs">✓</span>
                           </div>
                         )}
@@ -459,7 +457,7 @@ export default function HomePage() {
                 ))}
 
                 <Button
-                  className="w-full mt-4 py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-medium rounded-lg"
+                  className="w-full mt-3 py-2.5 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-lg"
                   onClick={() => {
                     if (selectedService?.id === 'others') {
                       window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
