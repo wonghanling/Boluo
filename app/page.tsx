@@ -217,7 +217,7 @@ export default function HomePage() {
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-base md:text-lg text-black mb-8 max-w-2xl mx-auto font-medium"
+              className="text-base md:text-lg text-white mb-8 max-w-2xl mx-auto font-medium shadow-lg shadow-white/50 drop-shadow-lg"
             >
               领取您的会员/无密码接触充值您的账号
             </motion.p>
@@ -263,29 +263,26 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* 提示文案 */}
-              <div className="text-center text-black">
-                <div
-                  className="text-sm font-black"
-                  style={{
-                    fontWeight: 900,
-                    fontFamily: '"Impact", "Franklin Gothic Heavy", "Arial Black", "黑体", "SimHei", "Microsoft YaHei Heavy", sans-serif',
-                    letterSpacing: '-0.5px'
-                  }}
-                >
-                  请先注册并选择服务套餐
+              {/* 三条营销文案 */}
+              <motion.div
+                className="mt-6 space-y-2 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2, duration: 0.5 }}
+              >
+                <div className="flex items-center justify-center">
+                  <Icons.Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mr-2" />
+                  <p className="text-yellow-300 font-medium text-lg">安全极速开通，可退款。</p>
                 </div>
-                <div
-                  className="text-sm font-black"
-                  style={{
-                    fontWeight: 900,
-                    fontFamily: '"Impact", "Franklin Gothic Heavy", "Arial Black", "黑体", "SimHei", "Microsoft YaHei Heavy", sans-serif',
-                    letterSpacing: '-0.5px'
-                  }}
-                >
-                  支付完成后自动开通
+                <div className="flex items-center justify-center">
+                  <Icons.Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mr-2" />
+                  <p className="text-yellow-300 font-medium text-lg">3000+用户信赖享用全球最先进的AI能力。</p>
                 </div>
-              </div>
+                <div className="flex items-center justify-center">
+                  <Icons.Check className="h-6 w-6 text-white bg-green-500 rounded-full p-1 mr-2" />
+                  <p className="text-yellow-300 font-medium text-lg">任何问题均可随时联系。</p>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
