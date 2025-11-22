@@ -6,6 +6,16 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
+    const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+      // 阻止事件冒泡，防止重复粘贴
+      e.stopPropagation()
+
+      // 如果原本有 onPaste，就调用它
+      if (props.onPaste) {
+        props.onPaste(e)
+      }
+    }
+
     return (
       <input
         type={type}
@@ -15,6 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         ref={ref}
         {...props}
+        onPaste={handlePaste}
       />
     )
   }

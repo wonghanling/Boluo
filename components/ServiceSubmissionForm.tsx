@@ -186,16 +186,10 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
         if (error) {
           console.error('Supabase update error:', error)
-          setMessage('提交失败，请稍后重试')
+          setMessage(`提交失败：${error.message || '未知错误'}`)
         } else {
           setMessage('提交成功！我们将尽快为您处理服务')
-          // 清空表单
-          setFormData({
-            chatgpt_account: '',
-            chatgpt_payment_url: '',
-            claude_email: '',
-            service_type: getServiceTypeFromAmount(paymentAmount || 35)
-          })
+          setIsAlreadySubmitted(true)
         }
       } else {
         // 如果没有orderId，创建新的订单记录（兼容旧流程）
@@ -216,7 +210,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
         if (error) {
           console.error('Supabase insert error:', error)
-          setMessage('提交失败，请稍后重试')
+          setMessage(`提交失败：${error.message || '未知错误'}`)
         } else {
           setMessage('提交成功！我们将尽快为您处理')
           setFormData({
@@ -229,10 +223,11 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
       }
     } catch (error) {
       console.error('Catch error:', error)
-      setMessage('提交失败，请稍后重试')
+      const errorMsg = error instanceof Error ? error.message : '网络错误'
+      setMessage(`提交失败：${errorMsg}`)
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setIsSubmitting(false)
   }
 
   return (
