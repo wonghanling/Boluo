@@ -398,7 +398,7 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto p-4 mx-auto">
+        <DialogContent className="w-full max-w-lg mx-auto px-3 max-h-[80vh] overflow-y-auto">
           {selectedService && (
             <>
               <DialogHeader className="text-center mb-4">
@@ -412,7 +412,7 @@ export default function HomePage() {
                 {selectedService.pricing?.map((plan: any, index: number) => (
                   <div
                     key={index}
-                    className={`p-4 rounded-lg cursor-pointer text-center ${
+                    className={`w-full px-4 py-4 rounded-lg cursor-pointer text-center shadow-md ${
                       selectedPlan === index
                         ? 'bg-yellow-400 border-2 border-blue-600'
                         : 'bg-yellow-400 border border-gray-300'
