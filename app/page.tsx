@@ -398,66 +398,74 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-md max-h-[80vh] overflow-y-auto p-4">
+        <DialogContent className="sm:max-w-md">
           {selectedService && (
             <>
-              <DialogHeader className="text-center mb-4">
-                <DialogTitle className="text-xl font-bold">{selectedService.name}</DialogTitle>
-                <DialogDescription className="text-sm">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-bold text-center">{selectedService.name}</DialogTitle>
+                <DialogDescription className="text-center">
                   {selectedService.description}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="space-y-3">
-                {selectedService.pricing?.map((plan: any, index: number) => (
-                  <div
-                    key={index}
-                    className={`px-4 py-4 rounded-lg cursor-pointer text-center shadow-md ${
-                      selectedPlan === index
-                        ? 'bg-yellow-400 border-2 border-blue-600'
-                        : 'bg-yellow-400 border border-gray-300'
-                    }`}
-                    onClick={() => handlePlanSelect(index)}
-                  >
-                    {plan.popular && (
-                      <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full inline-block mb-2">
-                        热门
-                      </div>
-                    )}
-
-                    <h3 className="text-lg font-bold">{plan.name}</h3>
-                    <div className="text-2xl font-bold my-2">{plan.price}</div>
-
-                    <div className="text-left space-y-1">
-                      {plan.features?.slice(0, 4).map((feature: string, idx: number) => (
-                        <div key={idx} className="flex items-center text-sm">
-                          <span className="text-green-600 mr-2">✓</span>
-                          {feature}
+              <div className="mt-4">
+                <div className="space-y-3">
+                  {selectedService.pricing?.map((plan: any, index: number) => (
+                    <div
+                      key={index}
+                      className={`p-4 rounded-lg cursor-pointer transition-all duration-300 ${
+                        selectedPlan === index
+                          ? 'bg-yellow-400 border-2 border-blue-600'
+                          : 'bg-yellow-400 border border-gray-300'
+                      }`}
+                      onClick={() => handlePlanSelect(index)}
+                    >
+                      {plan.popular && (
+                        <div className="text-center mb-2">
+                          <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                            热门
+                          </span>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                      )}
 
-              <Button
-                className="w-full mt-4 py-3 bg-green-600 hover:bg-green-700 text-white text-lg"
-                onClick={() => {
-                  if (selectedService?.id === 'others') {
-                    window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
-                    setServiceModalOpen(false)
-                  } else {
-                    handlePayment()
-                  }
-                }}
-                disabled={selectedService?.id !== 'others' && (selectedPlan === null || isPaying)}
-              >
-                {selectedService?.id === 'others'
-                  ? '联系微信'
-                  : isPaying
-                    ? '创建订单中...'
-                    : '立即支付'}
-              </Button>
+                      <div className="text-center mb-3">
+                        <h3 className="text-lg font-bold">{plan.name}</h3>
+                        <div className="text-2xl font-bold">{plan.price}</div>
+                      </div>
+
+                      <div className="space-y-1">
+                        {plan.features?.slice(0, 4).map((feature: string, idx: number) => (
+                          <div key={idx} className="flex items-center text-sm">
+                            <span className="text-green-600 mr-2">✓</span>
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4">
+                  <Button
+                    className="w-full py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-medium"
+                    onClick={() => {
+                      if (selectedService?.id === 'others') {
+                        window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
+                        setServiceModalOpen(false)
+                      } else {
+                        handlePayment()
+                      }
+                    }}
+                    disabled={selectedService?.id !== 'others' && (selectedPlan === null || isPaying)}
+                  >
+                    {selectedService?.id === 'others'
+                      ? '联系微信'
+                      : isPaying
+                        ? '创建订单中...'
+                        : '立即支付'}
+                  </Button>
+                </div>
+              </div>
             </>
           )}
         </DialogContent>
