@@ -62,6 +62,50 @@ export function Header() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
+            {/* 重新设计：真正的菠萝形状 */}
+            <div className="w-8 h-10">
+              <svg viewBox="0 0 20 26" className="w-full h-full">
+                {/* 绿色叶子 - 菠萝顶部 */}
+                <g fill="#22c55e">
+                  <path d="M8 0 L9 4 L10 2 L11 4 L12 0 L11 3 L10 1 L9 3 Z" />
+                  <path d="M6 2 L7 5 L8 3 L9 2 Z" fill="#16a34a" />
+                  <path d="M11 2 L12 3 L13 5 L14 2 Z" fill="#16a34a" />
+                  <path d="M7 1 L8 4 L9 2 L10 1 Z" fill="#15803d" />
+                  <path d="M10 1 L11 2 L12 4 L13 1 Z" fill="#15803d" />
+                </g>
+
+                {/* 菠萝身体 - 椭圆形 */}
+                <ellipse cx="10" cy="14" rx="6" ry="8" fill="#fbbf24" />
+
+                {/* 菠萝特征网格纹理 */}
+                <g stroke="#f59e0b" strokeWidth="1" fill="none">
+                  {/* 横向弧线 */}
+                  <path d="M6 8 Q10 6 14 8" />
+                  <path d="M5 11 Q10 9 15 11" />
+                  <path d="M5 14 Q10 12 15 14" />
+                  <path d="M5 17 Q10 15 15 17" />
+                  <path d="M6 20 Q10 18 14 20" />
+
+                  {/* 竖向弧线 */}
+                  <path d="M7 7 Q6 14 7 21" />
+                  <path d="M10 6 Q10 14 10 22" />
+                  <path d="M13 7 Q14 14 13 21" />
+                </g>
+
+                {/* 菠萝钻石纹理填充 */}
+                <g fill="#f59e0b" opacity="0.3">
+                  <polygon points="8,9 10,8 12,9 10,11" />
+                  <polygon points="7,12 9,11 11,12 9,14" />
+                  <polygon points="9,12 11,11 13,12 11,14" />
+                  <polygon points="8,15 10,14 12,15 10,17" />
+                  <polygon points="7,18 9,17 11,18 9,20" />
+                  <polygon points="9,18 11,17 13,18 11,20" />
+                </g>
+
+                {/* 高光效果让菠萝更立体 */}
+                <ellipse cx="8" cy="12" rx="1" ry="2" fill="#fef3c7" opacity="0.6" />
+              </svg>
+            </div>
             <span className="font-bold text-xl">BoLuo</span>
           </Link>
 
