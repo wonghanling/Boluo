@@ -397,8 +397,8 @@ export default function HomePage() {
       </section>
 
       {/* Service Modal */}
-      <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-md mx-auto">
+      <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen} modal={false}>
+        <DialogContent className="sm:max-w-md mx-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
           {selectedService && (
             <>
               <DialogHeader>
@@ -408,11 +408,11 @@ export default function HomePage() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-4 space-y-1">
+              <div className="mt-4 space-y-2">
                 {selectedService.pricing?.map((plan: any, index: number) => (
                   <div
                     key={index}
-                    className={`relative px-2 py-1.5 rounded-md cursor-pointer border transition-all ${
+                    className={`relative p-3 rounded-lg cursor-pointer border transition-all ${
                       selectedPlan === index
                         ? 'bg-yellow-400 border-blue-600 border-2'
                         : 'bg-yellow-400 border-yellow-300 hover:border-yellow-400'
@@ -420,14 +420,15 @@ export default function HomePage() {
                     onClick={() => handlePlanSelect(index)}
                   >
                     {plan.popular && (
-                      <div className="absolute -top-0.5 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-blue-600 text-white text-xs px-1 py-0.5 rounded-full">
+                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
                           热门
                         </span>
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between">
+                    {/* 第一行：标题、价格、选中指示器 */}
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-3">
                         <h3 className="font-bold text-sm text-gray-800">{plan.name}</h3>
                         <div className="font-bold text-base text-gray-900">
@@ -436,28 +437,27 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2">
-                        <div className="text-xs text-gray-700">
-                          {plan.features?.slice(0, 1).map((feature: string, idx: number) => (
-                            <span key={idx} className="flex items-center">
-                              <span className="text-green-600 mr-1">✓</span>
-                              {feature}
-                            </span>
-                          ))}
+                      {selectedPlan === index && (
+                        <div className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
                         </div>
+                      )}
+                    </div>
 
-                        {selectedPlan === index && (
-                          <div className="w-3 h-3 bg-blue-600 rounded-full flex items-center justify-center">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        )}
-                      </div>
+                    {/* 第二行：特性列表 */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      {plan.features?.map((feature: string, idx: number) => (
+                        <span key={idx} className="flex items-center text-xs text-gray-700">
+                          <span className="text-green-600 mr-1">✓</span>
+                          {feature}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 ))}
 
                 <Button
-                  className="w-full mt-3 py-2.5 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-lg"
+                  className="w-full mt-4 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-lg"
                   onClick={() => {
                     if (selectedService?.id === 'others') {
                       window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')

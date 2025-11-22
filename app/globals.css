@@ -55,13 +55,31 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    /* 防止页面缩放抖动 */
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     @apply bg-background text-foreground;
     scrollbar-gutter: stable;
+    /* 防止页面重新布局时抖动 */
+    width: 100vw;
+    overflow-x: hidden;
   }
 }
 
-html {
-  scroll-behavior: smooth;
-  overflow-y: scroll;
+/* 禁止 Radix Dialog 自动缩放页面 */
+[data-radix-dialog-content] {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  transform: none !important;
+}
+
+/* 确保弹窗遮罩层固定定位 */
+[data-radix-dialog-overlay] {
+  position: fixed !important;
 }
