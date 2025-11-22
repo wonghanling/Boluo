@@ -165,12 +165,20 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // 防止重复提交
+    if (isSubmitting || isAlreadySubmitted) {
+      console.warn('表单正在提交或已提交，忽略重复提交')
+      return
+    }
+
     setIsSubmitting(true)
     setMessage('')
 
     try {
       if (orderId) {
-        // 如果有orderId，更新现有订单记录
+        console.log('更新订单:', orderId)
+
         const { error } = await supabase
           .from('orders')
           .update({
@@ -186,13 +194,20 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
         if (error) {
           console.error('Supabase update error:', error)
-          setMessage(`提交失败：${error.message || '未知错误'}`)
+          setMessage(`提交失败：${error.message || '数据库更新错误'}`)
         } else {
-          setMessage('提交成功！我们将尽快为您处理服务')
+          console.log('订单更新成功')
+          setMessage('✅ 提交成功！我们将尽快为您处理服务')
           setIsAlreadySubmitted(true)
+
+          // 3秒后自动跳转到订单页面
+          setTimeout(() => {
+            window.location.href = '/orders'
+          }, 3000)
         }
       } else {
-        // 如果没有orderId，创建新的订单记录（兼容旧流程）
+        console.log('创建新订单')
+
         const { error } = await supabase
           .from('orders')
           .insert({
@@ -210,9 +225,12 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
         if (error) {
           console.error('Supabase insert error:', error)
-          setMessage(`提交失败：${error.message || '未知错误'}`)
+          setMessage(`提交失败：${error.message || '数据库插入错误'}`)
         } else {
-          setMessage('提交成功！我们将尽快为您处理')
+          console.log('订单创建成功')
+          setMessage('✅ 提交成功！我们将尽快为您处理')
+
+          // 重置表单
           setFormData({
             chatgpt_account: '',
             chatgpt_payment_url: '',
@@ -223,9 +241,10 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
       }
     } catch (error) {
       console.error('Catch error:', error)
-      const errorMsg = error instanceof Error ? error.message : '网络错误'
-      setMessage(`提交失败：${errorMsg}`)
+      const errorMsg = error instanceof Error ? error.message : '网络连接错误'
+      setMessage(`❌ 提交失败：${errorMsg}`)
     } finally {
+      // 确保在所有情况下都重置loading
       setIsSubmitting(false)
     }
   }

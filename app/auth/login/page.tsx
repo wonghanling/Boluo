@@ -63,6 +63,7 @@ export default function LoginPage() {
             text: error.message || '登录失败，请稍后重试'
           })
         }
+        setIsLoading(false) // 确保错误时重置loading状态
         return
       }
 
@@ -72,10 +73,14 @@ export default function LoginPage() {
           text: '登录成功！正在跳转...'
         })
 
-        // 1秒后跳转到首页
+        // 先重置loading，再跳转避免状态冲突
+        setIsLoading(false)
+
+        // 短延迟确保状态更新完成
         setTimeout(() => {
           router.push('/')
-        }, 1000)
+        }, 100)
+        return
       }
 
     } catch (error) {

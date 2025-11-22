@@ -5,27 +5,7 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, onPaste, ...props }, ref) => {
-    const handlePaste = React.useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
-      // 清除默认的粘贴行为，手动处理避免重复
-      e.preventDefault()
-
-      const paste = e.clipboardData.getData('text')
-      const target = e.currentTarget
-
-      // 直接设置值，不触发额外事件
-      if (target) {
-        target.value = paste
-        // 手动触发React的change事件
-        target.dispatchEvent(new Event('input', { bubbles: true }))
-      }
-
-      // 如果有自定义的onPaste处理器，调用它
-      if (onPaste) {
-        onPaste(e)
-      }
-    }, [onPaste])
-
+  ({ className, type, ...props }, ref) => {
     return (
       <input
         type={type}
@@ -34,7 +14,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
-        onPaste={handlePaste}
         {...props}
       />
     )

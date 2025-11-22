@@ -56,9 +56,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const authVerified = !!currentUser.email_confirmed_at
         const profileVerified = data.email_verified
 
-        // 如果auth已验证但profile未验证，更新profile
+        // 强制同步：如果auth已验证，profile就应该是true
         if (authVerified && !profileVerified) {
-          console.log('📧 同步邮箱验证状态到user_profiles...')
+          console.log('📧 强制同步邮箱验证状态到user_profiles...')
           const { error: updateError } = await supabase
             .from('user_profiles')
             .update({ email_verified: true })
@@ -66,7 +66,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           if (!updateError) {
             data.email_verified = true
-            console.log('✅ 邮箱验证状态同步成功')
+            console.log('✅ 邮箱验证状态强制同步成功')
+          } else {
+            console.error('❌ 同步验证状态失败:', updateError)
           }
         }
       }
