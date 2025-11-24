@@ -54,7 +54,7 @@ export default function LoginPage() {
     setMessage(null)
 
     try {
-      const { data: authData, error } = await auth.signIn(data.email, data.password)
+      const { error } = await auth.signIn(data.email, data.password)
 
       if (error) {
         // 处理不同类型的错误
@@ -77,17 +77,16 @@ export default function LoginPage() {
         return
       }
 
-      if (authData.user) {
-        setMessage({
-          type: 'success',
-          text: '登录成功！正在跳转...'
-        })
+      // 登录成功
+      setMessage({
+        type: 'success',
+        text: '登录成功！正在跳转...'
+      })
 
-        // 1秒后跳转到首页
-        setTimeout(() => {
-          router.push('/')
-        }, 1000)
-      }
+      // 1秒后跳转到首页
+      setTimeout(() => {
+        router.push('/')
+      }, 1000)
 
     } catch (error) {
       console.error('Login error:', error)
