@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useAuth } from "@/components/AuthProvider"
-import { Eye, EyeOff, ArrowLeft, Mail, Lock } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft, Mail, Lock, User } from "lucide-react"
 
 // 表单验证 schema
 const signUpSchema = z.object({
@@ -85,7 +85,7 @@ export default function SignUpPage() {
         return
       }
 
-      if (authData.user) {
+      if (authData?.user) {
         // 步骤2：发送验证码
         setUserEmail(data.email)
         const { error: otpError } = await auth.signInWithOtp(data.email)

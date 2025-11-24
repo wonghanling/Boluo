@@ -12,7 +12,7 @@ interface AuthContextType {
   loading: boolean
 
   // 认证操作
-  signUp: (email: string, password: string) => Promise<{ error?: AuthError }>
+  signUp: (email: string, password: string) => Promise<{ data?: { user: User | null }, error?: AuthError }>
   signIn: (email: string, password: string) => Promise<{ error?: AuthError }>
   signOut: () => Promise<{ error?: AuthError }>
   resetPassword: (email: string) => Promise<{ error?: AuthError }>
@@ -193,13 +193,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { error: error || undefined }
       }
 
-      // 如果用户创建成功，创建用户资料
-      if (data.user && !data.user.email_confirmed_at) {
-        // 用户需要验证邮箱，不立即创建profile
-        return { error: undefined }
-      }
-
-      return { error: undefined }
+      // 返回data以便调用者可以检查user
+      return { data, error: undefined }
     } catch (error) {
       console.error('SignUp error:', error)
       return { error: error as AuthError }
