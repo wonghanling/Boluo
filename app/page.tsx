@@ -188,8 +188,34 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col">
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <Image
+                src="/boluoing-logo.png"
+                alt="BoLuo菠萝logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
+              <span className="text-xl font-bold text-gray-800">BoLuo</span>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="flex items-center space-x-6">
+              <a href="#hero" className="text-gray-600 hover:text-gray-900 transition-colors">首页</a>
+              <a href="#services" className="text-gray-600 hover:text-gray-900 transition-colors">服务</a>
+              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">联系我们</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <section id="hero" className="px-4 py-20 md:py-32 bg-gradient-to-b from-yellow-400 to-blue-600 text-center">
+      <section id="hero" className="px-4 pt-36 pb-20 md:pt-44 md:pb-32 bg-gradient-to-b from-yellow-400 to-blue-600 text-center">
         <div className="container mx-auto">
           <motion.div
             initial="initial"
@@ -217,7 +243,7 @@ export default function HomePage() {
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-base md:text-lg text-black mb-8 max-w-2xl mx-auto font-medium"
+              className="text-base md:text-lg text-white mb-8 max-w-3xl mx-auto font-medium text-center px-4 shadow-lg shadow-white/50 drop-shadow-lg"
             >
               领取您的会员/无密码接触充值您的账号
             </motion.p>
@@ -234,9 +260,9 @@ export default function HomePage() {
               </Button>
             </motion.div>
 
-            {/* 动态提示 - 移到按钮外层确保居中 */}
+            {/* 动态提示 - 改为三个绿色勾列表 */}
             <motion.div
-              className="mt-4 flex flex-col items-center space-y-2"
+              className="mt-8 flex flex-col items-center space-y-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1, duration: 0.5 }}
@@ -263,27 +289,19 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* 提示文案 */}
-              <div className="text-center text-black">
-                <div
-                  className="text-sm font-black"
-                  style={{
-                    fontWeight: 900,
-                    fontFamily: '"Impact", "Franklin Gothic Heavy", "Arial Black", "黑体", "SimHei", "Microsoft YaHei Heavy", sans-serif',
-                    letterSpacing: '-0.5px'
-                  }}
-                >
-                  请先注册并选择服务套餐
+              {/* 三个绿色勾列表 */}
+              <div className="flex flex-col items-center space-y-2">
+                <div className="flex items-center text-yellow-300 text-base md:text-lg font-medium">
+                  <span className="mr-2 text-green-500 text-xl">✓</span>
+                  安全极速开通，可退款。
                 </div>
-                <div
-                  className="text-sm font-black"
-                  style={{
-                    fontWeight: 900,
-                    fontFamily: '"Impact", "Franklin Gothic Heavy", "Arial Black", "黑体", "SimHei", "Microsoft YaHei Heavy", sans-serif',
-                    letterSpacing: '-0.5px'
-                  }}
-                >
-                  支付完成后自动开通
+                <div className="flex items-center text-yellow-300 text-sm md:text-lg font-medium whitespace-nowrap">
+                  <span className="mr-2 text-green-500 text-xl">✓</span>
+                  3000+用户信赖享用全球最先进的AI能力。
+                </div>
+                <div className="flex items-center text-yellow-300 text-base md:text-lg font-medium">
+                  <span className="mr-2 text-green-500 text-xl">✓</span>
+                  任何问题均可随时联系。
                 </div>
               </div>
             </motion.div>
@@ -400,76 +418,85 @@ export default function HomePage() {
 
       {/* Service Modal */}
       <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto p-4">
+        <DialogContent className="sm:max-w-4xl max-w-[95vw] max-h-[90vh] overflow-y-auto p-3 sm:p-4">
           {selectedService && (
             <>
               <DialogHeader className="pb-2">
-                <DialogTitle className="text-lg sm:text-xl font-bold">{selectedService.name}</DialogTitle>
-                <DialogDescription className="text-sm sm:text-base">
+                <DialogTitle className="text-base sm:text-lg md:text-xl font-bold">{selectedService.name}</DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm md:text-base">
                   {selectedService.description}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {selectedService.pricing?.map((plan: any, index: number) => (
-                    <div
-                      key={index}
-                      className={`relative p-2 rounded-lg text-gray-800 shadow-lg cursor-pointer transition-all duration-300 ${
-                        selectedPlan === index
-                          ? 'bg-yellow-400 border-2 border-blue-600'
-                          : 'bg-yellow-400 hover:shadow-xl'
-                      }`}
-                      onClick={() => handlePlanSelect(index)}
-                    >
-                      {plan.popular && (
-                        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2">
-                          <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-medium">
-                            热门
-                          </span>
-                        </div>
-                      )}
+              <div className="mt-2 space-y-2">
+                {selectedService.pricing?.map((plan: any, index: number) => (
+                  <div
+                    key={index}
+                    className={`relative px-2 sm:px-3 py-2 rounded-lg cursor-pointer transition-all border ${
+                      selectedPlan === index
+                        ? 'bg-yellow-400 border-blue-600 border-2'
+                        : 'bg-yellow-400 border-yellow-300 hover:border-yellow-400'
+                    }`}
+                    onClick={() => handlePlanSelect(index)}
+                  >
+                    {plan.popular && (
+                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10">
+                        <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-medium">
+                          热门
+                        </span>
+                      </div>
+                    )}
 
-                      <div className="text-center mb-2">
-                        <h3 className="text-sm sm:text-base font-bold mb-0.5">{plan.name}</h3>
-                        <div className="mb-1">
-                          <span className="text-lg sm:text-xl font-bold">{plan.price}</span>
-                          {plan.period && <span className="text-gray-600 text-xs">/{plan.period}</span>}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                      {/* 左侧：标题和价格 */}
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <h3 className="text-xs sm:text-sm font-bold text-gray-800">{plan.name}</h3>
+                        <div className="text-sm sm:text-base font-bold text-gray-900">
+                          {plan.price}
+                          {plan.period && <span className="text-xs text-gray-600">/{plan.period}</span>}
                         </div>
                       </div>
 
-                      <ul className="space-y-0.5">
-                        {plan.features?.slice(0, 5).map((feature: string, idx: number) => (
-                          <li key={idx} className="flex items-start text-xs leading-tight">
-                            <Icons.Check className="h-2.5 w-2.5 text-blue-600 mr-1 mt-0.5 flex-shrink-0" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {/* 右侧：特性 */}
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-gray-700">
+                          {plan.features?.map((feature: string, idx: number) => (
+                            <span key={idx} className="flex items-center whitespace-nowrap">
+                              <span className="text-green-600 mr-1">✓</span>
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                        {selectedPlan === index && (
+                          <div className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
+              </div>
 
-                <div className="mt-4 text-center">
-                  <Button
-                    className="text-sm sm:text-base px-4 py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 font-normal"
-                    onClick={() => {
-                      if (selectedService?.id === 'others') {
-                        window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
-                        setServiceModalOpen(false)
-                      } else {
-                        handlePayment()
-                      }
-                    }}
-                    disabled={selectedService?.id !== 'others' && (selectedPlan === null || isPaying)}
-                  >
-                    {selectedService?.id === 'others'
-                      ? '联系微信'
-                      : isPaying
-                        ? '创建订单中...'
-                        : '立即支付'}
-                  </Button>
-                </div>
+              <div className="mt-4 text-center">
+                <Button
+                  className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-lg"
+                  onClick={() => {
+                    if (selectedService?.id === 'others') {
+                      window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
+                      setServiceModalOpen(false)
+                    } else {
+                      handlePayment()
+                    }
+                  }}
+                  disabled={selectedService?.id !== 'others' && (selectedPlan === null || isPaying)}
+                >
+                  {selectedService?.id === 'others'
+                    ? '联系微信'
+                    : isPaying
+                      ? '创建订单中...'
+                      : '立即支付'}
+                </Button>
               </div>
             </>
           )}
@@ -478,45 +505,49 @@ export default function HomePage() {
 
       {/* 注册引导弹窗 */}
       <Dialog open={showRegisterModal} onOpenChange={setShowRegisterModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-w-[90vw] bg-yellow-300">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center">
+            <DialogTitle className="text-lg sm:text-xl font-bold text-center text-black">
               🎉 欢迎来到BoLuo AI服务平台
             </DialogTitle>
-            <DialogDescription className="text-center text-base">
+            <DialogDescription className="text-center text-sm sm:text-base text-black">
               注册账户，享受专业的AI工具代充服务
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-6">
-            <div className="text-center mb-6">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-4">
-                <h3 className="font-semibold text-gray-800 mb-2">✨ 注册即享优惠</h3>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p>• ChatGPT Plus 专业代充服务</p>
-                  <p>• Claude Code 官方申请服务</p>
-                  <p>• 安全快速，无需密码</p>
-                </div>
+          {/* 大标题 */}
+          <div className="text-center my-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-black">代充海外最先进AI</h2>
+          </div>
+
+          <div className="mt-4">
+            {/* 注册优惠框 */}
+            <div className="bg-yellow-400/60 p-3 sm:p-4 rounded-lg mb-4">
+              <h3 className="font-semibold text-black mb-2 text-center text-sm sm:text-base">✨ 注册即享优惠</h3>
+              <div className="text-xs sm:text-sm text-black space-y-1 text-center">
+                <p>• ChatGPT Plus 专业代充服务</p>
+                <p>• Claude Code 官方申请服务</p>
+                <p>• 安全快速，无需密码</p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            {/* 按钮组 */}
+            <div className="flex flex-col gap-2 sm:gap-3">
               <Button
-                className="w-full py-3 text-base bg-blue-600 hover:bg-blue-700 text-white"
+                className="w-full py-2 sm:py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white border-2 border-black"
                 onClick={() => {
                   setShowRegisterModal(false)
-                  window.open('/auth/signup', '_blank')
+                  window.open('/auth/signup', '_self')
                 }}
               >
                 立即注册账户
               </Button>
 
               <Button
-                variant="outline"
-                className="w-full py-3 text-base"
+                className="w-full py-2 sm:py-3 text-sm sm:text-base bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => {
                   setShowRegisterModal(false)
-                  window.open('/auth/login', '_blank')
+                  window.open('/auth/login', '_self')
                 }}
               >
                 已有账户？登录
@@ -524,15 +555,16 @@ export default function HomePage() {
 
               <Button
                 variant="ghost"
-                className="w-full py-2 text-sm text-gray-500 hover:text-gray-700"
+                className="w-full py-2 text-xs sm:text-sm text-black hover:text-gray-700 hover:bg-yellow-400/30"
                 onClick={() => setShowRegisterModal(false)}
               >
                 稍后再说
               </Button>
             </div>
 
-            <div className="mt-4 text-center">
-              <p className="text-xs text-gray-500">
+            {/* 底部说明 */}
+            <div className="mt-3 sm:mt-4 text-center">
+              <p className="text-xs text-black">
                 注册完成后，请选择相应服务套餐进行购买
               </p>
             </div>
