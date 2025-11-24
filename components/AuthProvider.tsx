@@ -20,6 +20,7 @@ interface AuthContextType {
 
   // OTP验证码认证操作
   signInWithOtp: (email: string) => Promise<{ error?: AuthError }>
+  sendOtpForSignup: (email: string) => Promise<{ error?: AuthError }>
   verifyOtp: (email: string, token: string) => Promise<{ error?: AuthError, user?: User }>
 
   // 用户资料操作
@@ -271,7 +272,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // 发送OTP验证码到邮箱
+  // 发送OTP验证码到邮箱（登录用）
   const signInWithOtp = async (email: string) => {
     try {
       const { error } = await supabase.auth.signInWithOtp({
@@ -288,6 +289,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error: undefined }
     } catch (error) {
       console.error('SignInWithOtp error:', error)
+      return { error: error as AuthError }
+    }
+  }
+
+  // 发送OTP验证码（注册用，允许创建用户）
+  const sendOtpForSignup = async (email: string) => {
+    try {
+      console.log('📧 发送注册验证码到:', email)
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: true // 注册时允许创建用户
+        }
+      })
+
+      if (error) {
+        console.error('❌ 发送验证码失败:', error)
+        return { error: error || undefined }
+      }
+
+      console.log('✅ 验证码已发送')
+      return { error: undefined }
+    } catch (error) {
+      console.error('SendOtpForSignup error:', error)
       return { error: error as AuthError }
     }
   }
@@ -400,6 +425,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     resetPassword,
     updatePassword,
     signInWithOtp,
+    sendOtpForSignup,
     verifyOtp,
     updateProfile,
     refreshProfile

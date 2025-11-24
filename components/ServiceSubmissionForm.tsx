@@ -173,6 +173,31 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
     try {
       if (orderId) {
+        // ✅ 【防白嫖】先检查此订单号是否已经提交过
+        console.log('🔍 检查订单是否已提交:', orderId)
+        const { data: existingSubmission, error: checkError } = await supabase
+          .from('service_submissions')
+          .select('order_id')
+          .eq('order_id', orderId)
+          .maybeSingle()
+
+        if (checkError) {
+          console.error('检查订单状态失败:', checkError)
+          setMessage('检查订单状态失败，请稍后重试')
+          setIsSubmitting(false)
+          return
+        }
+
+        if (existingSubmission) {
+          console.log('⚠️ 订单已提交，拒绝重复提交:', orderId)
+          setMessage('⚠️ 此订单已经提交过，无法重复提交！')
+          setIsAlreadySubmitted(true)
+          setIsSubmitting(false)
+          return
+        }
+
+        console.log('✅ 订单号唯一，开始提交...')
+
         // 新表结构：插入到service_submissions表
         const { error } = await supabase
           .from('service_submissions')

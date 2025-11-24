@@ -100,7 +100,7 @@ export default function SignUpPage() {
       if (authData?.user) {
         // 步骤2：发送验证码
         setUserEmail(data.email)
-        const { error: otpError } = await auth.signInWithOtp(data.email)
+        const { error: otpError } = await auth.sendOtpForSignup(data.email)
 
         if (otpError) {
           setMessage({
