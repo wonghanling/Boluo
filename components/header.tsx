@@ -176,13 +176,19 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => router.push('/auth/login')}
+                  onClick={() => {
+                    const currentUrl = encodeURIComponent(window.location.href)
+                    router.push(`/auth/login?returnUrl=${currentUrl}`)
+                  }}
                 >
                   登录
                 </Button>
                 <Button
                   size="sm"
-                  onClick={() => router.push('/auth/signup')}
+                  onClick={() => {
+                    const currentUrl = encodeURIComponent(window.location.href)
+                    router.push(`/auth/signup?returnUrl=${currentUrl}`)
+                  }}
                 >
                   注册
                 </Button>
@@ -305,7 +311,8 @@ export function Header() {
                       variant="outline"
                       className="w-full"
                       onClick={() => {
-                        router.push('/auth/login')
+                        const currentUrl = encodeURIComponent(window.location.href)
+                        router.push(`/auth/login?returnUrl=${currentUrl}`)
                         setMobileMenuOpen(false)
                       }}
                     >
@@ -314,7 +321,8 @@ export function Header() {
                     <Button
                       className="w-full"
                       onClick={() => {
-                        router.push('/auth/signup')
+                        const currentUrl = encodeURIComponent(window.location.href)
+                        router.push(`/auth/signup?returnUrl=${currentUrl}`)
                         setMobileMenuOpen(false)
                       }}
                     >

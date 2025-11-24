@@ -233,39 +233,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 登出
   const signOut = async () => {
     try {
-      setLoading(true)
+      console.log('🚪 开始登出...')
 
-      // 清理本地状态
-      setUser(null)
-      setUserProfile(null)
-
-      // 清理localStorage缓存
-      localStorage.removeItem('hasShownRegisterPrompt')
-      localStorage.removeItem('membershipClaimed')
-
-      // 调用Supabase登出
+      // 1. 先调用Supabase登出（最重要）
       const { error } = await supabase.auth.signOut()
 
       if (error) {
-        console.error('SignOut error:', error)
-        // 即使Supabase登出失败，也要清理本地状态
+        console.error('❌ Supabase登出失败:', error)
+        return { error: error || undefined }
       }
 
-      // 强制刷新页面，确保状态完全重置
-      window.location.href = '/'
+      console.log('✅ Supabase登出成功')
 
-      return { error: error || undefined }
+      // 2. 清理本地状态
+      setUser(null)
+      setUserProfile(null)
+      setLoading(false)
+
+      // 3. 清理localStorage缓存
+      localStorage.removeItem('hasShownRegisterPrompt')
+      localStorage.removeItem('membershipClaimed')
+
+      console.log('✅ 本地状态已清理')
+
+      return { error: undefined }
     } catch (error) {
-      console.error('SignOut exception:', error)
+      console.error('❌ 登出异常:', error)
 
       // 发生异常时也要清理状态
       setUser(null)
       setUserProfile(null)
+      setLoading(false)
       localStorage.removeItem('hasShownRegisterPrompt')
       localStorage.removeItem('membershipClaimed')
-
-      // 强制刷新页面
-      window.location.href = '/'
 
       return { error: error as AuthError }
     }
@@ -296,6 +296,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const verifyOtp = async (email: string, token: string) => {
     setLoading(true)
     try {
+      console.log('🔐 开始验证OTP...')
       const { data, error } = await supabase.auth.verifyOtp({
         email,
         token,
@@ -303,18 +304,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
 
       if (error) {
+        console.error('❌ OTP验证失败:', error)
         return { error: error || undefined }
       }
 
       if (data.user) {
+        console.log('✅ OTP验证成功，用户:', data.user.email)
         setUser(data.user)
+
+        // ✅ 关键修复：验证成功后，立即更新user_profiles的email_verified为true
+        console.log('📧 同步邮箱验证状态到user_profiles表...')
+        const { error: updateError } = await supabase
+          .from('user_profiles')
+          .update({ email_verified: true })
+          .eq('id', data.user.id)
+
+        if (updateError) {
+          console.error('⚠️ 更新user_profiles失败:', updateError)
+          // 不阻止登录，只是记录错误
+        } else {
+          console.log('✅ user_profiles邮箱验证状态已同步')
+        }
+
+        // 获取最新的用户资料
         await fetchUserProfile(data.user.id)
+
         return { error: undefined, user: data.user }
       }
 
       return { error: undefined }
     } catch (error) {
-      console.error('VerifyOtp error:', error)
+      console.error('❌ VerifyOtp异常:', error)
       return { error: error as AuthError }
     } finally {
       setLoading(false)

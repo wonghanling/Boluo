@@ -259,6 +259,21 @@ Type error: Property 'data' does not exist on type '{ error?: AuthError | undefi
 
 ### 2025-11-24 (最新)
 ```
+fix: 修复注册页面TypeScript类型错误
+
+- 修改AuthProvider的signUp方法返回类型，包含data
+- 注册页面使用可选链检查authData?.user
+- 添加缺失的User图标导入
+- Build编译成功
+
+修复的问题:
+1. signUp方法现在返回{ data?, error? }
+2. 修复"authData is possibly undefined"错误
+3. 修复"Cannot find name User"错误
+```
+
+### 2025-11-24
+```
 fix: 修复登录页面TypeScript类型错误
 
 - 修复signIn方法返回值解构问题

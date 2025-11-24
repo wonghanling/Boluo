@@ -62,6 +62,24 @@ export async function POST(request: NextRequest) {
     const { supabase } = await import('@/lib/supabase')
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
+    // ✅ 防重复订单：检查订单号是否已存在
+    console.log('🔍 检查订单是否已存在:', orderId)
+    const { data: existingOrder, error: checkError } = await supabase
+      .from('orders')
+      .select('order_id')
+      .eq('order_id', orderId)
+      .maybeSingle()
+
+    if (existingOrder) {
+      console.log('⚠️ 订单已存在，拒绝重复创建:', orderId)
+      return NextResponse.json({
+        error: '订单已存在，请勿重复提交',
+        orderId: orderId
+      }, { status: 400 })
+    }
+
+    console.log('✅ 订单号唯一，开始创建...')
+
     // 保存订单到数据库（新表结构：只存支付信息）
     const { error: insertError } = await supabase
       .from('orders')

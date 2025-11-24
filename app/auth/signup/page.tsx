@@ -40,11 +40,23 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null)
 
+  // 获取返回URL
+  const [returnUrl, setReturnUrl] = useState('/')
+
   // 验证码相关状态
   const [showOtpInput, setShowOtpInput] = useState(false)
   const [otp, setOtp] = useState("")
   const [userEmail, setUserEmail] = useState("")
   const [isVerifying, setIsVerifying] = useState(false)
+
+  // 页面加载时获取返回URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const redirect = params.get('returnUrl')
+      || (document.referrer && !document.referrer.includes('/auth/') ? document.referrer : '/')
+    setReturnUrl(redirect)
+    console.log('📍 注册成功后将返回:', redirect)
+  }, [])
 
   const {
     register,
@@ -142,15 +154,20 @@ export default function SignUpPage() {
       }
 
       if (user) {
+        console.log('✅ 注册验证成功，准备跳转到:', returnUrl)
         setMessage({
           type: 'success',
           text: '验证成功！正在跳转...'
         })
 
-        // 1秒后跳转到首页
+        // 0.5秒后跳转到返回页面
         setTimeout(() => {
-          router.push('/')
-        }, 1000)
+          if (returnUrl && returnUrl !== window.location.href) {
+            window.location.href = returnUrl
+          } else {
+            router.push('/')
+          }
+        }, 500)
       }
     } catch (error) {
       console.error('Verify OTP error:', error)

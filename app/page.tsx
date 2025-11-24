@@ -537,7 +537,8 @@ export default function HomePage() {
                 className="w-full py-2 sm:py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white border-2 border-black"
                 onClick={() => {
                   setShowRegisterModal(false)
-                  window.open('/auth/signup', '_self')
+                  const currentUrl = encodeURIComponent(window.location.href)
+                  window.location.href = `/auth/signup?returnUrl=${currentUrl}`
                 }}
               >
                 立即注册账户
@@ -547,7 +548,8 @@ export default function HomePage() {
                 className="w-full py-2 sm:py-3 text-sm sm:text-base bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => {
                   setShowRegisterModal(false)
-                  window.open('/auth/login', '_self')
+                  const currentUrl = encodeURIComponent(window.location.href)
+                  window.location.href = `/auth/login?returnUrl=${currentUrl}`
                 }}
               >
                 已有账户？登录
