@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { auth } from "@/lib/supabase"
-import { Eye, EyeOff, ArrowLeft, Mail, Lock, User } from "lucide-react"
+import { useAuth } from "@/components/AuthProvider"
+import { Eye, EyeOff, ArrowLeft, Mail, Lock } from "lucide-react"
 
 // 表单验证 schema
 const signUpSchema = z.object({
@@ -34,16 +34,24 @@ type SignUpFormData = z.infer<typeof signUpSchema>
 
 export default function SignUpPage() {
   const router = useRouter()
+  const auth = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null)
 
+  // 验证码相关状态
+  const [showOtpInput, setShowOtpInput] = useState(false)
+  const [otp, setOtp] = useState("")
+  const [userEmail, setUserEmail] = useState("")
+  const [isVerifying, setIsVerifying] = useState(false)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    getValues
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema)
   })
@@ -53,6 +61,7 @@ export default function SignUpPage() {
     setMessage(null)
 
     try {
+      // 步骤1：创建账户
       const { data: authData, error } = await auth.signUp(data.email, data.password)
 
       if (error) {
@@ -77,16 +86,24 @@ export default function SignUpPage() {
       }
 
       if (authData.user) {
+        // 步骤2：发送验证码
+        setUserEmail(data.email)
+        const { error: otpError } = await auth.signInWithOtp(data.email)
+
+        if (otpError) {
+          setMessage({
+            type: 'error',
+            text: '发送验证码失败，请稍后重试'
+          })
+          return
+        }
+
+        // 显示验证码输入框
+        setShowOtpInput(true)
         setMessage({
           type: 'success',
-          text: '注册成功！请检查您的邮箱并点击验证链接以激活账户。'
+          text: `验证码已发送到 ${data.email}，请查收邮件`
         })
-        reset()
-
-        // 3秒后跳转到登录页面
-        setTimeout(() => {
-          router.push('/auth/login')
-        }, 3000)
       }
 
     } catch (error) {
@@ -97,6 +114,52 @@ export default function SignUpPage() {
       })
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  // 验证OTP验证码
+  const handleVerifyOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      setMessage({
+        type: 'error',
+        text: '请输入6位验证码'
+      })
+      return
+    }
+
+    setIsVerifying(true)
+    setMessage(null)
+
+    try {
+      const { error, user } = await auth.verifyOtp(userEmail, otp)
+
+      if (error) {
+        setMessage({
+          type: 'error',
+          text: '验证码错误或已过期，请重新获取'
+        })
+        return
+      }
+
+      if (user) {
+        setMessage({
+          type: 'success',
+          text: '验证成功！正在跳转...'
+        })
+
+        // 1秒后跳转到首页
+        setTimeout(() => {
+          router.push('/')
+        }, 1000)
+      }
+    } catch (error) {
+      console.error('Verify OTP error:', error)
+      setMessage({
+        type: 'error',
+        text: '验证失败，请稍后重试'
+      })
+    } finally {
+      setIsVerifying(false)
     }
   }
 
@@ -257,6 +320,39 @@ export default function SignUpPage() {
               {isLoading ? "注册中..." : "创建账户"}
             </Button>
           </form>
+
+          {/* 验证码输入区域 */}
+          {showOtpInput && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                验证您的邮箱
+              </h3>
+              <p className="text-sm text-gray-600 mb-4 text-center">
+                我们已发送验证码到 <span className="font-medium">{userEmail}</span>
+              </p>
+
+              <div className="space-y-4">
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="请输入6位验证码"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    className="text-center text-lg tracking-widest"
+                    maxLength={6}
+                  />
+                </div>
+
+                <Button
+                  onClick={handleVerifyOtp}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  disabled={isVerifying || otp.length !== 6}
+                >
+                  {isVerifying ? "验证中..." : "验证并登录"}
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* 登录链接 */}
           <div className="mt-8 text-center">

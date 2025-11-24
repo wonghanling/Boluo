@@ -18,6 +18,10 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error?: AuthError }>
   updatePassword: (password: string) => Promise<{ error?: AuthError }>
 
+  // OTP验证码认证操作
+  signInWithOtp: (email: string) => Promise<{ error?: AuthError }>
+  verifyOtp: (email: string, token: string) => Promise<{ error?: AuthError, user?: User }>
+
   // 用户资料操作
   updateProfile: (updates: Partial<UserProfile>) => Promise<{ error?: any }>
   refreshProfile: () => Promise<void>
@@ -272,6 +276,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  // 发送OTP验证码到邮箱
+  const signInWithOtp = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: false // 只用于登录，不创建新用户
+        }
+      })
+
+      if (error) {
+        return { error: error || undefined }
+      }
+
+      return { error: undefined }
+    } catch (error) {
+      console.error('SignInWithOtp error:', error)
+      return { error: error as AuthError }
+    }
+  }
+
+  // 验证OTP验证码
+  const verifyOtp = async (email: string, token: string) => {
+    setLoading(true)
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: 'email'
+      })
+
+      if (error) {
+        return { error: error || undefined }
+      }
+
+      if (data.user) {
+        setUser(data.user)
+        await fetchUserProfile(data.user.id)
+        return { error: undefined, user: data.user }
+      }
+
+      return { error: undefined }
+    } catch (error) {
+      console.error('VerifyOtp error:', error)
+      return { error: error as AuthError }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // 重置密码
   const resetPassword = async (email: string) => {
     try {
@@ -330,6 +384,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signOut,
     resetPassword,
     updatePassword,
+    signInWithOtp,
+    verifyOtp,
     updateProfile,
     refreshProfile
   }
