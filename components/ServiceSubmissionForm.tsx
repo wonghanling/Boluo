@@ -119,7 +119,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
     }
   }, [paymentAmount])
 
-  // 检查订单是否已经提交过
+  // 检查订单是否已经提交过（新表结构：查询service_submissions表）
   useEffect(() => {
     const checkOrderStatus = async () => {
       if (!orderId) {
@@ -128,19 +128,22 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
       }
 
       try {
+        // 查询service_submissions表检查是否已提交
         const { data, error } = await supabase
-          .from('orders')
-          .select('processing_status, claude_email, chatgpt_account, chatgpt_payment_url')
+          .from('service_submissions')
+          .select('status, claude_email, chatgpt_account, chatgpt_payment_url')
           .eq('order_id', orderId)
           .single()
 
-        if (error) {
-          console.error('查询订单状态失败:', error)
+        if (error && error.code !== 'PGRST116') {
+          // PGRST116 = 未找到记录，这是正常的（还未提交）
+          console.error('查询提交状态失败:', error)
           setIsCheckingStatus(false)
           return
         }
 
-        if (data && data.processing_status === 'info_submitted') {
+        if (data) {
+          // 找到记录说明已提交过
           setIsAlreadySubmitted(true)
           setMessage('✅ 此订单已提交！请勿重复填写。')
           // 显示已提交的信息
@@ -170,62 +173,30 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
 
     try {
       if (orderId) {
-        // 如果有orderId，更新现有订单记录
+        // 新表结构：插入到service_submissions表
         const { error } = await supabase
-          .from('orders')
-          .update({
+          .from('service_submissions')
+          .insert({
+            order_id: orderId,
             user_id: user?.id || null,
             user_email: user?.email || null,
             chatgpt_account: formData.chatgpt_account || null,
             chatgpt_payment_url: formData.chatgpt_payment_url || null,
             claude_email: formData.claude_email || null,
-            processing_status: 'info_submitted',
-            updated_at: new Date().toISOString()
-          })
-          .eq('order_id', orderId)
-
-        if (error) {
-          console.error('Supabase update error:', error)
-          setMessage('提交失败，请稍后重试')
-        } else {
-          setMessage('提交成功！我们将尽快为您处理服务')
-          // 清空表单
-          setFormData({
-            chatgpt_account: '',
-            chatgpt_payment_url: '',
-            claude_email: '',
-            service_type: getServiceTypeFromAmount(paymentAmount || 35)
-          })
-        }
-      } else {
-        // 如果没有orderId，创建新的订单记录（兼容旧流程）
-        const { error } = await supabase
-          .from('orders')
-          .insert({
-            user_id: user?.id || null,
-            user_email: user?.email || null,
-            order_id: `manual_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            amount: paymentAmount || 0,
-            service_type: formData.service_type,
-            payment_status: 'pending',
-            processing_status: 'info_submitted',
-            chatgpt_account: formData.chatgpt_account || null,
-            chatgpt_payment_url: formData.chatgpt_payment_url || null,
-            claude_email: formData.claude_email || null
+            status: 'submitted'
           })
 
         if (error) {
           console.error('Supabase insert error:', error)
           setMessage('提交失败，请稍后重试')
         } else {
-          setMessage('提交成功！我们将尽快为您处理')
-          setFormData({
-            chatgpt_account: '',
-            chatgpt_payment_url: '',
-            claude_email: '',
-            service_type: 'ChatGPT免费版代开通35'
-          })
+          setMessage('✅ 提交成功！我们将尽快为您处理服务')
+          setIsAlreadySubmitted(true)
+                    // 不清空表单，让用户看到已提交的信息
         }
+      } else {
+        // 没有orderId说明流程有问题
+        setMessage('❌ 订单信息缺失，请返回重新支付')
       }
     } catch (error) {
       console.error('Catch error:', error)

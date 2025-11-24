@@ -51,11 +51,12 @@ function OrdersPageContent() {
     if (!user) return
 
     try {
+      // 新表结构：使用联合视图查询订单和提交信息
       const { data, error } = await supabase
-        .from('orders')
+        .from('orders_full')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        .order('order_created_at', { ascending: false })
 
       if (error) {
         console.error('Error fetching orders:', error)
@@ -66,13 +67,14 @@ function OrdersPageContent() {
       const formattedOrders = (data || []).map(order => {
         let status: 'submitted' | 'processing' | 'completed' | 'cancelled' = 'submitted'
 
-        if (order.processing_status === 'info_submitted') {
+                // 根据submission_status判断状态
+        if (order.submission_status === 'submitted') {
           status = 'submitted'
-        } else if (order.processing_status === 'processing') {
+        } else if (order.submission_status === 'processing') {
           status = 'processing'
-        } else if (order.processing_status === 'completed') {
+        } else if (order.submission_status === 'completed') {
           status = 'completed'
-        } else if (order.processing_status === 'cancelled') {
+        } else if (order.submission_status === 'failed') {
           status = 'cancelled'
         }
 
@@ -83,7 +85,7 @@ function OrdersPageContent() {
           claude_email: order.claude_email,
           service_type: order.service_type,
           status,
-          created_at: order.created_at
+          created_at: order.order_created_at
         }
       })
 

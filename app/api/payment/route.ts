@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     const { supabase } = await import('@/lib/supabase')
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    // 保存订单到数据库
+    // 保存订单到数据库（新表结构：只存支付信息）
     const { error: insertError } = await supabase
       .from('orders')
       .insert({
@@ -70,7 +70,6 @@ export async function POST(request: NextRequest) {
         amount: parseFloat(amount),
         service_type: title,
         payment_status: 'pending',
-        processing_status: 'waiting_for_info',
         payment_method: 'xunhupay',
         ip_address: clientIP,
         user_agent: userAgent,
