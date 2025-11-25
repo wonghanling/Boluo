@@ -188,6 +188,9 @@ export default function LoginPage() {
           text: '登录成功！正在跳转...'
         })
 
+        // ✅ 立即重置验证状态，避免卡在"验证中"
+        setIsVerifying(false)
+
         setTimeout(() => {
           if (returnUrl && returnUrl !== window.location.href) {
             window.location.href = returnUrl

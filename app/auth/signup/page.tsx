@@ -160,6 +160,9 @@ export default function SignUpPage() {
           text: '验证成功！正在跳转...'
         })
 
+        // ✅ 立即重置验证状态，避免卡在"验证中"
+        setIsVerifying(false)
+
         // 0.5秒后跳转到返回页面
         setTimeout(() => {
           if (returnUrl && returnUrl !== window.location.href) {
