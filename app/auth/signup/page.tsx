@@ -145,6 +145,9 @@ export default function SignUpPage() {
     try {
       const { error, user } = await auth.verifyOtp(userEmail, otp)
 
+      // ✅ 立即重置验证状态，不管后续操作如何
+      setIsVerifying(false)
+
       if (error) {
         setMessage({
           type: 'error',
@@ -159,9 +162,6 @@ export default function SignUpPage() {
           type: 'success',
           text: '验证成功！正在跳转...'
         })
-
-        // ✅ 立即重置验证状态，避免卡在"验证中"
-        setIsVerifying(false)
 
         // 0.5秒后跳转到返回页面
         setTimeout(() => {

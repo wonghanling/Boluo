@@ -173,6 +173,9 @@ export default function LoginPage() {
     try {
       const { error, user } = await auth.verifyOtp(otpEmail, otp)
 
+      // ✅ 立即重置验证状态，不管后续操作如何
+      setIsVerifying(false)
+
       if (error) {
         setMessage({
           type: 'error',
@@ -187,9 +190,6 @@ export default function LoginPage() {
           type: 'success',
           text: '登录成功！正在跳转...'
         })
-
-        // ✅ 立即重置验证状态，避免卡在"验证中"
-        setIsVerifying(false)
 
         setTimeout(() => {
           if (returnUrl && returnUrl !== window.location.href) {
