@@ -311,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="px-4 py-20 bg-yellow-300">
+      <section id="services" className="px-4 py-10 md:py-20 bg-yellow-300">
         <div className="container mx-auto">
           <motion.div
             initial="initial"
@@ -319,13 +319,13 @@ export default function HomePage() {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">核心服务</h2>
-              <p className="text-xl text-black max-w-2xl mx-auto">
+            <motion.div variants={fadeInUp} className="text-center mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-black">核心服务</h2>
+              <p className="text-base md:text-xl text-black max-w-2xl mx-auto">
                 专业的海外 AI 工具代充服务，让您轻松享受全球最先进的人工智能技术
               </p>
             </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {services.map((service, index) => {
                 const IconComponent = Icons[service.icon as keyof typeof Icons]
                 return (
@@ -378,7 +378,7 @@ export default function HomePage() {
       </section>
 
       {/* Advantages Section */}
-      <section className="px-4 py-20 bg-yellow-300">
+      <section className="px-4 py-10 md:py-20 bg-yellow-300">
         <div className="container mx-auto">
           <motion.div
             initial="initial"
@@ -386,13 +386,13 @@ export default function HomePage() {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">为什么选择我们</h2>
-              <p className="text-xl text-black max-w-2xl mx-auto">
+            <motion.div variants={fadeInUp} className="text-center mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-black">为什么选择我们</h2>
+              <p className="text-base md:text-xl text-black max-w-2xl mx-auto">
                 专业、安全、便捷的服务体验
               </p>
             </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
               {advantages.map((advantage, index) => {
                 const IconComponent = Icons[advantage.icon as keyof typeof Icons]
                 return (
@@ -415,14 +415,14 @@ export default function HomePage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="px-4 py-20 bg-yellow-300">
+      <section id="contact" className="px-4 py-10 md:py-20 bg-yellow-300">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">联系我们</h2>
-          <p className="text-xl text-black mb-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-black">联系我们</h2>
+          <p className="text-base md:text-xl text-black mb-6 md:mb-8 max-w-2xl mx-auto">
             有任何问题或需要咨询？我们随时为您提供专业服务
           </p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="text-lg px-8 py-4"
             onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
           >
