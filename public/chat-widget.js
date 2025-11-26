@@ -15,7 +15,7 @@
     var LHC_API = LHC_API||{};
     LHC_API.args = {
         mode:'widget',
-        lhc_base_url:'//mistcurrnet.com/index.php/',
+        lhc_base_url:'https://mistcurrnet.com/index.php/',
         wheight:450,
         wwidth:350,
         pheight:520,
@@ -29,7 +29,7 @@
     po.setAttribute('crossorigin','anonymous');
     po.async = true;
     var date = new Date();
-    po.src = '//mistcurrnet.com/design/defaulttheme/js/widgetv2/index.js?'+(""+date.getFullYear() + date.getMonth() + date.getDate());
+    po.src = 'https://mistcurrnet.com/design/defaulttheme/js/widgetv2/index.js?'+(""+date.getFullYear() + date.getMonth() + date.getDate());
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(po, s);
 
