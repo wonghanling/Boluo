@@ -2,6 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
+import Script from "next/script"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import {
@@ -338,7 +339,21 @@ export default function HomePage() {
                       onClick={() => handleServiceClick(service)}
                     >
                       <div className="flex items-center justify-center w-12 h-12 bg-brand/10 rounded-xl mb-4 group-hover:bg-brand/20 transition-colors">
-                        <IconComponent className="h-6 w-6 text-brand" />
+                        {service.id === 'chatgpt' ? (
+                          <img
+                            src="/ChatGPT.png"
+                            alt="ChatGPT"
+                            className="w-6 h-6 object-contain"
+                          />
+                        ) : service.id === 'claude' ? (
+                          <img
+                            src="/Claude code.png"
+                            alt="Claude Code"
+                            className="w-6 h-6 object-contain"
+                          />
+                        ) : (
+                          <IconComponent className="h-6 w-6 text-brand" />
+                        )}
                       </div>
                       <h3 className="text-xl font-semibold mb-3">{service.name}</h3>
                       <p className="text-muted-foreground mb-4">{service.description}</p>
@@ -573,6 +588,13 @@ export default function HomePage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* 聊天组件 */}
+      <Script
+        src="/chat-widget.js"
+        strategy="lazyOnload"
+        onLoad={() => console.log('聊天组件已加载')}
+      />
     </div>
   )
 }

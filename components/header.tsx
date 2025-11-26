@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { Moon, Sun, Menu, MessageCircle, User, LogOut, Settings, Mail, ChevronDown } from "lucide-react"
@@ -62,6 +63,14 @@ export function Header() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
+            <Image
+              src="/boluoing-logo.png"
+              alt="BoLuo Logo"
+              width={24}
+              height={24}
+              className="w-6 h-6 opacity-100"
+              priority
+            />
             <span className="font-bold text-xl">BoLuo</span>
           </Link>
 
