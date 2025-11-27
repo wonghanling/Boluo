@@ -31,7 +31,7 @@
         var _l = '';
         var _m = document.getElementsByTagName('meta');
         var _cl = '';
-        for (i=0; i < _m.length; i++) {
+        for (var i=0; i < _m.length; i++) {
             if ( _m[i].getAttribute('http-equiv') == 'content-language' ) {
                 _cl = _m[i].getAttribute('content');
             }
