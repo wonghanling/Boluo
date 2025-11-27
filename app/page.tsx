@@ -592,7 +592,7 @@ export default function HomePage() {
       {/* 聊天组件 */}
       <Script
         src="/chat-widget.js"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         onLoad={() => console.log('聊天组件已加载')}
       />
     </div>
