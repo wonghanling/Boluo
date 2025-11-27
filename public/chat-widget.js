@@ -11,8 +11,8 @@
 (function() {
     'use strict';
 
-    // LiveHelperChat Chatbox 聊天框组件集成代码
-    var LHCChatboxOptions = {
+    // 确保全局变量被正确定义
+    window.LHCChatboxOptions = {
         hashchatbox:'empty',
         identifier:'default',
         status_text:'Chatbox'
