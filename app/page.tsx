@@ -48,10 +48,10 @@ export default function HomePage() {
 
   // 图片列表
   const slideImages = [
-    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN1.jpg",
-    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN2.jpg",
-    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN3.jpg",
-    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN4.jpg"
+    "/ZHANGDAN1.jpg",
+    "/ZHANGDAN2.jpg",
+    "/ZHANGDAN3.jpg",
+    "/ZHANGDAN4.jpg"
   ]
 
   // 切换图片函数
