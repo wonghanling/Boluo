@@ -42,6 +42,27 @@ export default function HomePage() {
   const [showRegisterModal, setShowRegisterModal] = React.useState(false)
   const [hasShownRegisterPrompt, setHasShownRegisterPrompt] = React.useState(false)
 
+  // 自定义弹窗状态
+  const [showCustomModal, setShowCustomModal] = React.useState(false)
+  const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0)
+
+  // 图片列表
+  const slideImages = [
+    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN1.jpg",
+    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN2.jpg",
+    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN3.jpg",
+    "https://pub-6901e50709a54ed69f066133ff4b8b4a.r2.dev/ZHANGDAN4.jpg"
+  ]
+
+  // 切换图片函数
+  const handlePrevSlide = () => {
+    setCurrentSlideIndex((prev) => (prev - 1 + slideImages.length) % slideImages.length)
+  }
+
+  const handleNextSlide = () => {
+    setCurrentSlideIndex((prev) => (prev + 1) % slideImages.length)
+  }
+
   // 页面加载时显示注册提醒（仅对未登录用户显示一次）
   React.useEffect(() => {
     if (!loading) {
@@ -305,6 +326,30 @@ export default function HomePage() {
                   任何问题均可随时联系。
                 </div>
               </div>
+
+              {/* 新增按钮 - 独立存在，不影响其他代码 */}
+              <motion.div
+                className="mt-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 0.5 }}
+              >
+                <button
+                  onClick={() => setShowCustomModal(true)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '999px',
+                    border: 'none',
+                    background: '#f5d547',
+                    color: '#111',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    fontWeight: '500'
+                  }}
+                >
+                  查看服务详情 / FAQ
+                </button>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
@@ -588,6 +633,302 @@ export default function HomePage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* 服务详情弹窗 - 独立存在，不影响其他代码 */}
+      {showCustomModal && (
+        <div
+          onClick={() => setShowCustomModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.55)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '92%',
+              maxWidth: '720px',
+              maxHeight: '90vh',
+              background: '#050608',
+              color: '#f5f5f5',
+              borderRadius: '16px',
+              padding: '16px 18px 18px',
+              boxShadow: '0 18px 45px rgba(0,0,0,0.6)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}
+          >
+            {/* 顶部栏 */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <div>
+                <div style={{ fontSize: '14px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  服务说明 & FAQ
+                </div>
+                <div style={{ fontSize: '11px', opacity: 0.65, marginTop: '2px' }}>
+                  ChatGPT / Claude / 代充服务 · 下单前看看这里
+                </div>
+              </div>
+              <button
+                onClick={() => setShowCustomModal(false)}
+                style={{
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '999px',
+                  border: 'none',
+                  background: 'rgba(255,255,255,0.06)',
+                  color: '#f5f5f5',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* 主体内容：可滚动 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto', paddingRight: '4px' }}>
+
+              {/* FAQ区块 */}
+              <section
+                style={{
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.02)',
+                  padding: '10px 10px 8px',
+                  border: '1px solid rgba(255,255,255,0.04)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <h3 style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    FAQ · 常见问题
+                  </h3>
+                  <span style={{ fontSize: '11px', opacity: 0.6 }}>下单前 90% 的疑问在这里</span>
+                </div>
+
+                <div style={{ marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
+                  <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
+                    <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
+                      ✅ 开通多久可以使用？
+                    </summary>
+                    <p style={{ marginTop: '2px', opacity: 0.8 }}>
+                      正常 1～5 分钟内完成开通，特殊情况下不超过 30 分钟，全程有客服跟进。
+                    </p>
+                  </details>
+
+                  <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
+                    <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
+                      ✅ 会不会封号？安全吗？
+                    </summary>
+                    <p style={{ marginTop: '2px', opacity: 0.8 }}>
+                      通过正规渠道代开，不登录你的账号、不改密码，不影响你原有使用安全与数据。
+                    </p>
+                  </details>
+
+                  <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
+                    <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
+                      ✅ 支持哪些付款方式？
+                    </summary>
+                    <p style={{ marginTop: '2px', opacity: 0.8 }}>
+                      支持微信 / 支付宝 付款，确认套餐后会给到专属收款码，付款后系统 / 客服会在约定时间内完成开通。
+                    </p>
+                  </details>
+
+                  <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
+                    <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
+                      ✅ 万一开通失败怎么办？
+                    </summary>
+                    <p style={{ marginTop: '2px', opacity: 0.8 }}>
+                      若因我们原因未能成功开通，将全额退款；整个过程有聊天记录与凭证，可随时核对。
+                    </p>
+                  </details>
+                </div>
+              </section>
+
+              {/* 用户评价区块 */}
+              <section
+                style={{
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.02)',
+                  padding: '10px 10px 8px',
+                  border: '1px solid rgba(255,255,255,0.04)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <h3 style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    用户评价
+                  </h3>
+                  <span style={{ fontSize: '11px', opacity: 0.6 }}>部分真实反馈（示例文案）</span>
+                </div>
+
+                <div style={{ marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px' }}>
+                  <div
+                    style={{
+                      padding: '6px 8px',
+                      borderRadius: '8px',
+                      background: 'rgba(0,0,0,0.55)',
+                      border: '1px solid rgba(255,255,255,0.03)',
+                    }}
+                  >
+                    <div style={{ fontSize: '11px', opacity: 0.75 }}>⭐️⭐️⭐️⭐️⭐️ · ChatGPT Plus 代充</div>
+                    <p style={{ marginTop: '2px' }}>
+                      下单后 3 分钟就帮我开通了，比自己折腾国外卡省事多了。
+                    </p>
+                    <div style={{ marginTop: '2px', fontSize: '11px', opacity: 0.6 }}>—— @鹏 · 程序员</div>
+                  </div>
+
+                  <div
+                    style={{
+                      padding: '6px 8px',
+                      borderRadius: '8px',
+                      background: 'rgba(0,0,0,0.55)',
+                      border: '1px solid rgba(255,255,255,0.03)',
+                    }}
+                  >
+                    <div style={{ fontSize: '11px', opacity: 0.75 }}>⭐️⭐️⭐️⭐️⭐️ · Claude Pro</div>
+                    <p style={{ marginTop: '2px' }}>
+                      Claude / ChatGPT 都能开，客服把使用注意事项也讲得很详细。
+                    </p>
+                    <div style={{ marginTop: '2px', fontSize: '11px', opacity: 0.6 }}>—— @L同学 · 在读研究生</div>
+                  </div>
+
+                  <div
+                    style={{
+                      padding: '6px 8px',
+                      borderRadius: '8px',
+                      background: 'rgba(0,0,0,0.55)',
+                      border: '1px solid rgba(255,255,255,0.03)',
+                    }}
+                  >
+                    <div style={{ fontSize: '11px', opacity: 0.75 }}>⭐️⭐️⭐️⭐️⭐️ · 长期续费用户</div>
+                    <p style={{ marginTop: '2px' }}>
+                      已经连续在这边续了几个月，一直很稳定，有问题直接微信聊就行。
+                    </p>
+                    <div style={{ marginTop: '2px', fontSize: '11px', opacity: 0.6 }}>—— @W · 自媒体博主</div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 截图预览区块 */}
+              <section
+                style={{
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.02)',
+                  padding: '10px 10px 8px',
+                  border: '1px solid rgba(255,255,255,0.04)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <h3 style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    截图预览
+                  </h3>
+                  <span style={{ fontSize: '11px', opacity: 0.6 }}>下单 / 开通 / 账单示意</span>
+                </div>
+
+                <div style={{ marginTop: '6px' }}>
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      paddingTop: '55%',
+                      borderRadius: '10px',
+                      overflow: 'hidden',
+                      background: '#050608',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}
+                  >
+                    {/* 图片 */}
+                    <img
+                      src={slideImages[currentSlideIndex]}
+                      alt={`账单截图 ${currentSlideIndex + 1}`}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+
+                    {/* 左右按钮 */}
+                    <button
+                      onClick={handlePrevSlide}
+                      style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '8px',
+                        transform: 'translateY(-50%)',
+                        width: '22px',
+                        height: '22px',
+                        borderRadius: '999px',
+                        border: 'none',
+                        background: 'rgba(0,0,0,0.55)',
+                        color: '#fff',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={handleNextSlide}
+                      style={{
+                        position: 'absolute',
+                        top: '50%',
+                        right: '8px',
+                        transform: 'translateY(-50%)',
+                        width: '22px',
+                        height: '22px',
+                        borderRadius: '999px',
+                        border: 'none',
+                        background: 'rgba(0,0,0,0.55)',
+                        color: '#fff',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      ›
+                    </button>
+
+                    {/* 小圆点 */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '6px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        display: 'flex',
+                        gap: '4px',
+                      }}
+                    >
+                      {slideImages.map((_, index) => (
+                        <span
+                          key={index}
+                          style={{
+                            width: '6px',
+                            height: '6px',
+                            borderRadius: '999px',
+                            background: '#f5d547',
+                            opacity: index === currentSlideIndex ? 1 : 0.3,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 聊天组件 */}
       <Script
