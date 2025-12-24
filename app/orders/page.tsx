@@ -56,7 +56,7 @@ function OrdersPageContent() {
         .from('orders_full')
         .select('*')
         .eq('user_id', user.id)
-        .order('order_created_at', { ascending: false })
+        .eq('payment_status', 'paid').order('order_created_at', { ascending: false })
 
       if (error) {
         console.error('Error fetching orders:', error)
