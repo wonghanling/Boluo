@@ -218,6 +218,20 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
           setMessage('✅ 提交成功！我们将尽快为您处理服务')
           setIsAlreadySubmitted(true)
                     // 不清空表单，让用户看到已提交的信息
+          // ✅ 同时更新订单支付状态为已支付（双重保险机制）
+          const { error: updateOrderError } = await supabase
+            .from('orders')
+            .update({
+              payment_status: 'paid',
+              paid_at: new Date().toISOString()
+            })
+            .eq('order_id', orderId)
+
+          if (updateOrderError) {
+            console.error('更新订单状态失败（不影响提交）:', updateOrderError)
+          } else {
+            console.log('✅ 订单状态已更新为已支付')
+          }
         }
       } else {
         // 没有orderId说明流程有问题
