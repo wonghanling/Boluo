@@ -212,6 +212,25 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
     setMessage('')
 
     try {
+      // ✅ 【必填验证】检查显示的字段是否都已填写
+      if (fieldAccess.chatgpt_account && !formData.chatgpt_account.trim()) {
+        setMessage('❌ 请填写ChatGPT账号')
+        setIsSubmitting(false)
+        return
+      }
+      
+      if (fieldAccess.chatgpt_payment_url && !formData.chatgpt_payment_url.trim()) {
+        setMessage('❌ 请填写ChatGPT支付URL')
+        setIsSubmitting(false)
+        return
+      }
+      
+      if (fieldAccess.claude_email && !formData.claude_email.trim()) {
+        setMessage('❌ 请填写联系邮箱')
+        setIsSubmitting(false)
+        return
+      }
+
       if (orderId) {
         // ✅ 【防白嫖】先检查此订单号是否已经提交过
         console.log('🔍 检查订单是否已提交:', orderId)
@@ -384,6 +403,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
               }}>✉</span>
               <input
                 type="email"
+                required
                 value={formData.chatgpt_account}
                 onChange={(e) => setFormData(prev => ({...prev, chatgpt_account: e.target.value}))}
                 placeholder="填写你的ChatGPT的账号："
@@ -428,6 +448,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
               onChange={(e) => setFormData(prev => ({...prev, chatgpt_payment_url: e.target.value}))}
               placeholder="登录ChatGPT账号购买Plus 支付页面链接&#10;https://pay.openai.com/c/pay/cs_live_a1Em0yetbv1wEunBgqpunNEIBy1bQI8LyPDe7BeQX7A5z5WN1xw8vB4pAl#fidpamzKaWAnPyd%2FbScp3ZwZ3Zmd2x1cWxqaTBrbHRwYGtqdnZAa2RhaWBnJz9jZGI2YCknZHVsTnB8Jz8nd3WEaaWyqeFgwM1k2KdfzJ3BtNNGhQQepsf4NelJDGlYB1o138gvXVA2XbNIxZGWi%2FnFGQaXtdKgVgVoOjP8PvVtgIJhO..."
               rows={6}
+              required
               readOnly={isAlreadySubmitted}
               style={{
                 width: '100%',
@@ -474,6 +495,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
               }}>✉</span>
               <input
                 type="text"
+                required
                 value={formData.claude_email}
                 onChange={(e) => setFormData(prev => ({...prev, claude_email: e.target.value}))}
                 placeholder="请填写联系邮箱，例如：example@qq.com"
