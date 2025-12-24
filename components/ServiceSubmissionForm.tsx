@@ -46,6 +46,14 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
         return "ChatGPT独享代充 ¥169/月"
       case 1500:
         return "ChatGPTPro专业版 ¥1500/月"
+      case 13:
+        return "Claude code 日付套餐 ¥13/天"
+      case 29:
+        return "Claude code 新号申请 ¥29/一次性"
+      case 130:
+        return "Claude code 周付套餐 ¥130/周"
+      case 320:
+        return "Claude code月付套餐 ¥320/月"
       default:
         return "ChatGPT免费版代开通35"
     }
@@ -96,6 +104,38 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
           claude_email: true,
           service_type_editable: false, // Lock to paid service
           service_type_options: serviceOptions.filter(opt => opt.includes('Pro专业版'))
+        }
+      case 13: // Claude日付套餐 - 只需要联系邮箱
+        return {
+          chatgpt_account: false, // 隐藏ChatGPT账号字段
+          chatgpt_payment_url: false, // 隐藏支付URL字段
+          claude_email: true, // 只显示联系邮箱
+          service_type_editable: false, // Lock to paid service
+          service_type_options: serviceOptions.filter(opt => opt.includes('日付套餐'))
+        }
+      case 29: // Claude新号申请 - 只需要联系邮箱
+        return {
+          chatgpt_account: false, // 隐藏ChatGPT账号字段
+          chatgpt_payment_url: false, // 隐藏支付URL字段
+          claude_email: true, // 只显示联系邮箱
+          service_type_editable: false, // Lock to paid service
+          service_type_options: serviceOptions.filter(opt => opt.includes('新号申请'))
+        }
+      case 130: // Claude周付套餐 - 只需要联系邮箱
+        return {
+          chatgpt_account: false, // 隐藏ChatGPT账号字段
+          chatgpt_payment_url: false, // 隐藏支付URL字段
+          claude_email: true, // 只显示联系邮箱
+          service_type_editable: false, // Lock to paid service
+          service_type_options: serviceOptions.filter(opt => opt.includes('周付套餐'))
+        }
+      case 320: // Claude月付套餐 - 只需要联系邮箱
+        return {
+          chatgpt_account: false, // 隐藏ChatGPT账号字段
+          chatgpt_payment_url: false, // 隐藏支付URL字段
+          claude_email: true, // 只显示联系邮箱
+          service_type_editable: false, // Lock to paid service
+          service_type_options: serviceOptions.filter(opt => opt.includes('月付套餐'))
         }
       default:
         return {
@@ -416,7 +456,9 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
               color: '#333',
               textAlign: 'left'
             }}>
-              购买claude code 请填写你的邮箱QQ/Googel/微信
+              {paymentAmount === 169 || paymentAmount === 1500 
+                ? '请填写你的联系邮箱（QQ/Google/微信）' 
+                : '请填写你的联系邮箱（QQ/Google/微信），方便直接把账号发送给你的邮箱。'}
             </label>
             <div style={{
               display: 'flex',
@@ -434,7 +476,7 @@ export default function ServiceSubmissionForm({ paymentAmount, serviceName, orde
                 type="text"
                 value={formData.claude_email}
                 onChange={(e) => setFormData(prev => ({...prev, claude_email: e.target.value}))}
-                placeholder="购买claude code 请填写你的邮箱QQ/Googel/微信"
+                placeholder="请填写联系邮箱，例如：example@qq.com"
                 readOnly={isAlreadySubmitted}
                 style={{
                   flex: 1,
