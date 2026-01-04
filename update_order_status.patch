@@ -1,0 +1,16 @@
+220a221,234
+>
+>           // ✅ 同时更新订单支付状态为已支付（双重保险机制）
+>           const { error: updateOrderError } = await supabase
+>             .from('orders')
+>             .update({
+>               payment_status: 'paid',
+>               paid_at: new Date().toISOString()
+>             })
+>             .eq('order_id', orderId)
+>
+>           if (updateOrderError) {
+>             console.error('更新订单状态失败（不影响提交）:', updateOrderError)
+>           } else {
+>             console.log('✅ 订单状态已更新为已支付')
+>           }

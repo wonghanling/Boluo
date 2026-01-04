@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
+import { verifyCallback } from '@/lib/alipay'
 import { createClient } from '@supabase/supabase-js'
 
 // 强制动态渲染
@@ -10,142 +10,71 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-// 生成MD5哈希
-function md5(text: string): string {
-  return crypto.createHash('md5').update(text).digest('hex')
-}
-
-// 验证签名
-function getHash(params: Record<string, any>, appSecret: string): string {
-  const sortedParams = Object.keys(params)
-    .filter(key => params[key] && key !== 'hash') // 过滤掉空值和hash本身
-    .sort()
-    .map(key => `${key}=${params[key]}`)
-    .join('&')
-  const stringSignTemp = sortedParams + appSecret
-  const hash = md5(stringSignTemp)
-  console.log('回调验签参数:', sortedParams)
-  console.log('回调验签字符串:', stringSignTemp)
-  console.log('回调生成的签名:', hash)
-  return hash
-}
-
+// 支付宝异步通知回调
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const appSecret = process.env.XUNHUPAY_SECRET
+    const formData = await request.formData()
+    const params: any = {}
 
-    if (!appSecret) {
-      console.error('虎皮椒密钥配置缺失')
-      return new NextResponse('success', { status: 200 })
+    formData.forEach((value, key) => {
+      params[key] = value
+    })
+
+    console.log('支付宝异步通知:', params)
+
+    // 验证签名
+    const isValid = verifyCallback(params)
+
+    if (!isValid) {
+      console.error('签名验证失败')
+      return new NextResponse('fail', { status: 400 })
     }
 
-    console.log('支付回调数据:', body)
-
-    // 验签
-    const calculatedHash = getHash(body, appSecret)
-    if (body.hash !== calculatedHash) {
-      console.error('验签失败:', {
-        received: body.hash,
-        calculated: calculatedHash
-      })
-      return new NextResponse('success', { status: 200 })
-    }
+    // 提取关键信息
+    const {
+      out_trade_no, // 商户订单号
+      trade_no, // 支付宝交易号
+      trade_status, // 交易状态
+      total_amount, // 订单金额
+    } = params
 
     // 处理支付成功
-    if (body.status === 'OD') {
-      console.log('支付成功:', {
-        orderId: body.trade_order_id,
-        amount: body.total_fee,
-        transactionId: body.transaction_id
-      })
+    if (trade_status === 'TRADE_SUCCESS' || trade_status === 'TRADE_FINISHED') {
+      console.log(`订单 ${out_trade_no} 支付成功，支付宝交易号: ${trade_no}`)
 
-      // 生成安全令牌
+      // 更新数据库订单状态为已支付
       try {
-        const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/token`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            orderId: body.trade_order_id
-          })
-        })
-
-        const tokenResult = await tokenResponse.json()
-
-        if (tokenResult.success) {
-          console.log('✅ 令牌生成成功:', tokenResult.token)
-
-          // 注意：虎皮椒回调不能直接跳转用户页面
-          // 实际跳转需要在支付接口的return_url中处理
-          // 这里只是生成令牌供后续使用
-        } else {
-          console.error('❌ 生成令牌失败:', tokenResult.error)
-        }
-      } catch (tokenError) {
-        console.error('❌ 令牌生成接口调用失败:', tokenError)
-      }
-
-      // 【更新】保存/更新订单信息到新的统一 orders 表
-      try {
-        // 先检查订单是否已存在
-        const { data: existingOrder } = await supabase
+        const { error } = await supabase
           .from('orders')
-          .select('*')
-          .eq('order_id', body.trade_order_id)
-          .single()
+          .update({
+            payment_status: 'paid',
+            trade_order_id: trade_no,
+            paid_at: new Date().toISOString(),
+          })
+          .eq('order_id', out_trade_no)
 
-        if (existingOrder) {
-          // 订单存在，更新支付状态
-          const { error: updateError } = await supabase
-            .from('orders')
-            .update({
-              payment_status: 'paid',
-              updated_at: new Date().toISOString()
-            })
-            .eq('order_id', body.trade_order_id)
-
-          if (updateError) {
-            console.error('❌ 更新订单支付状态失败:', updateError)
-          } else {
-            console.log('✅ 订单支付状态已更新为已支付')
-          }
+        if (error) {
+          console.error('更新订单状态失败:', error)
         } else {
-          // 订单不存在，创建新订单记录
-          const { error: insertError } = await supabase
-            .from('orders')
-            .insert({
-              order_id: body.trade_order_id,
-              amount: parseFloat(body.total_fee),
-              service_type: body.title || '未知服务',
-              payment_status: 'paid',
-              processing_status: 'waiting_for_info',
-              payment_method: 'xunhupay'
-            })
-
-          if (insertError) {
-            console.error('❌ 创建订单记录失败:', insertError)
-          } else {
-            console.log('✅ 新订单记录已创建并标记为已支付')
-          }
+          console.log(`订单 ${out_trade_no} 状态已更新为已支付`)
         }
-      } catch (saveOrderError) {
-        console.error('❌ 处理订单信息异常（不影响支付流程）:', saveOrderError)
+      } catch (dbError) {
+        console.error('数据库更新异常:', dbError)
       }
-
-    } else {
-      console.log('支付未成功:', {
-        orderId: body.trade_order_id,
-        status: body.status
-      })
     }
 
-    // 虎皮椒要求返回 success 字符串
-    return new NextResponse('success', { status: 200 })
-
+    // 返回success给支付宝，表示已收到通知
+    return new NextResponse('success')
   } catch (error) {
-    console.error('支付回调处理错误:', error)
-    return new NextResponse('success', { status: 200 })
+    console.error('处理支付回调失败:', error)
+    return new NextResponse('fail', { status: 500 })
   }
+}
+
+// 不允许GET请求
+export async function GET() {
+  return NextResponse.json(
+    { error: 'Method not allowed' },
+    { status: 405 }
+  )
 }
