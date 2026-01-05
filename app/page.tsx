@@ -143,10 +143,6 @@ export default function HomePage() {
       })
 
       const result = await response.json()
-      console.log('✅ 支付API返回结果:', result)
-      console.log('📝 payUrl内容:', result.payUrl)
-      console.log('📝 payUrl类型:', typeof result.payUrl)
-      console.log('📝 payUrl长度:', result.payUrl?.length)
 
       if (result.success) {
         // 创建一个临时div来渲染支付表单

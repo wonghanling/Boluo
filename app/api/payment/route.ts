@@ -62,9 +62,6 @@ export async function POST(request: NextRequest) {
       notifyUrl: `${notifyUrl}/api/payment/notify`,
     }
 
-    console.log('支付参数:', paymentParams)
-    console.log('设备类型:', isMobileDevice ? '移动端' : 'PC端')
-
     // 根据设备类型选择支付方式
     let paymentUrl
     if (isMobileDevice) {
@@ -74,10 +71,6 @@ export async function POST(request: NextRequest) {
       // 电脑网站支付 - 跳转支付宝页面显示二维码
       paymentUrl = await createPCPayment(paymentParams)
     }
-
-    console.log('🔍 支付URL类型:', typeof paymentUrl)
-    console.log('🔍 支付URL长度:', paymentUrl?.length)
-    console.log('🔍 支付URL前100字符:', paymentUrl?.substring(0, 100))
 
     return NextResponse.json({
       success: true,
