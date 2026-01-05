@@ -75,6 +75,10 @@ export async function POST(request: NextRequest) {
       paymentUrl = await createPCPayment(paymentParams)
     }
 
+    console.log('🔍 支付URL类型:', typeof paymentUrl)
+    console.log('🔍 支付URL长度:', paymentUrl?.length)
+    console.log('🔍 支付URL前100字符:', paymentUrl?.substring(0, 100))
+
     return NextResponse.json({
       success: true,
       payUrl: paymentUrl,
