@@ -149,10 +149,18 @@ export default function HomePage() {
       console.log('📝 payUrl长度:', result.payUrl?.length)
 
       if (result.success) {
-        // PC端和移动端都直接跳转支付宝页面
-        // PC端：支付宝会显示二维码
-        // 移动端：直接打开支付宝APP
-        window.open(result.payUrl, '_blank')
+        // 创建一个临时div来渲染支付表单
+        // 支付宝SDK返回的是HTML表单字符串，需要插入到页面并自动提交
+        const div = document.createElement('div')
+        div.innerHTML = result.payUrl
+        document.body.appendChild(div)
+
+        // 自动提交表单（支付宝SDK返回的HTML包含自动提交脚本）
+        const script = div.querySelector('script')
+        if (script) {
+          eval(script.innerHTML)
+        }
+
         setServiceModalOpen(false)
       } else {
         alert(result.error || '支付创建失败')
