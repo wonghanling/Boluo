@@ -155,15 +155,15 @@ export const services: Service[] = [
   },
   {
     id: "network",
-    name: "网络云加速服务",
-    description: "不提供境内",
+    name: "即将推出",
+    description: "敬请期待",
     icon: "Zap",
     href: "#",
     features: [
-      "套餐便宜，速度更快",
-      "专业稳定的网络解决方案",
-      "银行级别安全",
-      "7×24小时技术支持"
+      "开发进行中",
+      "即将发布",
+      "更多惊喜",
+      "保持关注"
     ],
     pricing: [
       {

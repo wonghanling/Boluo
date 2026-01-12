@@ -361,10 +361,25 @@ export default function HomePage() {
                     variants={fadeInUp}
                     className="group"
                   >
-                    <div 
-                      className="p-6 rounded-2xl bg-black text-white border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full cursor-pointer"
+                    <div
+                      className={`p-6 rounded-2xl bg-black text-white border shadow-lg transition-all duration-300 h-full relative ${
+                        service.id === 'network'
+                          ? 'opacity-60 cursor-not-allowed'
+                          : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer'
+                      }`}
                       onClick={() => handleServiceClick(service)}
                     >
+                      {/* Coming Soon 标签 - 仅对 network 服务显示 */}
+                      {service.id === 'network' && (
+                        <div className="absolute -top-2 -right-2 z-10">
+                          <div className="relative">
+                            <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                              Coming Soon
+                            </span>
+                            <span className="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-75"></span>
+                          </div>
+                        </div>
+                      )}
                       <div className="flex items-center justify-center w-12 h-12 bg-brand/10 rounded-xl mb-4 group-hover:bg-brand/20 transition-colors">
                         {service.id === 'chatgpt' ? (
                           <img
