@@ -97,15 +97,15 @@ export function PurchaseDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-6xl max-w-[95vw] max-h-[90vh] overflow-y-auto rounded-[28px] border-0 bg-white p-0 shadow-[0_20px_80px_rgba(15,23,42,0.22)]">
+      <DialogContent className="sm:max-w-5xl max-w-[94vw] max-h-[88vh] overflow-y-auto rounded-[22px] border border-slate-200 bg-white p-0 shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
         {service && (
-          <div className="overflow-hidden rounded-[28px]">
-            <div className="px-6 pt-7 pb-5 sm:px-8">
-              <DialogHeader className="space-y-3 text-left">
-                <DialogTitle className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+          <div className="overflow-hidden rounded-[22px]">
+            <div className="px-6 pt-6 pb-6 sm:px-7">
+              <DialogHeader className="space-y-2 text-left">
+                <DialogTitle className="text-[30px] font-bold tracking-tight text-slate-950">
                   {service.name}
                 </DialogTitle>
-                <DialogDescription className="max-w-3xl text-base leading-7 text-slate-500 sm:text-xl">
+                <DialogDescription className="max-w-3xl text-lg leading-8 text-slate-500">
                   {service.description}
                 </DialogDescription>
               </DialogHeader>
@@ -115,10 +115,10 @@ export function PurchaseDialog({
                   <button
                     key={index}
                     type="button"
-                    className={`relative flex w-full flex-col gap-3 rounded-2xl px-5 py-4 text-left transition-all sm:flex-row sm:items-center sm:justify-between ${
+                    className={`relative flex w-full flex-col gap-3 rounded-2xl border px-5 py-4 text-left transition-all sm:flex-row sm:items-center sm:justify-between ${
                       selectedPlan === index
-                        ? "bg-amber-400 ring-2 ring-blue-500"
-                        : "bg-amber-300 hover:bg-amber-300/90"
+                        ? "border-blue-500 bg-[#ffca15] ring-2 ring-blue-500"
+                        : "border-[#f3c318] bg-[#ffca15] hover:bg-[#ffc400]"
                     }`}
                     onClick={() => {
                       setSelectedPlan(index)
@@ -132,17 +132,17 @@ export function PurchaseDialog({
                     )}
 
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl font-bold text-slate-950">{plan.name}</span>
-                      <span className="text-2xl font-bold text-slate-950">
+                      <span className="text-[22px] font-bold text-slate-950">{plan.name}</span>
+                      <span className="text-[22px] font-bold text-slate-950">
                         {plan.price}
-                        {plan.period && <span className="text-xl">/{plan.period}</span>}
+                        {plan.period && <span className="text-lg">/{plan.period}</span>}
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-start gap-x-3 gap-y-2 text-sm font-medium text-slate-700 sm:justify-end sm:text-lg">
+                    <div className="flex flex-wrap items-center justify-start gap-x-3 gap-y-2 text-sm font-medium text-[#556b2f] sm:justify-end sm:text-[15px]">
                       {plan.features?.map((feature, idx) => (
                         <span key={idx} className="inline-flex items-center">
-                          <span className="mr-1 text-emerald-600">✓</span>
+                          <span className="mr-1 text-[#14a44d]">✓</span>
                           {feature}
                         </span>
                       ))}
@@ -156,10 +156,10 @@ export function PurchaseDialog({
               )}
 
               {service.id !== "others" && canDirectPay && (
-                <div className="mt-8 rounded-[24px] border border-slate-200 bg-slate-50/80 px-5 py-5 sm:px-6">
-                  <div className="mb-5">
-                    <h3 className="text-xl font-bold text-slate-950">填写收卡信息</h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-500 sm:text-base">
+                <div className="mt-7 rounded-[20px] border border-[#f0d46b] bg-[#fff8dc] px-5 py-5 sm:px-6">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-bold text-slate-950">填写收卡信息</h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
                       付款完成后，卡号、礼品卡卡密或二维码会发送到你填写的邮箱。联系方式用于异常情况联系。
                     </p>
                   </div>
@@ -174,7 +174,7 @@ export function PurchaseDialog({
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                         placeholder="you@example.com"
-                        className="h-12 rounded-xl border-slate-200 bg-white text-base"
+                        className="h-11 rounded-xl border-slate-200 bg-white text-base"
                       />
                       {errors.email && (
                         <p className="mt-2 text-sm text-red-600">{errors.email}</p>
@@ -189,7 +189,7 @@ export function PurchaseDialog({
                         value={contact}
                         onChange={(event) => setContact(event.target.value)}
                         placeholder="微信 / Telegram / 手机号"
-                        className="h-12 rounded-xl border-slate-200 bg-white text-base"
+                        className="h-11 rounded-xl border-slate-200 bg-white text-base"
                       />
                       {errors.contact && (
                         <p className="mt-2 text-sm text-red-600">{errors.contact}</p>
@@ -204,17 +204,17 @@ export function PurchaseDialog({
                         value={note}
                         onChange={(event) => setNote(event.target.value)}
                         placeholder="可选，填写收卡时间要求或补充说明"
-                        className="min-h-[100px] rounded-xl border-slate-200 bg-white text-base"
+                        className="min-h-[88px] rounded-xl border-slate-200 bg-white text-base"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              <div className="mt-8">
+              <div className="mt-7">
                 {service.id === "others" || !canDirectPay ? (
                   <Button
-                    className="h-14 w-full rounded-2xl border-0 bg-green-600 text-xl font-bold text-white hover:bg-green-700"
+                    className="h-14 w-full rounded-2xl border-0 bg-[#1faa45] text-[18px] font-bold text-white hover:bg-[#18973c]"
                     onClick={() => {
                       window.open(WORK_WECHAT_URL, "_blank")
                       onOpenChange(false)
@@ -224,7 +224,7 @@ export function PurchaseDialog({
                   </Button>
                 ) : (
                   <Button
-                    className="h-14 w-full rounded-2xl border-0 bg-green-600 text-xl font-bold text-white hover:bg-green-700"
+                    className="h-14 w-full rounded-2xl border-0 bg-[#1faa45] text-[18px] font-bold text-white hover:bg-[#18973c]"
                     onClick={handleSubmit}
                     disabled={isPaying}
                   >
