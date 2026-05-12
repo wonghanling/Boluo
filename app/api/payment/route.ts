@@ -7,7 +7,13 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { amount, title } = body
+    const {
+      amount,
+      title,
+      contactEmail,
+      contactMethod,
+      customerNote,
+    } = body
 
     // 获取请求IP和User Agent
     const forwardedFor = request.headers.get('x-forwarded-for')
@@ -17,12 +23,21 @@ export async function POST(request: NextRequest) {
 
     // 获取当前登录用户信息
     const { supabase } = await import('@/lib/supabase')
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!amount || !title || !contactEmail || !contactMethod) {
+      return NextResponse.json({ error: '缺少支付参数' }, { status: 400 })
+    }
 
     // 生成订单号
     const orderId = generateOrderNo()
 
     console.log('✅ 创建新订单:', orderId)
+    console.log('📝 收到联系方式:', {
+      contactEmail,
+      contactMethod,
+      customerNote,
+    })
 
     // 保存订单到数据库（新表结构：只存支付信息）
     const { error: insertError } = await supabase
@@ -36,7 +51,9 @@ export async function POST(request: NextRequest) {
         ip_address: clientIP,
         user_agent: userAgent,
         user_id: user?.id || null,
-        user_email: user?.email || null
+        user_email: contactEmail,
+        contact_method: contactMethod || null,
+        customer_note: customerNote || null,
       })
 
     if (insertError) {
@@ -58,7 +75,7 @@ export async function POST(request: NextRequest) {
       totalAmount: parseFloat(amount).toFixed(2),
       subject: title,
       body: `订单号:${orderId}`,
-      returnUrl: `${notifyUrl}/api/payment/success?orderId=${orderId}&amount=${amount}&service=${encodeURIComponent(title)}`,
+      returnUrl: `${notifyUrl}/api/payment/success?orderId=${orderId}`,
       notifyUrl: `${notifyUrl}/api/payment/notify`,
     }
 

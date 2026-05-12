@@ -13,12 +13,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Icons } from "@/components/icons"
+import { PurchaseDialog } from "@/components/PurchaseDialog"
 import { services } from "@/content/services"
 import { heroContent, advantages } from "@/content/general"
 import { faqs } from "@/content/faq"
 import { contactInfo } from "@/content/general"
-import { useAuth } from "@/components/AuthProvider"
 import Image from "next/image"
+import type { Service } from "@/types"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -35,9 +36,6 @@ const staggerContainer = {
 }
 
 export default function HomePage() {
-  const { user, loading } = useAuth()
-
-
   // 注册引导弹窗状态
   const [showRegisterModal, setShowRegisterModal] = React.useState(false)
   const [hasShownRegisterPrompt, setHasShownRegisterPrompt] = React.useState(false)
@@ -63,28 +61,9 @@ export default function HomePage() {
     setCurrentSlideIndex((prev) => (prev + 1) % slideImages.length)
   }
 
-  // 页面加载时显示注册提醒（仅对未登录用户显示一次）
-  React.useEffect(() => {
-    if (!loading) {
-      const hasShownBefore = localStorage.getItem('hasShownRegisterPrompt')
-
-      if (!user && !hasShownBefore && !hasShownRegisterPrompt) {
-        const timer = setTimeout(() => {
-          setShowRegisterModal(true)
-          setHasShownRegisterPrompt(true)
-          localStorage.setItem('hasShownRegisterPrompt', 'true')
-        }, 3000) // 3秒后显示注册提醒
-
-        return () => clearTimeout(timer)
-      }
-    }
-  }, [user, loading, hasShownRegisterPrompt])
-
-
   const [openFAQ, setOpenFAQ] = React.useState<number | null>(null)
-  const [selectedService, setSelectedService] = React.useState<any>(null)
+  const [selectedService, setSelectedService] = React.useState<Service | null>(null)
   const [serviceModalOpen, setServiceModalOpen] = React.useState(false)
-  const [selectedPlan, setSelectedPlan] = React.useState<number | null>(null)
   const [isPaying, setIsPaying] = React.useState(false) // 🛡️ 防重复支付
 
   const copyWechatId = () => {
@@ -92,19 +71,26 @@ export default function HomePage() {
     alert("微信号已复制到剪贴板")
   }
 
-  const handlePayment = async () => {
+  const handlePayment = async ({
+    service,
+    planIndex,
+    email,
+    contact,
+    note,
+  }: {
+    service: Service
+    planIndex: number
+    email: string
+    contact: string
+    note: string
+  }) => {
     // 🛡️ 防重复点击
     if (isPaying) {
       console.log('⚠️ 支付正在进行中，请勿重复点击')
       return
     }
 
-    if (!selectedService || selectedPlan === null) {
-      alert('请先选择套餐')
-      return
-    }
-
-    const plan = selectedService.pricing[selectedPlan]
+    const plan = service.pricing[planIndex]
 
     // 解析价格（去掉 ¥ 符号和 /月 等后缀）
     const priceStr = plan.price.replace(/[¥￥]/g, '').replace(/\/.*$/, '')
@@ -118,15 +104,8 @@ export default function HomePage() {
     setIsPaying(true) // 🛡️ 开始支付，禁用按钮
 
     try {
-      // 生成订单号
-      const orderId = `${selectedService.id}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
       // 构建订单标题
-      const title = `${selectedService.name} - ${plan.name}`
-
-      // 检测设备类型
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      const deviceType = isMobile ? 'mobile' : 'pc'
+      const title = `${service.name} - ${plan.name}`
 
       const response = await fetch('/api/payment', {
         method: 'POST',
@@ -134,11 +113,13 @@ export default function HomePage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          orderId,
           amount: amount.toString(),
           title,
-          serviceType: selectedService.id,
-          planIndex: selectedPlan,
+          serviceType: service.id,
+          planIndex,
+          contactEmail: email,
+          contactMethod: contact,
+          customerNote: note,
         }),
       })
 
@@ -158,6 +139,7 @@ export default function HomePage() {
         }
 
         setServiceModalOpen(false)
+        setSelectedService(null)
       } else {
         alert(result.error || '支付创建失败')
       }
@@ -175,19 +157,8 @@ export default function HomePage() {
       return
     }
 
-    // 检查用户登录状态
-    if (!user) {
-      setShowRegisterModal(true)
-      return
-    }
-
     setSelectedService(service)
-    setSelectedPlan(null) // 重置选中的套餐
     setServiceModalOpen(true)
-  }
-
-  const handlePlanSelect = (planIndex: number) => {
-    setSelectedPlan(planIndex)
   }
 
   return (
@@ -473,92 +444,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Service Modal */}
-      <Dialog open={serviceModalOpen} onOpenChange={setServiceModalOpen}>
-        <DialogContent className="sm:max-w-4xl max-w-[95vw] max-h-[90vh] overflow-y-auto p-3 sm:p-4">
-          {selectedService && (
-            <>
-              <DialogHeader className="pb-2">
-                <DialogTitle className="text-base sm:text-lg md:text-xl font-bold">{selectedService.name}</DialogTitle>
-                <DialogDescription className="text-xs sm:text-sm md:text-base">
-                  {selectedService.description}
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="mt-2 space-y-2">
-                {selectedService.pricing?.map((plan: any, index: number) => (
-                  <div
-                    key={index}
-                    className={`relative px-2 sm:px-3 py-2 rounded-lg cursor-pointer transition-all border ${
-                      selectedPlan === index
-                        ? 'bg-yellow-400 border-blue-600 border-2'
-                        : 'bg-yellow-400 border-yellow-300 hover:border-yellow-400'
-                    }`}
-                    onClick={() => handlePlanSelect(index)}
-                  >
-                    {plan.popular && (
-                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10">
-                        <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-medium">
-                          热门
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-                      {/* 左侧：标题和价格 */}
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <h3 className="text-xs sm:text-sm font-bold text-gray-800">{plan.name}</h3>
-                        <div className="text-sm sm:text-base font-bold text-gray-900">
-                          {plan.price}
-                          {plan.period && <span className="text-xs text-gray-600">/{plan.period}</span>}
-                        </div>
-                      </div>
-
-                      {/* 右侧：特性 */}
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-gray-700">
-                          {plan.features?.map((feature: string, idx: number) => (
-                            <span key={idx} className="flex items-center whitespace-nowrap">
-                              <span className="text-green-600 mr-1">✓</span>
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
-                        {selectedPlan === index && (
-                          <div className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 text-center">
-                <Button
-                  className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-lg"
-                  onClick={() => {
-                    if (selectedService?.id === 'others') {
-                      window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')
-                      setServiceModalOpen(false)
-                    } else {
-                      handlePayment()
-                    }
-                  }}
-                  disabled={selectedService?.id !== 'others' && (selectedPlan === null || isPaying)}
-                >
-                  {selectedService?.id === 'others'
-                    ? '联系微信'
-                    : isPaying
-                      ? '创建订单中...'
-                      : '立即支付'}
-                </Button>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <PurchaseDialog
+        open={serviceModalOpen}
+        onOpenChange={setServiceModalOpen}
+        service={selectedService}
+        isPaying={isPaying}
+        onSubmit={handlePayment}
+      />
 
       {/* 注册引导弹窗 */}
       <Dialog open={showRegisterModal} onOpenChange={setShowRegisterModal}>

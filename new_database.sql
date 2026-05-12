@@ -18,6 +18,8 @@ CREATE TABLE public.orders (
   -- 用户信息（支付时记录，永不修改）
   user_id UUID REFERENCES auth.users(id),
   user_email TEXT,
+  contact_method TEXT,
+  customer_note TEXT,
 
   -- 支付信息
   amount DECIMAL(10, 2) NOT NULL,
