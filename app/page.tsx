@@ -224,7 +224,7 @@ export default function HomePage() {
             </motion.p>
             <motion.div
               variants={fadeInUp}
-              className="flex justify-center"
+              className="flex flex-wrap justify-center gap-4"
             >
               <Button
                 size="lg"
@@ -233,6 +233,14 @@ export default function HomePage() {
               >
                 {heroContent.primaryCta}
               </Button>
+              <Link href="/cards">
+                <Button
+                  size="lg"
+                  className="text-lg px-8 py-4 bg-white text-slate-950 hover:bg-slate-100 border-2 border-white font-normal"
+                >
+                  Visa / 礼品卡专区
+                </Button>
+              </Link>
             </motion.div>
 
             {/* 动态提示 - 改为三个绿色勾列表 */}
