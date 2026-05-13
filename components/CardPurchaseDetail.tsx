@@ -17,8 +17,130 @@ type FormErrors = {
   usdAmount?: string
 }
 
+type DetailSurfaceStyle = {
+  primaryGlow: string
+  secondaryGlow: string
+  panelGlow: string
+  statsPanel: string
+}
+
 const SERVICE_FEE_USD = 2.5
 const FALLBACK_USD_CNY_RATE = 6.79
+
+function getDetailImageClass(productId: string) {
+  if (productId === "paypal") {
+    return "object-left object-center scale-[0.94]"
+  }
+
+  if (productId === "steam") {
+    return "object-left object-center scale-[0.84]"
+  }
+
+  return "object-left"
+}
+
+function getDetailSurfaceStyle(productId: string): DetailSurfaceStyle {
+  switch (productId) {
+    case "visa":
+      return {
+        primaryGlow: "bg-cyan-300/25",
+        secondaryGlow: "bg-blue-100/18",
+        panelGlow: "from-white/20 to-blue-100/10",
+        statsPanel: "bg-blue-950/16",
+      }
+    case "mastercard":
+      return {
+        primaryGlow: "bg-orange-300/20",
+        secondaryGlow: "bg-red-200/16",
+        panelGlow: "from-white/18 to-orange-100/8",
+        statsPanel: "bg-black/18",
+      }
+    case "apple-gift-card":
+      return {
+        primaryGlow: "bg-slate-200/18",
+        secondaryGlow: "bg-zinc-100/14",
+        panelGlow: "from-white/18 to-slate-100/8",
+        statsPanel: "bg-slate-950/16",
+      }
+    case "google-play":
+      return {
+        primaryGlow: "bg-lime-200/20",
+        secondaryGlow: "bg-emerald-100/16",
+        panelGlow: "from-white/18 to-lime-100/10",
+        statsPanel: "bg-emerald-950/18",
+      }
+    case "xbox":
+      return {
+        primaryGlow: "bg-lime-200/24",
+        secondaryGlow: "bg-green-100/18",
+        panelGlow: "from-white/18 to-lime-100/10",
+        statsPanel: "bg-green-950/18",
+      }
+    case "amazon":
+      return {
+        primaryGlow: "bg-amber-200/24",
+        secondaryGlow: "bg-orange-100/18",
+        panelGlow: "from-white/18 to-amber-100/10",
+        statsPanel: "bg-slate-950/18",
+      }
+    case "ebay":
+      return {
+        primaryGlow: "bg-yellow-200/24",
+        secondaryGlow: "bg-blue-100/18",
+        panelGlow: "from-white/18 to-yellow-100/10",
+        statsPanel: "bg-slate-950/16",
+      }
+    case "nintendo":
+      return {
+        primaryGlow: "bg-rose-200/22",
+        secondaryGlow: "bg-red-100/16",
+        panelGlow: "from-white/18 to-rose-100/10",
+        statsPanel: "bg-rose-950/18",
+      }
+    case "paypal":
+      return {
+        primaryGlow: "bg-cyan-200/24",
+        secondaryGlow: "bg-sky-100/18",
+        panelGlow: "from-white/18 to-cyan-100/10",
+        statsPanel: "bg-sky-950/18",
+      }
+    case "playstation":
+      return {
+        primaryGlow: "bg-blue-200/22",
+        secondaryGlow: "bg-indigo-100/16",
+        panelGlow: "from-white/18 to-blue-100/10",
+        statsPanel: "bg-blue-950/18",
+      }
+    case "roblox":
+      return {
+        primaryGlow: "bg-zinc-200/18",
+        secondaryGlow: "bg-white/12",
+        panelGlow: "from-white/18 to-zinc-100/8",
+        statsPanel: "bg-black/18",
+      }
+    case "spotify":
+      return {
+        primaryGlow: "bg-green-200/24",
+        secondaryGlow: "bg-emerald-100/18",
+        panelGlow: "from-white/18 to-green-100/10",
+        statsPanel: "bg-green-950/18",
+      }
+    case "steam":
+      return {
+        primaryGlow: "bg-sky-200/20",
+        secondaryGlow: "bg-blue-100/16",
+        panelGlow: "from-white/18 to-sky-100/10",
+        statsPanel: "bg-slate-950/18",
+      }
+    default:
+      return {
+        primaryGlow: "bg-cyan-300/25",
+        secondaryGlow: "bg-white/16",
+        panelGlow: "from-white/18 to-white/8",
+        statsPanel: "bg-slate-950/16",
+      }
+  }
+}
 
 export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
   const [usdAmount, setUsdAmount] = React.useState("")
@@ -29,7 +151,9 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
   const [isPaying, setIsPaying] = React.useState(false)
   const [exchangeRate, setExchangeRate] = React.useState(FALLBACK_USD_CNY_RATE)
   const [rateUpdatedAt, setRateUpdatedAt] = React.useState<string | null>(null)
-  const [rateStatus, setRateStatus] = React.useState<"loading" | "success" | "fallback">("loading")
+  const [rateStatus, setRateStatus] = React.useState<"loading" | "success" | "fallback">(
+    "loading"
+  )
 
   React.useEffect(() => {
     let isMounted = true
@@ -81,6 +205,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
   const isValidAmount = Number.isFinite(amountNumber) && amountNumber > 0
   const checkoutUsd = isValidAmount ? amountNumber + SERVICE_FEE_USD : 0
   const checkoutCny = checkoutUsd * exchangeRate
+  const surfaceStyle = getDetailSurfaceStyle(product.id)
 
   const handleSubmit = async () => {
     const nextErrors: FormErrors = {}
@@ -138,7 +263,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
       const result = await response.json()
 
       if (!result.success) {
-        alert(result.error || "支付创建失败")
+        window.alert(result.error || "支付创建失败")
         return
       }
 
@@ -152,7 +277,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
       }
     } catch (error) {
       console.error("支付错误:", error)
-      alert("支付接口异常，请稍后重试")
+      window.alert("支付接口异常，请稍后重试")
     } finally {
       setIsPaying(false)
     }
@@ -160,58 +285,70 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
 
   return (
     <div className="mx-auto flex w-full max-w-[760px] flex-col gap-4 xl:max-w-[720px]">
-      <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] sm:p-5">
+      <div className="rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f4f7fb_100%)] p-4 shadow-[0_20px_50px_rgba(15,23,42,0.08)] sm:p-5">
         <div
-          className={`rounded-[24px] bg-gradient-to-br ${product.accent} px-5 py-5 text-white sm:px-6 sm:py-6`}
+          className={`relative overflow-hidden rounded-[24px] bg-gradient-to-br ${product.accent} px-5 py-5 text-white shadow-[0_26px_60px_rgba(15,23,42,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] sm:px-6 sm:py-6`}
         >
-          <div className="flex items-start justify-between gap-3">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.42),transparent_30%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.18),transparent_24%),linear-gradient(145deg,rgba(255,255,255,0.08),rgba(15,23,42,0.18))]" />
+          <div className={`absolute -left-14 top-0 h-40 w-40 rounded-full blur-3xl ${surfaceStyle.primaryGlow}`} />
+          <div className={`absolute right-[-30px] top-10 h-36 w-36 rounded-full blur-3xl ${surfaceStyle.secondaryGlow}`} />
+          <div className="absolute -bottom-16 left-1/3 h-40 w-40 rounded-full bg-slate-950/24 blur-3xl" />
+
+          <div className="relative z-10 flex items-start justify-between gap-3">
             <div>
-              <span className="rounded-full bg-white/18 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-white">
+              <span className="rounded-full border border-white/14 bg-white/16 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-white backdrop-blur-md">
                 {product.badge}
               </span>
               <h2 className="mt-3 text-[26px] font-semibold tracking-tight sm:text-[30px]">
                 {product.name}
               </h2>
-              <p className="mt-1.5 text-[13px] leading-5 text-white/80">
-                {product.subtitle}
-              </p>
+              <p className="mt-1.5 text-[13px] leading-5 text-white/82">{product.subtitle}</p>
             </div>
-            <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/80">
+
+            <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/84 backdrop-blur-sm">
               Ready
             </span>
           </div>
-          <div className="mt-4 rounded-[20px] bg-white/10 p-4 backdrop-blur-[2px]">
+
+          <div
+            className={`relative z-10 mt-4 rounded-[22px] border border-white/14 bg-gradient-to-br ${surfaceStyle.panelGlow} p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_18px_36px_rgba(15,23,42,0.14)] backdrop-blur-xl`}
+          >
+            <div className="absolute inset-x-6 top-0 h-px bg-white/30" />
+            <div className="absolute inset-0 rounded-[22px] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]" />
             <div className="relative h-[90px] w-full sm:h-[112px]">
               <Image
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-contain object-left"
+                className={`object-contain ${getDetailImageClass(product.id)} drop-shadow-[0_16px_30px_rgba(15,23,42,0.28)]`}
                 sizes="720px"
               />
             </div>
           </div>
-          <div className="mt-5 grid gap-3 text-white/88 sm:grid-cols-3">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
-                输入美元
-              </p>
+
+          <div className="relative z-10 mt-5 grid gap-3 text-white/90 sm:grid-cols-3">
+            <div
+              className={`rounded-[18px] border border-white/12 px-3.5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-sm ${surfaceStyle.statsPanel}`}
+            >
+              <p className="text-[11px] uppercase tracking-[0.2em] text-white/62">输入美元</p>
               <p className="mt-1.5 text-[18px] font-semibold">
                 {isValidAmount ? `${amountNumber.toFixed(2)} USD` : "--"}
               </p>
             </div>
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
-                服务费
-              </p>
+
+            <div
+              className={`rounded-[18px] border border-white/12 px-3.5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-sm ${surfaceStyle.statsPanel}`}
+            >
+              <p className="text-[11px] uppercase tracking-[0.2em] text-white/62">服务费</p>
               <p className="mt-1.5 text-[18px] font-semibold">
                 {SERVICE_FEE_USD.toFixed(2)} USD
               </p>
             </div>
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
-                结算美元
-              </p>
+
+            <div
+              className={`rounded-[18px] border border-white/12 px-3.5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-sm ${surfaceStyle.statsPanel}`}
+            >
+              <p className="text-[11px] uppercase tracking-[0.2em] text-white/62">结算美元</p>
               <p className="mt-1.5 text-[18px] font-semibold">
                 {isValidAmount ? `${checkoutUsd.toFixed(2)} USD` : "--"}
               </p>
@@ -219,17 +356,15 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
           </div>
         </div>
 
-        <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50 p-4">
+        <div className="mt-4 rounded-[20px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(241,245,249,0.98))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-            卡片说明
+            Card Detail
           </p>
-          <p className="mt-2.5 text-[13px] leading-6 text-slate-600">
-            {product.description}
-          </p>
+          <p className="mt-2.5 text-[13px] leading-6 text-slate-600">{product.description}</p>
           <div className="mt-3 space-y-1.5 text-[12px] text-slate-700">
             {product.features.map((feature) => (
               <div key={feature} className="flex items-center gap-2">
-                <span className="text-[13px] text-green-600">✓</span>
+                <span className="text-[13px] text-emerald-600">✓</span>
                 <span>{feature}</span>
               </div>
             ))}
@@ -238,7 +373,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
         </div>
       </div>
 
-      <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] sm:p-5">
+      <div className="rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] p-4 shadow-[0_20px_50px_rgba(15,23,42,0.06)] sm:p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
@@ -248,7 +383,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
               填写购买信息
             </h2>
           </div>
-          <div className="rounded-full border border-slate-200 px-3 py-1.5 text-[11px] font-medium text-slate-500">
+          <div className="rounded-full border border-slate-200 bg-white/90 px-3 py-1.5 text-[11px] font-medium text-slate-500">
             {product.supportsSubscription ? "支持订阅" : "不支持软件订阅"}
           </div>
         </div>
@@ -269,11 +404,9 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
               className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
             <p className="mt-2 text-[11px] leading-5 text-slate-500">
-              例如输入 20 USD，系统会按 22.50 USD 结算，再按汇率换算成人民币支付。
+              例如输入 20 USD，系统会按 22.50 USD 结算，再按实时汇率换算成人民币支付。
             </p>
-            {errors.usdAmount && (
-              <p className="mt-2 text-sm text-red-600">{errors.usdAmount}</p>
-            )}
+            {errors.usdAmount && <p className="mt-2 text-sm text-red-600">{errors.usdAmount}</p>}
           </div>
 
           <div className="sm:col-span-1">
@@ -283,7 +416,10 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
             <Input
               type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value)
+                setErrors((prev) => ({ ...prev, email: undefined }))
+              }}
               placeholder="you@example.com"
               className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
@@ -296,13 +432,14 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
             </label>
             <Input
               value={contact}
-              onChange={(event) => setContact(event.target.value)}
+              onChange={(event) => {
+                setContact(event.target.value)
+                setErrors((prev) => ({ ...prev, contact: undefined }))
+              }}
               placeholder="微信 / Telegram / 手机号"
               className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
-            {errors.contact && (
-              <p className="mt-2 text-sm text-red-600">{errors.contact}</p>
-            )}
+            {errors.contact && <p className="mt-2 text-sm text-red-600">{errors.contact}</p>}
           </div>
 
           <div className="sm:col-span-2">
@@ -318,7 +455,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
           </div>
         </div>
 
-        <div className="mt-5 rounded-[20px] border border-slate-200 bg-slate-50 p-4">
+        <div className="mt-5 rounded-[20px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,1),rgba(248,250,252,1))] p-4">
           <div className="flex items-center justify-between text-[12px] text-slate-500">
             <span>商品</span>
             <span className="text-right text-slate-900">{product.name}</span>
