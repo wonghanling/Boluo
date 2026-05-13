@@ -164,7 +164,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+      <nav className="fixed top-0 left-0 right-0 z-30 overflow-x-clip bg-white/95 border-b border-gray-200 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -180,7 +180,7 @@ export default function HomePage() {
             </div>
 
             {/* Navigation Links */}
-            <div className="flex items-center space-x-6">
+            <div className="hidden items-center space-x-6 sm:flex">
               <a href="#hero" className="text-gray-600 hover:text-gray-900 transition-colors">首页</a>
               <a href="#services" className="text-gray-600 hover:text-gray-900 transition-colors">服务</a>
               <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">联系我们</a>
@@ -278,7 +278,7 @@ export default function HomePage() {
                   <span className="mr-2 text-green-500 text-xl">✓</span>
                   安全极速开通，可退款。
                 </div>
-                <div className="flex items-center text-yellow-300 text-sm md:text-lg font-medium whitespace-nowrap">
+                <div className="flex items-center text-center text-yellow-300 text-sm md:text-lg font-medium">
                   <span className="mr-2 text-green-500 text-xl">✓</span>
                   3000+用户信赖享用全球最先进的AI能力。
                 </div>

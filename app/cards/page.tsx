@@ -223,7 +223,7 @@ export default function CardsPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col px-4 pb-10 pt-6 sm:px-6 lg:flex-row lg:gap-8 lg:px-8 lg:pb-16 lg:pt-8">
+      <div className="mx-auto flex w-full max-w-[1360px] flex-col px-4 pb-10 pt-6 sm:px-6 lg:flex-row lg:gap-6 lg:px-8 lg:pb-14 lg:pt-8">
         <aside className="w-full shrink-0 lg:w-[340px]">
           <div className="mb-6 flex items-center justify-between">
             <div>
@@ -301,77 +301,77 @@ export default function CardsPage() {
         </aside>
 
         <section className="mt-6 flex-1 lg:mt-0">
-          <div className="space-y-6">
-            <div className="rounded-[32px] border border-slate-200 bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:p-7">
+          <div className="mx-auto flex w-full max-w-[760px] flex-col gap-4 xl:max-w-[720px]">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] sm:p-5">
               <div
-                className={`rounded-[28px] bg-gradient-to-br ${selectedProduct.accent} px-6 py-7 text-white sm:px-7 sm:py-8`}
+                className={`rounded-[24px] bg-gradient-to-br ${selectedProduct.accent} px-5 py-5 text-white sm:px-6 sm:py-6`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <span className="rounded-full bg-white/18 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-white">
                       {selectedProduct.badge}
                     </span>
-                    <h2 className="mt-4 text-[30px] font-semibold tracking-tight sm:text-[36px]">
+                    <h2 className="mt-3 text-[26px] font-semibold tracking-tight sm:text-[30px]">
                       {selectedProduct.name}
                     </h2>
-                    <p className="mt-2 text-[14px] leading-6 text-white/80">
+                    <p className="mt-1.5 text-[13px] leading-5 text-white/80">
                       {selectedProduct.subtitle}
                     </p>
                   </div>
-                  <span className="rounded-full border border-white/20 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white/80">
+                  <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/80">
                     Ready
                   </span>
                 </div>
-                <div className="mt-6 rounded-[24px] bg-white/10 p-5 backdrop-blur-[2px]">
-                  <div className="relative h-[124px] w-full sm:h-[150px]">
+                <div className="mt-4 rounded-[20px] bg-white/10 p-4 backdrop-blur-[2px]">
+                  <div className="relative h-[90px] w-full sm:h-[112px]">
                     <Image
                       src={selectedProduct.image}
                       alt={selectedProduct.name}
                       fill
                       className="object-contain object-left"
-                      sizes="860px"
+                      sizes="720px"
                     />
                   </div>
                 </div>
-                <div className="mt-8 grid gap-4 text-white/88 sm:grid-cols-3">
+                <div className="mt-5 grid gap-3 text-white/88 sm:grid-cols-3">
                   <div>
-                    <p className="text-[12px] uppercase tracking-[0.2em] text-white/60">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
                       输入美元
                     </p>
-                    <p className="mt-2 text-[22px] font-semibold">
+                    <p className="mt-1.5 text-[18px] font-semibold">
                       {isValidAmount ? `${amountNumber.toFixed(2)} USD` : "--"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[12px] uppercase tracking-[0.2em] text-white/60">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
                       服务费
                     </p>
-                    <p className="mt-2 text-[22px] font-semibold">
+                    <p className="mt-1.5 text-[18px] font-semibold">
                       {SERVICE_FEE_USD.toFixed(2)} USD
                     </p>
                   </div>
                   <div>
-                    <p className="text-[12px] uppercase tracking-[0.2em] text-white/60">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
                       结算美元
                     </p>
-                    <p className="mt-2 text-[22px] font-semibold">
+                    <p className="mt-1.5 text-[18px] font-semibold">
                       {isValidAmount ? `${checkoutUsd.toFixed(2)} USD` : "--"}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 rounded-[24px] border border-slate-200 bg-slate-50 p-5">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                   卡片说明
                 </p>
-                <p className="mt-3 text-[14px] leading-6 text-slate-600">
+                <p className="mt-2.5 text-[13px] leading-6 text-slate-600">
                   {selectedProduct.description}
                 </p>
-                <div className="mt-4 space-y-2 text-[13px] text-slate-700">
+                <div className="mt-3 space-y-1.5 text-[12px] text-slate-700">
                   {selectedProduct.features.map((feature) => (
                     <div key={feature} className="flex items-center gap-2">
-                      <span className="text-[14px] text-green-600">✓</span>
+                      <span className="text-[13px] text-green-600">✓</span>
                       <span>{feature}</span>
                     </div>
                   ))}
@@ -379,24 +379,24 @@ export default function CardsPage() {
               </div>
             </div>
 
-            <div className="rounded-[32px] border border-slate-200 bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:p-7">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                     Purchase
                   </p>
-                  <h2 className="mt-2 text-[28px] font-semibold tracking-tight text-slate-950">
+                  <h2 className="mt-2 text-[24px] font-semibold tracking-tight text-slate-950">
                     填写购买信息
                   </h2>
                 </div>
-                <div className="rounded-full border border-slate-200 px-4 py-2 text-[12px] font-medium text-slate-500">
+                <div className="rounded-full border border-slate-200 px-3 py-1.5 text-[11px] font-medium text-slate-500">
                   不支持软件订阅
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label className="mb-2 block text-[13px] font-semibold text-slate-900">
+                  <label className="mb-2 block text-[12px] font-semibold text-slate-900">
                     输入购买面额（USD）
                   </label>
                   <Input
@@ -407,9 +407,9 @@ export default function CardsPage() {
                       setErrors((prev) => ({ ...prev, usdAmount: undefined }))
                     }}
                     placeholder="例如 20"
-                    className="h-11 rounded-2xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[15px]"
+                    className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
                   />
-                  <p className="mt-2 text-[12px] text-slate-500">
+                  <p className="mt-2 text-[11px] leading-5 text-slate-500">
                     例如输入 20 USD，系统会按 22.50 USD 结算，再按汇率换算成人民币支付。
                   </p>
                   {errors.usdAmount && (
@@ -418,7 +418,7 @@ export default function CardsPage() {
                 </div>
 
                 <div className="sm:col-span-1">
-                  <label className="mb-2 block text-[13px] font-semibold text-slate-900">
+                  <label className="mb-2 block text-[12px] font-semibold text-slate-900">
                     接收邮箱
                   </label>
                   <Input
@@ -426,7 +426,7 @@ export default function CardsPage() {
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="you@example.com"
-                    className="h-11 rounded-2xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[15px]"
+                    className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
                   />
                   {errors.email && (
                     <p className="mt-2 text-sm text-red-600">{errors.email}</p>
@@ -434,14 +434,14 @@ export default function CardsPage() {
                 </div>
 
                 <div className="sm:col-span-1">
-                  <label className="mb-2 block text-[13px] font-semibold text-slate-900">
+                  <label className="mb-2 block text-[12px] font-semibold text-slate-900">
                     联系方式
                   </label>
                   <Input
                     value={contact}
                     onChange={(event) => setContact(event.target.value)}
                     placeholder="微信 / Telegram / 手机号"
-                    className="h-11 rounded-2xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[15px]"
+                    className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
                   />
                   {errors.contact && (
                     <p className="mt-2 text-sm text-red-600">{errors.contact}</p>
@@ -449,48 +449,48 @@ export default function CardsPage() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="mb-2 block text-[13px] font-semibold text-slate-900">
+                  <label className="mb-2 block text-[12px] font-semibold text-slate-900">
                     备注信息
                   </label>
                   <Textarea
                     value={note}
                     onChange={(event) => setNote(event.target.value)}
                     placeholder="可选，填写收卡时间要求或补充说明"
-                    className="min-h-[104px] rounded-[24px] border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[15px]"
+                    className="min-h-[88px] rounded-[20px] border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
                   />
                 </div>
               </div>
 
-              <div className="mt-6 rounded-[26px] border border-slate-200 bg-slate-50 p-5">
-                <div className="flex items-center justify-between text-[13px] text-slate-500">
+              <div className="mt-5 rounded-[20px] border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center justify-between text-[12px] text-slate-500">
                   <span>商品</span>
                   <span className="text-right text-slate-900">{selectedProduct.name}</span>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-[13px] text-slate-500">
+                <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
                   <span>输入面额</span>
                   <span className="text-right text-slate-900">
                     {isValidAmount ? `${amountNumber.toFixed(2)} USD` : "--"}
                   </span>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-[13px] text-slate-500">
+                <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
                   <span>服务费</span>
                   <span className="text-right text-slate-900">
                     {SERVICE_FEE_USD.toFixed(2)} USD
                   </span>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-[13px] text-slate-500">
+                <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
                   <span>结算美元</span>
                   <span className="text-right text-slate-900">
                     {isValidAmount ? `${checkoutUsd.toFixed(2)} USD` : "--"}
                   </span>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-[13px] text-slate-500">
+                <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
                   <span>实时汇率</span>
                   <span className="text-right text-slate-900">
                     1 USD = {exchangeRate.toFixed(4)} CNY
                   </span>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-[13px] text-slate-500">
+                <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
                   <span>汇率状态</span>
                   <span className="text-right text-slate-900">
                     {rateStatus === "loading"
@@ -501,28 +501,28 @@ export default function CardsPage() {
                   </span>
                 </div>
                 {rateUpdatedAt && (
-                  <div className="mt-3 flex items-center justify-between text-[13px] text-slate-500">
+                  <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
                     <span>更新时间</span>
                     <span className="text-right text-slate-900">{rateUpdatedAt}</span>
                   </div>
                 )}
                 <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-4">
-                  <span className="text-[14px] font-semibold text-slate-950">应付人民币</span>
-                  <span className="text-[28px] font-semibold tracking-tight text-slate-950">
+                  <span className="text-[13px] font-semibold text-slate-950">应付人民币</span>
+                  <span className="text-[24px] font-semibold tracking-tight text-slate-950">
                     {isValidAmount ? `¥${checkoutCny.toFixed(2)}` : "--"}
                   </span>
                 </div>
               </div>
 
               <Button
-                className="mt-6 h-12 w-full rounded-[20px] border-0 bg-[#1faa45] text-[16px] font-semibold text-white hover:bg-[#18973c]"
+                className="mt-5 h-11 w-full rounded-[18px] border-0 bg-[#1faa45] text-[15px] font-semibold text-white hover:bg-[#18973c]"
                 onClick={handleSubmit}
                 disabled={isPaying}
               >
                 {isPaying ? "跳转支付中..." : "立即付款"}
               </Button>
 
-              <p className="mt-4 text-[12px] leading-5 text-slate-500">
+              <p className="mt-3 text-[11px] leading-5 text-slate-500">
                 付款完成后，卡号、礼品卡卡密或二维码会发送到你填写的邮箱。联系方式用于异常情况联系。
               </p>
             </div>
