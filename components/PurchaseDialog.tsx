@@ -58,10 +58,10 @@ export function PurchaseDialog({
     setErrors({})
   }, [open, service?.id])
 
-  const selectedPlanData =
-    selectedPlan !== null ? service?.pricing?.[selectedPlan] : null
-  const canDirectPay =
-    !!selectedPlanData && !Number.isNaN(parsePrice(selectedPlanData.price))
+  const selectedPlanData = selectedPlan !== null ? service?.pricing?.[selectedPlan] : null
+  const canDirectPay = !!selectedPlanData && !Number.isNaN(parsePrice(selectedPlanData.price))
+  const requiresPaymentLinkNote =
+    service?.id === "chatgpt" && selectedPlanData?.price.includes("169")
 
   const handleSubmit = async () => {
     if (!service) return
@@ -148,7 +148,7 @@ export function PurchaseDialog({
                     <div className="flex flex-wrap items-center justify-start gap-x-2 gap-y-1 text-[11px] font-medium leading-4 text-[#556b2f] sm:justify-end sm:gap-x-2.5 sm:gap-y-1.5 sm:text-[13px]">
                       {plan.features?.map((feature, idx) => (
                         <span key={idx} className="inline-flex items-center">
-                          <span className="mr-1 text-[#14a44d]">✓</span>
+                          <span className="mr-1 text-[#14a44d]">•</span>
                           {feature}
                         </span>
                       ))}
@@ -208,10 +208,23 @@ export function PurchaseDialog({
                       <label className="mb-1.5 block text-[11px] font-semibold text-slate-800 sm:mb-1.5 sm:text-[13px]">
                         备注信息
                       </label>
+                      {requiresPaymentLinkNote && (
+                        <div className="mb-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-5 text-amber-900 sm:text-[12px]">
+                          <p>请粘贴您的付款链接。</p>
+                          <p className="mt-1 break-all text-amber-800/90">
+                            例如：
+                            https://chatgpt.com/checkout/openai_llc/cs_live_a1P7rr6aUH3328mm40l7GfbXlxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                          </p>
+                        </div>
+                      )}
                       <Textarea
                         value={note}
                         onChange={(event) => setNote(event.target.value)}
-                        placeholder="可选，填写收卡时间要求或补充说明"
+                        placeholder={
+                          requiresPaymentLinkNote
+                            ? "请粘贴您的 ChatGPT 付款链接"
+                            : "可选，填写收卡时间要求或补充说明"
+                        }
                         className="min-h-[72px] rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:min-h-[78px] sm:text-[14px]"
                       />
                     </div>
