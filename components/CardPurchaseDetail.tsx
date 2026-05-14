@@ -267,8 +267,11 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
 
     if (!selectedCountry) {
       nextErrors.country = "缺少国家配置"
-    } else if ((selectedCountry.mode === "fixed" || selectedCountry.mode === "hybrid") && !selectedOption) {
-      nextErrors.option = "请选择面额或产品"
+    } else if (
+      (selectedCountry.mode === "fixed" || selectedCountry.mode === "hybrid") &&
+      !selectedOption
+    ) {
+      nextErrors.option = "请选择面额或商品"
     } else if (!isAmountValid) {
       if (selectedCountry.mode === "input") {
         nextErrors.amount = `请输入 ${selectedCountry.currency} ${selectedCountry.min} - ${selectedCountry.max} 范围内的金额`
@@ -300,7 +303,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
         `卡种: ${product.name}`,
         `国家: ${formatCountryLabel(selectedCountry)}`,
         `币种: ${selectedCountry.currency}`,
-        `面额或产品: ${selectedDisplayLabel}`,
+        `面额或商品: ${selectedDisplayLabel}`,
         `用户金额: ${inputAmount.toFixed(2)} ${selectedCountry.currency}`,
         `折算美元: ${baseAmountUsd.toFixed(2)} USD`,
         `服务费: ${SERVICE_FEE_USD.toFixed(2)} USD`,
@@ -388,7 +391,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
             </div>
 
             <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/84 backdrop-blur-sm">
-              已准备
+              准备发货
             </span>
           </div>
 
@@ -467,7 +470,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
         <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/80 px-4 py-3 text-[12px] leading-5 text-slate-600">
           当前商品为 <span className="font-semibold text-slate-950">{product.name}</span>。
           {product.purchaseRule.requiresCountrySelection
-            ? " 请先选择国家或地区，再根据规则选择产品、固定面额或输入金额。"
+            ? " 请先选择国家或地区，再根据规则选择商品、固定面值或输入金额。"
             : " 当前商品无需选择国家，直接输入金额并填写联系方式即可。"}
         </div>
 
@@ -495,7 +498,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
           {(selectedCountry?.mode === "fixed" || selectedCountry?.mode === "hybrid") && (
             <div className="sm:col-span-2">
               <label className="mb-2 block text-[12px] font-semibold text-slate-900">
-                选择面额 / 产品
+                选择面额 / 商品
               </label>
               <select
                 value={selectedOptionLabel}
@@ -514,8 +517,8 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
               </select>
               <p className="mt-2 text-[11px] leading-5 text-slate-500">
                 {selectedCountry.mode === "hybrid"
-                  ? "当前国家同时支持固定产品和部分自定义金额产品。请先选择产品，再按规则输入金额。"
-                  : "当前国家使用固定面额或固定产品，不显示自定义金额输入框。"}
+                  ? "当前国家同时支持固定商品和部分自定义金额商品。请先选择商品，再按规则输入金额。"
+                  : "当前国家使用固定面额或固定商品，不显示自定义金额输入框。"}
               </p>
               {errors.option && <p className="mt-2 text-sm text-red-600">{errors.option}</p>}
             </div>
@@ -607,7 +610,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
             </div>
           )}
           <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
-            <span>{selectedCountry?.mode === "input" ? "输入金额" : "面额 / 产品"}</span>
+            <span>{selectedCountry?.mode === "input" ? "输入金额" : "面额 / 商品"}</span>
             <span className="text-right text-slate-900">{selectedDisplayLabel}</span>
           </div>
           <div className="mt-2.5 flex items-center justify-between text-[12px] text-slate-500">
@@ -649,7 +652,7 @@ export function CardPurchaseDetail({ product }: CardPurchaseDetailProps) {
           <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-4">
             <span className="text-[13px] font-semibold text-slate-950">应付人民币</span>
             <span className="text-[24px] font-semibold tracking-tight text-slate-950">
-              {isAmountValid ? `￥${checkoutCny.toFixed(2)}` : "--"}
+              {isAmountValid ? `¥${checkoutCny.toFixed(2)}` : "--"}
             </span>
           </div>
         </div>
