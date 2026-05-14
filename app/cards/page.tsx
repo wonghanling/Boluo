@@ -39,7 +39,7 @@ export default function CardsPage() {
           </Link>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 xl:grid-cols-3">
           {cardProducts.map((product) => {
             const theme = getCardTheme(product.id)
             const isAmazon = product.id === "amazon"
