@@ -73,7 +73,7 @@ export const cardProducts: CardProduct[] = [
     badge: "Global",
     subtitle: "虚拟 Visa 卡",
     description:
-      "请输入需要购买的美元金额。系统会先将所选金额换算为美元，再加上固定 2.50 USD 服务费，最后按人民币结算。",
+      "请输入需要购买的美元金额。系统会先将所选金额换算为美元，再加上固定 2.00 USD 服务费，最后按人民币结算。",
     accent: "from-[#0f3fb3] via-[#1c60f2] to-[#66a1ff]",
     image: "/visa-10.svg",
     deliveryText: "卡号 / 卡密 / 二维码发送至邮箱",
@@ -103,7 +103,7 @@ export const cardProducts: CardProduct[] = [
     badge: "Global",
     subtitle: "虚拟 Mastercard 卡",
     description:
-      "请输入需要购买的美元金额。系统会先将所选金额换算为美元，再加上固定 2.50 USD 服务费，最后按人民币结算。",
+      "请输入需要购买的美元金额。系统会先将所选金额换算为美元，再加上固定 2.00 USD 服务费，最后按人民币结算。",
     accent: "from-[#111111] via-[#2d2d2d] to-[#575757]",
     image: "/mastercard-modern-design-.svg",
     deliveryText: "卡号 / 卡密 / 二维码发送至邮箱",

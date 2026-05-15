@@ -20,7 +20,7 @@ type FormErrors = {
   contact?: string
 }
 
-const SERVICE_FEE_USD = 2.5
+const SERVICE_FEE_USD = 2
 const FALLBACK_USD_CNY_RATE = 6.79
 const FALLBACK_BASE_RATES: Record<string, number> = {
   USD: 1,
