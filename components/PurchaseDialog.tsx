@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -35,6 +36,17 @@ type FormErrors = {
 
 const WORK_WECHAT_URL = "https://work.weixin.qq.com/ca/cawcdeac58029da582"
 
+/**
+ * 这些服务的套餐按钮不走站内支付：
+ * 点击/悬浮只显示微信二维码，不展开收卡信息表单和「立即支付」按钮。
+ * 想恢复站内支付，把数组改成空数组 [] 即可。
+ */
+const QR_ONLY_SERVICE_IDS = ["chatgpt", "claude"]
+
+const QR_IMAGE_SRC = "/wechat-qrcode.jpg"
+const QR_PANEL_WIDTH = 220
+const QR_PANEL_HEIGHT = 330
+
 export function PurchaseDialog({
   open,
   onOpenChange,
@@ -52,16 +64,21 @@ export function PurchaseDialog({
     if (!open) return
 
     setSelectedPlan(null)
+    setHoveredPlan(null)
     setEmail("")
     setContact("")
     setNote("")
     setErrors({})
   }, [open, service?.id])
 
+  const [hoveredPlan, setHoveredPlan] = React.useState<number | null>(null)
+
+  const qrOnly = !!service && QR_ONLY_SERVICE_IDS.includes(service.id)
   const selectedPlanData = selectedPlan !== null ? service?.pricing?.[selectedPlan] : null
-  const canDirectPay = !!selectedPlanData && !Number.isNaN(parsePrice(selectedPlanData.price))
+  const canDirectPay =
+    !qrOnly && !!selectedPlanData && !Number.isNaN(parsePrice(selectedPlanData.price))
   const requiresPaymentLinkNote =
-    service?.id === "chatgpt" && selectedPlanData?.price.includes("169")
+    service?.id === "chatgpt" && selectedPlanData?.price.includes("148")
 
   const handleSubmit = async () => {
     if (!service) return
@@ -114,46 +131,74 @@ export function PurchaseDialog({
 
               <div className="mt-4 space-y-2 sm:mt-5 sm:space-y-2.5">
                 {service.pricing?.map((plan, index) => (
-                  <button
+                  <div
                     key={index}
-                    type="button"
-                    className={`relative flex w-full flex-col gap-1.5 rounded-[14px] border px-3.5 py-2.5 text-left transition-all sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:rounded-[18px] sm:px-4 sm:py-3 ${
-                      selectedPlan === index
-                        ? "border-blue-500 bg-[#ffca15] ring-2 ring-blue-500"
-                        : "border-[#f3c318] bg-[#ffca15] hover:bg-[#ffc400]"
-                    }`}
-                    onClick={() => {
-                      setSelectedPlan(index)
-                      setErrors((prev) => ({ ...prev, plan: undefined }))
-                    }}
+                    className="relative"
+                    onMouseEnter={() => qrOnly && setHoveredPlan(index)}
+                    onMouseLeave={() => qrOnly && setHoveredPlan(null)}
                   >
-                    {plan.popular && (
-                      <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500 px-3 py-1 text-xs font-bold text-white">
-                        热门
-                      </span>
-                    )}
-
-                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
-                      <span className="text-[14px] font-bold text-slate-950 sm:text-[18px]">
-                        {plan.name}
-                      </span>
-                      <span className="text-[14px] font-bold text-slate-950 sm:text-[18px]">
-                        {plan.price}
-                        {plan.period && (
-                          <span className="text-[12px] sm:text-[14px]">/{plan.period}</span>
-                        )}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-start gap-x-2 gap-y-1 text-[11px] font-medium leading-4 text-[#556b2f] sm:justify-end sm:gap-x-2.5 sm:gap-y-1.5 sm:text-[13px]">
-                      {plan.features?.map((feature, idx) => (
-                        <span key={idx} className="inline-flex items-center">
-                          <span className="mr-1 text-[#14a44d]">•</span>
-                          {feature}
+                    <button
+                      type="button"
+                      className={`relative flex w-full flex-col gap-1.5 rounded-[14px] border px-3.5 py-2.5 text-left transition-all sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:rounded-[18px] sm:px-4 sm:py-3 ${
+                        selectedPlan === index
+                          ? "border-[#1d1d1f] bg-[#ffca15] ring-2 ring-[#1d1d1f]"
+                          : "border-[#f3c318] bg-[#ffca15] hover:bg-[#ffc400]"
+                      }`}
+                      onClick={() => {
+                        if (qrOnly) {
+                          // 只显示二维码，不进入支付流程
+                          setSelectedPlan(index)
+                          setHoveredPlan((prev) => (prev === index ? null : index))
+                          return
+                        }
+                        setSelectedPlan(index)
+                        setErrors((prev) => ({ ...prev, plan: undefined }))
+                      }}
+                    >
+                      {plan.popular && (
+                        <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1d1d1f] px-3 py-1 text-xs font-bold text-white">
+                          热门
                         </span>
-                      ))}
-                    </div>
-                  </button>
+                      )}
+
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
+                        <span className="text-[14px] font-bold text-slate-950 sm:text-[18px]">
+                          {plan.name}
+                        </span>
+                        <span className="text-[14px] font-bold text-slate-950 sm:text-[18px]">
+                          {plan.price}
+                          {plan.period && (
+                            <span className="text-[12px] sm:text-[14px]">/{plan.period}</span>
+                          )}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center justify-start gap-x-2 gap-y-1 text-[11px] font-medium leading-4 text-[#1d1d1f]/70 sm:justify-end sm:gap-x-2.5 sm:gap-y-1.5 sm:text-[13px]">
+                        {plan.features?.map((feature, idx) => (
+                          <span key={idx} className="inline-flex items-center">
+                            <span className="mr-1 text-[#1d1d1f]">•</span>
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                    </button>
+
+                    {qrOnly && hoveredPlan === index && (
+                      <div className="pointer-events-none absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-[14px] border border-slate-200 bg-white p-2.5 shadow-[0_18px_50px_rgba(15,23,42,0.28)]">
+                        <Image
+                          src={QR_IMAGE_SRC}
+                          alt="微信扫码咨询下单"
+                          width={QR_PANEL_WIDTH}
+                          height={QR_PANEL_HEIGHT}
+                          className="h-auto w-[150px] rounded-[10px] sm:w-[190px]"
+                          unoptimized
+                        />
+                        <p className="mt-1.5 text-center text-[11px] font-semibold text-slate-700 sm:text-[12px]">
+                          微信扫码下单
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
 
@@ -209,9 +254,9 @@ export function PurchaseDialog({
                         备注信息
                       </label>
                       {requiresPaymentLinkNote && (
-                        <div className="mb-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-5 text-amber-900 sm:text-[12px]">
+                        <div className="mb-2 rounded-xl border border-[#e5e5e7] bg-[#f5f5f7] px-3 py-2 text-[11px] leading-5 text-[#1d1d1f] sm:text-[12px]">
                           <p>请粘贴您的付款链接。</p>
-                          <p className="mt-1 break-all text-amber-800/90">
+                          <p className="mt-1 break-all text-[#1d1d1f]/60">
                             例如：
                             https://chatgpt.com/checkout/openai_llc/cs_live_a1P7rr6aUH3328mm40l7GfbXlxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                           </p>
@@ -235,7 +280,7 @@ export function PurchaseDialog({
               <div className="mt-4 sm:mt-5">
                 {service.id === "others" || !canDirectPay ? (
                   <Button
-                    className="h-11 w-full rounded-[14px] border-0 bg-[#1faa45] text-[15px] font-bold text-white hover:bg-[#18973c] sm:h-12 sm:rounded-[18px] sm:text-[16px]"
+                    className="h-11 w-full rounded-full border-0 bg-[#1d1d1f] text-[15px] font-bold text-white hover:bg-[#333336] sm:h-12 sm:text-[16px]"
                     onClick={() => {
                       window.open(WORK_WECHAT_URL, "_blank")
                       onOpenChange(false)
@@ -245,7 +290,7 @@ export function PurchaseDialog({
                   </Button>
                 ) : (
                   <Button
-                    className="h-11 w-full rounded-[14px] border-0 bg-[#1faa45] text-[15px] font-bold text-white hover:bg-[#18973c] sm:h-12 sm:rounded-[18px] sm:text-[16px]"
+                    className="h-11 w-full rounded-full border-0 bg-[#1d1d1f] text-[15px] font-bold text-white hover:bg-[#333336] sm:h-12 sm:text-[16px]"
                     onClick={handleSubmit}
                     disabled={isPaying}
                   >

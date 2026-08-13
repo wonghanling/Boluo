@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { services } from "@/content/services"
 
 export function Footer() {
@@ -19,7 +20,7 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* 品牌信息 */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <span className="font-bold text-xl">BoLuo</span>
             </div>
@@ -43,6 +44,20 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* 微信二维码 */}
+          <div className="flex flex-col items-start md:items-end">
+            <h3 className="font-semibold mb-3">微信扫码咨询</h3>
+            <Image
+              src="/wechat-qrcode.jpg"
+              alt="微信扫码咨询"
+              width={120}
+              height={160}
+              className="rounded-[10px] border border-slate-200 shadow-sm"
+              unoptimized
+            />
+            <p className="mt-2 text-xs text-muted-foreground">扫码加微信，快速下单</p>
           </div>
         </div>
 

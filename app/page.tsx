@@ -190,7 +190,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="px-4 pt-36 pb-20 md:pt-44 md:pb-32 bg-gradient-to-b from-yellow-400 to-blue-600 text-center">
+      <section id="hero" className="px-4 pt-36 pb-20 md:pt-44 md:pb-32 bg-gradient-to-b from-yellow-300 to-yellow-400 text-center">
         <div className="container mx-auto">
           <motion.div
             initial="initial"
@@ -200,25 +200,25 @@ export default function HomePage() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="text-6xl md:text-8xl font-bold tracking-tight mb-4 text-gray-800"
+              className="text-6xl md:text-8xl font-bold tracking-tight mb-4 text-[#1d1d1f]"
             >
               {heroContent.title}
             </motion.h1>
             <motion.h2
               variants={fadeInUp}
-              className="text-2xl md:text-3xl font-medium mb-6 text-gray-700"
+              className="text-2xl md:text-3xl font-medium mb-6 text-[#1d1d1f]"
             >
               {heroContent.subtitle}
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
+              className="text-lg md:text-xl text-[#1d1d1f]/70 mb-12 max-w-2xl mx-auto"
             >
               {heroContent.description}
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-base md:text-lg text-white mb-8 max-w-3xl mx-auto font-medium text-center px-4 shadow-lg shadow-white/50 drop-shadow-lg"
+              className="text-base md:text-lg text-[#1d1d1f] mb-8 max-w-3xl mx-auto font-medium text-center px-4"
             >
               领取您的会员/无密码接触充值您的账号
             </motion.p>
@@ -228,11 +228,12 @@ export default function HomePage() {
             >
               <Button
                 size="lg"
-                className="text-lg px-8 py-4 bg-transparent text-blue-600 hover:bg-blue-50 border-2 border-blue-600 font-normal"
+                className="text-lg px-8 py-4 bg-[#1d1d1f] text-white hover:bg-[#333336] border-0 rounded-full font-medium"
                 onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
               >
                 {heroContent.primaryCta}
               </Button>
+              {/* 暂时隐藏：Visa / 礼品卡专区入口
               <Link href="/cards">
                 <Button
                   size="lg"
@@ -241,6 +242,7 @@ export default function HomePage() {
                   Visa / 礼品卡专区
                 </Button>
               </Link>
+              */}
             </motion.div>
 
             {/* 动态提示 - 改为三个绿色勾列表 */}
@@ -255,7 +257,7 @@ export default function HomePage() {
                 {[0, 1, 2].map((index) => (
                   <motion.div
                     key={index}
-                    className="text-black text-3xl font-black"
+                    className="text-[#1d1d1f] text-3xl font-black"
                     style={{ fontWeight: 900 }}
                     animate={{
                       y: [0, -8, 0],
@@ -272,23 +274,27 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* 三个绿色勾列表 */}
+              {/* 卖点勾选列表 */}
               <div className="flex flex-col items-center space-y-2">
-                <div className="flex items-center text-yellow-300 text-base md:text-lg font-medium">
-                  <span className="mr-2 text-green-500 text-xl">✓</span>
+                <div className="flex items-center text-[#1d1d1f] text-base md:text-lg font-medium">
+                  <span className="mr-2 text-[#1d1d1f] text-xl">✓</span>
                   安全极速开通，可退款。
                 </div>
-                <div className="flex items-center text-center text-yellow-300 text-sm md:text-lg font-medium">
-                  <span className="mr-2 text-green-500 text-xl">✓</span>
+                <div className="flex items-center text-center text-[#1d1d1f] text-sm md:text-lg font-medium">
+                  <span className="mr-2 text-[#1d1d1f] text-xl">✓</span>
                   3000+用户信赖享用全球最先进的AI能力。
                 </div>
-                <div className="flex items-center text-yellow-300 text-base md:text-lg font-medium">
-                  <span className="mr-2 text-green-500 text-xl">✓</span>
+                <div className="flex items-center text-[#1d1d1f] text-base md:text-lg font-medium">
+                  <span className="mr-2 text-[#1d1d1f] text-xl">✓</span>
                   任何问题均可随时联系。
+                </div>
+                <div className="flex items-center text-[#1d1d1f] text-base md:text-lg font-medium">
+                  <span className="mr-2 text-[#1d1d1f] text-xl">✓</span>
+                  可以开发票。
                 </div>
               </div>
 
-              {/* 新增按钮 - 独立存在，不影响其他代码 */}
+              {/* 暂时隐藏：查看服务详情 / FAQ 按钮
               <motion.div
                 className="mt-6"
                 initial={{ opacity: 0 }}
@@ -300,9 +306,9 @@ export default function HomePage() {
                   style={{
                     padding: '8px 16px',
                     borderRadius: '999px',
-                    border: 'none',
-                    background: '#f5d547',
-                    color: '#111',
+                    border: '1px solid #1d1d1f',
+                    background: 'transparent',
+                    color: '#1d1d1f',
                     fontSize: '13px',
                     cursor: 'pointer',
                     fontWeight: '500'
@@ -311,13 +317,14 @@ export default function HomePage() {
                   查看服务详情 / FAQ
                 </button>
               </motion.div>
+              */}
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="px-4 py-10 md:py-20 bg-yellow-300">
+      <section id="services" className="px-4 py-10 md:py-20 bg-white">
         <div className="container mx-auto">
           <motion.div
             initial="initial"
@@ -326,8 +333,8 @@ export default function HomePage() {
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="text-center mb-8 md:mb-16">
-              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-black">核心服务</h2>
-              <p className="text-base md:text-xl text-black max-w-2xl mx-auto">
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-[#1d1d1f]">核心服务</h2>
+              <p className="text-base md:text-xl text-[#1d1d1f]/60 max-w-2xl mx-auto">
                 专业的海外 AI 工具代充服务，让您轻松享受全球最先进的人工智能技术
               </p>
             </motion.div>
@@ -341,7 +348,7 @@ export default function HomePage() {
                     className="group"
                   >
                     <div
-                      className={`p-6 rounded-2xl bg-black text-white border shadow-lg transition-all duration-300 h-full relative ${
+                      className={`p-6 rounded-2xl bg-[#1d1d1f] text-white border-0 shadow-lg transition-all duration-300 h-full relative ${
                         service.id === 'network'
                           ? 'opacity-60 cursor-not-allowed'
                           : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer'
@@ -352,14 +359,14 @@ export default function HomePage() {
                       {service.id === 'network' && (
                         <div className="absolute -top-2 -right-2 z-10">
                           <div className="relative">
-                            <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                            <span className="bg-yellow-400 text-[#1d1d1f] px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                               Coming Soon
                             </span>
                             <span className="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-75"></span>
                           </div>
                         </div>
                       )}
-                      <div className="flex items-center justify-center w-12 h-12 bg-brand/10 rounded-xl mb-4 group-hover:bg-brand/20 transition-colors">
+                      <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl mb-4 group-hover:bg-white/20 transition-colors">
                         {service.id === 'chatgpt' ? (
                           <img
                             src="/ChatGPT.png"
@@ -373,20 +380,20 @@ export default function HomePage() {
                             className="w-6 h-6 object-contain"
                           />
                         ) : (
-                          <IconComponent className="h-6 w-6 text-brand" />
+                          <IconComponent className="h-6 w-6 text-white" />
                         )}
                       </div>
-                      <h3 className="text-xl font-semibold mb-3">{service.name}</h3>
-                      <p className="text-muted-foreground mb-4">{service.description}</p>
+                      <h3 className="text-xl font-semibold mb-3 text-white">{service.name}</h3>
+                      <p className="text-white/60 mb-4">{service.description}</p>
                       <div className="space-y-2">
                         {service.features.slice(0, 6).map((feature, idx) => (
-                          <div key={idx} className="flex items-center text-sm">
-                            <Icons.Check className="h-4 w-4 text-brand mr-2 flex-shrink-0" />
+                          <div key={idx} className="flex items-center text-sm text-white/80">
+                            <Icons.Check className="h-4 w-4 text-yellow-400 mr-2 flex-shrink-0" />
                             {feature}
                           </div>
                         ))}
                       </div>
-                      <div className="mt-4 flex items-center text-brand text-sm font-medium">
+                      <div className="mt-4 flex items-center text-yellow-400 text-sm font-medium">
                         查看套餐 <Icons.ArrowRight className="h-4 w-4 ml-1" />
                       </div>
                     </div>
@@ -399,7 +406,7 @@ export default function HomePage() {
       </section>
 
       {/* Advantages Section */}
-      <section className="px-4 py-10 md:py-20 bg-yellow-300">
+      <section className="px-4 py-10 md:py-20 bg-[#f5f5f7]">
         <div className="container mx-auto">
           <motion.div
             initial="initial"
@@ -408,8 +415,8 @@ export default function HomePage() {
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="text-center mb-8 md:mb-16">
-              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-black">为什么选择我们</h2>
-              <p className="text-base md:text-xl text-black max-w-2xl mx-auto">
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-[#1d1d1f]">为什么选择我们</h2>
+              <p className="text-base md:text-xl text-[#1d1d1f]/60 max-w-2xl mx-auto">
                 专业、安全、便捷的服务体验
               </p>
             </motion.div>
@@ -422,11 +429,11 @@ export default function HomePage() {
                     variants={fadeInUp}
                     className="text-center"
                   >
-                    <div className="flex items-center justify-center w-16 h-16 bg-brand/10 rounded-full mb-4 mx-auto">
-                      <IconComponent className="h-8 w-8 text-brand" />
+                    <div className="flex items-center justify-center w-16 h-16 bg-[#1d1d1f] rounded-full mb-4 mx-auto">
+                      <IconComponent className="h-8 w-8 text-yellow-400" />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2 text-black">{advantage.title}</h3>
-                    <p className="text-black">{advantage.description}</p>
+                    <h3 className="text-xl font-semibold mb-2 text-[#1d1d1f]">{advantage.title}</h3>
+                    <p className="text-[#1d1d1f]/60">{advantage.description}</p>
                   </motion.div>
                 )
               })}
@@ -436,15 +443,15 @@ export default function HomePage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="px-4 py-10 md:py-20 bg-yellow-300">
+      <section id="contact" className="px-4 py-10 md:py-20 bg-[#1d1d1f]">
         <div className="container mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-black">联系我们</h2>
-          <p className="text-base md:text-xl text-black mb-6 md:mb-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white">联系我们</h2>
+          <p className="text-base md:text-xl text-white/60 mb-6 md:mb-8 max-w-2xl mx-auto">
             有任何问题或需要咨询？我们随时为您提供专业服务
           </p>
           <Button
             size="lg"
-            className="text-lg px-8 py-4"
+            className="text-lg px-8 py-4 rounded-full bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-0 font-medium"
             onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
           >
             立即联系
@@ -462,26 +469,26 @@ export default function HomePage() {
 
       {/* 注册引导弹窗 */}
       <Dialog open={showRegisterModal} onOpenChange={setShowRegisterModal}>
-        <DialogContent className="sm:max-w-md max-w-[90vw] bg-yellow-300">
+        <DialogContent className="sm:max-w-md max-w-[90vw] bg-white">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl font-bold text-center text-black">
-              🎉 欢迎来到BoLuo AI服务平台
+            <DialogTitle className="text-lg sm:text-xl font-bold text-center text-[#1d1d1f]">
+              欢迎来到 BoLuo AI 服务平台
             </DialogTitle>
-            <DialogDescription className="text-center text-sm sm:text-base text-black">
+            <DialogDescription className="text-center text-sm sm:text-base text-[#1d1d1f]/60">
               注册账户，享受专业的AI工具代充服务
             </DialogDescription>
           </DialogHeader>
 
           {/* 大标题 */}
           <div className="text-center my-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-black">代充海外最先进AI</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">代充海外最先进AI</h2>
           </div>
 
           <div className="mt-4">
             {/* 注册优惠框 */}
-            <div className="bg-yellow-400/60 p-3 sm:p-4 rounded-lg mb-4">
-              <h3 className="font-semibold text-black mb-2 text-center text-sm sm:text-base">✨ 注册即享优惠</h3>
-              <div className="text-xs sm:text-sm text-black space-y-1 text-center">
+            <div className="bg-yellow-300 p-3 sm:p-4 rounded-xl mb-4">
+              <h3 className="font-semibold text-[#1d1d1f] mb-2 text-center text-sm sm:text-base">注册即享优惠</h3>
+              <div className="text-xs sm:text-sm text-[#1d1d1f] space-y-1 text-center">
                 <p>• ChatGPT Plus 专业代充服务</p>
                 <p>• Claude Code 官方申请服务</p>
                 <p>• 安全快速，无需密码</p>
@@ -491,7 +498,7 @@ export default function HomePage() {
             {/* 按钮组 */}
             <div className="flex flex-col gap-2 sm:gap-3">
               <Button
-                className="w-full py-2 sm:py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white border-2 border-black"
+                className="w-full py-2 sm:py-3 text-sm sm:text-base rounded-full bg-[#1d1d1f] hover:bg-[#333336] text-white border-0"
                 onClick={() => {
                   setShowRegisterModal(false)
                   const currentUrl = encodeURIComponent(window.location.href)
@@ -502,7 +509,7 @@ export default function HomePage() {
               </Button>
 
               <Button
-                className="w-full py-2 sm:py-3 text-sm sm:text-base bg-green-600 hover:bg-green-700 text-white"
+                className="w-full py-2 sm:py-3 text-sm sm:text-base rounded-full bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] border border-[#1d1d1f]"
                 onClick={() => {
                   setShowRegisterModal(false)
                   const currentUrl = encodeURIComponent(window.location.href)
@@ -514,7 +521,7 @@ export default function HomePage() {
 
               <Button
                 variant="ghost"
-                className="w-full py-2 text-xs sm:text-sm text-black hover:text-gray-700 hover:bg-yellow-400/30"
+                className="w-full py-2 text-xs sm:text-sm text-[#1d1d1f]/60 hover:text-[#1d1d1f] hover:bg-[#f5f5f7]"
                 onClick={() => setShowRegisterModal(false)}
               >
                 稍后再说
@@ -523,7 +530,7 @@ export default function HomePage() {
 
             {/* 底部说明 */}
             <div className="mt-3 sm:mt-4 text-center">
-              <p className="text-xs text-black">
+              <p className="text-xs text-[#1d1d1f]/50">
                 注册完成后，请选择相应服务套餐进行购买
               </p>
             </div>
@@ -612,16 +619,16 @@ export default function HomePage() {
                 <div style={{ marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
                   <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
                     <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
-                      ✅ 开通多久可以使用？
+                      开通多久可以使用？
                     </summary>
                     <p style={{ marginTop: '2px', opacity: 0.8 }}>
-                      正常 1～5 分钟内完成开通，特殊情况下不超过 30 分钟，全程有客服跟进。
+                      付款后通常几分钟完成，全程有客服跟进。
                     </p>
                   </details>
 
                   <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
                     <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
-                      ✅ 会不会封号？安全吗？
+                      会不会封号？安全吗？
                     </summary>
                     <p style={{ marginTop: '2px', opacity: 0.8 }}>
                       通过正规渠道代开，不登录你的账号、不改密码，不影响你原有使用安全与数据。
@@ -630,21 +637,13 @@ export default function HomePage() {
 
                   <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
                     <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
-                      ✅ 支持哪些付款方式？
+                      支持哪些付款方式？
                     </summary>
                     <p style={{ marginTop: '2px', opacity: 0.8 }}>
                       支持微信 / 支付宝 付款，确认套餐后会给到专属收款码，付款后系统 / 客服会在约定时间内完成开通。
                     </p>
                   </details>
 
-                  <details style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '4px' }}>
-                    <summary style={{ cursor: 'pointer', listStyle: 'none' }}>
-                      ✅ 万一开通失败怎么办？
-                    </summary>
-                    <p style={{ marginTop: '2px', opacity: 0.8 }}>
-                      若因我们原因未能成功开通，将全额退款；整个过程有聊天记录与凭证，可随时核对。
-                    </p>
-                  </details>
                 </div>
               </section>
 
@@ -673,7 +672,7 @@ export default function HomePage() {
                       border: '1px solid rgba(255,255,255,0.03)',
                     }}
                   >
-                    <div style={{ fontSize: '11px', opacity: 0.75 }}>⭐️⭐️⭐️⭐️⭐️ · ChatGPT Plus 代充</div>
+                    <div style={{ fontSize: '11px', opacity: 0.75 }}>ChatGPT Plus 代充</div>
                     <p style={{ marginTop: '2px' }}>
                       下单后 3 分钟就帮我开通了，比自己折腾国外卡省事多了。
                     </p>
@@ -688,7 +687,7 @@ export default function HomePage() {
                       border: '1px solid rgba(255,255,255,0.03)',
                     }}
                   >
-                    <div style={{ fontSize: '11px', opacity: 0.75 }}>⭐️⭐️⭐️⭐️⭐️ · Claude Pro</div>
+                    <div style={{ fontSize: '11px', opacity: 0.75 }}>Claude Pro</div>
                     <p style={{ marginTop: '2px' }}>
                       Claude / ChatGPT 都能开，客服把使用注意事项也讲得很详细。
                     </p>
@@ -703,7 +702,7 @@ export default function HomePage() {
                       border: '1px solid rgba(255,255,255,0.03)',
                     }}
                   >
-                    <div style={{ fontSize: '11px', opacity: 0.75 }}>⭐️⭐️⭐️⭐️⭐️ · 长期续费用户</div>
+                    <div style={{ fontSize: '11px', opacity: 0.75 }}>长期续费用户</div>
                     <p style={{ marginTop: '2px' }}>
                       已经连续在这边续了几个月，一直很稳定，有问题直接微信聊就行。
                     </p>
@@ -812,7 +811,7 @@ export default function HomePage() {
                             width: '6px',
                             height: '6px',
                             borderRadius: '999px',
-                            background: '#f5d547',
+                            background: '#ffca15',
                             opacity: index === currentSlideIndex ? 1 : 0.3,
                           }}
                         />

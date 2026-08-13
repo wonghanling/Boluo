@@ -37,7 +37,7 @@ export const services: Service[] = [
       },
       {
         name: "独享代充",
-        price: "¥169",
+        price: "¥148",
         period: "月",
         features: [
           "无限制您的账号",

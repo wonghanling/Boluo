@@ -116,7 +116,7 @@ export function Header() {
                     setUserMenuOpen(!userMenuOpen)
                   }}
                 >
-                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-[#1d1d1f] rounded-full flex items-center justify-center">
                     <User className="w-4 h-4 text-white" />
                   </div>
                   <span className="text-sm font-medium max-w-24 truncate">
@@ -142,11 +142,11 @@ export function Header() {
                         <p className="text-xs text-gray-500">
                           {userProfile?.email_verified ? (
                             <span className="flex items-center">
-                              <Mail className="w-3 h-3 mr-1 text-green-500" />
+                              <Mail className="w-3 h-3 mr-1 text-[#1d1d1f]" />
                               邮箱已验证
                             </span>
                           ) : (
-                            <span className="text-orange-500">邮箱未验证</span>
+                            <span className="text-[#1d1d1f]/50">邮箱未验证</span>
                           )}
                         </p>
                       </div>
@@ -257,7 +257,7 @@ export function Header() {
                 <div className="pt-4 border-t">
                   <div className="px-4 pb-3">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-[#1d1d1f] rounded-full flex items-center justify-center">
                         <User className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -267,11 +267,11 @@ export function Header() {
                         <p className="text-xs text-gray-500">
                           {userProfile?.email_verified ? (
                             <span className="flex items-center">
-                              <Mail className="w-3 h-3 mr-1 text-green-500" />
+                              <Mail className="w-3 h-3 mr-1 text-[#1d1d1f]" />
                               邮箱已验证
                             </span>
                           ) : (
-                            <span className="text-orange-500">邮箱未验证</span>
+                            <span className="text-[#1d1d1f]/50">邮箱未验证</span>
                           )}
                         </p>
                       </div>
