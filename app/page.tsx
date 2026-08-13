@@ -442,20 +442,98 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="px-4 py-10 md:py-20 bg-[#1d1d1f]">
-        <div className="container mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white">联系我们</h2>
-          <p className="text-base md:text-xl text-white/60 mb-6 md:mb-8 max-w-2xl mx-auto">
-            有任何问题或需要咨询？我们随时为您提供专业服务
-          </p>
-          <Button
-            size="lg"
-            className="text-lg px-8 py-4 rounded-full bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-0 font-medium"
-            onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
+      {/* Contact Section - 正规会员代充介绍 */}
+      <section id="contact" className="px-4 py-12 md:py-20 bg-[#1d1d1f]">
+        <div className="container mx-auto max-w-5xl">
+          {/* 标题区 */}
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
           >
-            立即联系
-          </Button>
+            <motion.div variants={fadeInUp} className="text-center">
+              <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+                正规会员代充
+              </h2>
+              <p className="text-sm md:text-base text-white/50">
+                累计服务顾客 <span className="font-semibold text-yellow-400">1,665</span> 位
+              </p>
+            </motion.div>
+
+            {/* 价格与说明 */}
+            <motion.div variants={fadeInUp} className="mt-8 md:mt-10 text-center">
+              <p className="text-base md:text-xl text-white/80">
+                Plus / Pro / Pro 20x 会员代充
+              </p>
+              <p className="mt-2 text-3xl md:text-5xl font-bold text-yellow-400">
+                ¥148 <span className="text-lg md:text-2xl font-medium text-white/60">起</span>
+              </p>
+              <p className="mt-4 text-sm md:text-base text-white/60 max-w-2xl mx-auto leading-relaxed">
+                使用您自己的 ChatGPT 账号开通会员，无需提供账号密码，付款后通常几分钟完成。
+              </p>
+            </motion.div>
+
+            {/* 三个卖点 */}
+            <motion.div
+              variants={fadeInUp}
+              className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6"
+            >
+              {[
+                {
+                  title: "自有账号办理",
+                  desc: "直接为您的现有账号开通，无需更换新账号。"
+                },
+                {
+                  title: "无需提供密码",
+                  desc: "办理过程中不需要向客服提供账号密码。"
+                },
+                {
+                  title: "支持正常续费",
+                  desc: "会员到期后，原账号仍可继续续费或再次办理。"
+                }
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-5 md:px-6 md:py-6"
+                >
+                  <h3 className="text-base md:text-lg font-semibold text-white mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm md:text-[15px] text-white/55 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* 价格说明 */}
+            <motion.div
+              variants={fadeInUp}
+              className="mt-10 md:mt-14 rounded-2xl border border-yellow-400/20 bg-yellow-400/[0.06] px-5 py-5 md:px-8 md:py-7"
+            >
+              <h3 className="text-base md:text-xl font-semibold text-yellow-400 mb-3">
+                为什么我们的价格比别人高？
+              </h3>
+              <p className="text-sm md:text-[15px] text-white/70 leading-relaxed">
+                我们采用官网官方渠道充值，Plus 按官网 20 美元价格采购。明显低于官方成本的充值可能存在非官方渠道风险，平台对异常充值审核严格，可能出现会员被撤销或账号受限。
+              </p>
+              <p className="mt-3 text-sm md:text-[15px] text-white/70 leading-relaxed">
+                我们会在会员订阅期间提供订阅保障服务。
+              </p>
+            </motion.div>
+
+            {/* CTA */}
+            <motion.div variants={fadeInUp} className="mt-10 md:mt-12 text-center">
+              <Button
+                size="lg"
+                className="text-base md:text-lg px-8 py-4 rounded-full bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-0 font-medium"
+                onClick={() => window.open('https://work.weixin.qq.com/ca/cawcdeac58029da582', '_blank')}
+              >
+                立即联系
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
