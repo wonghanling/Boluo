@@ -100,7 +100,7 @@ export async function getCardUsage(cardCode: string) {
     const parsed = JSON.parse(result) as { totalUsed?: unknown; remaining?: unknown }
     const totalUsed = Number(parsed.totalUsed)
     const remaining = Number(parsed.remaining)
-    if (!Number.isInteger(totalUsed) || !Number.isInteger(remaining)) throw new Error()
+    if (!Number.isInteger(totalUsed) || totalUsed < 0 || !Number.isInteger(remaining) || remaining < 0) throw new Error()
     return { totalUsed, remaining }
   } catch {
     throw new UpstreamVerificationError("INVALID_RESPONSE")

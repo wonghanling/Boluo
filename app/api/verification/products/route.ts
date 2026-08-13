@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { createVerificationAdminClient } from "@/lib/verification/server"
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export async function GET() {
   const admin = createVerificationAdminClient()
@@ -24,5 +25,8 @@ export async function GET() {
       manual_fulfillment: product.config?.manual_fulfillment,
     },
   }))
-  return NextResponse.json({ products })
+  return NextResponse.json(
+    { products },
+    { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } },
+  )
 }

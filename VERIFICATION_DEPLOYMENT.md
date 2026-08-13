@@ -10,6 +10,8 @@
 2. `supabase_verification_security.sql`
 3. `supabase_verification_maintenance.sql`
 
+如果前三份脚本已经执行过，再执行 `supabase_verification_us_six_numbers.sql`，把美国套餐升级为首次 1 个号码加最多 5 次换号。
+
 迁移只新增 `verification_*` 对象，不删除或重建现有表。初始商品全部暂停销售，确认配置后再从 `/verification/admin` 开放。
 
 ## 2. Vercel 服务端环境变量
@@ -61,7 +63,7 @@ Authorization: Bearer CRON_SECRET的值（Vercel Cron 自动发送）
 
 1. 保持全部商品 `sales_paused = true` 完成部署。
 2. 确认上游余额能在 `/verification/admin` 正常显示。
-3. 确认美国失败号码是否退回每次 `¥1.30` 成本；未确认前不要使用 `¥3.90` 正式销售。
+3. 确认美国失败号码是否退回每次 `¥1.30` 成本；按最多 6 个号码计算，未退款时最坏成本为 `¥7.80`。
 4. 调整美国售价后，只开放 `US_SHORT`，使用小额真实订单测试支付、取号、查码、换号、完成和取消。
 5. 核对支付宝重复回调没有创建上游号码，并确认退款待审核队列。
 6. 英国商品继续暂停；正式续租接口未提供前仅保留人工履约数据结构，不猜接口。

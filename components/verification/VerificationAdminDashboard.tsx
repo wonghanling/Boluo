@@ -45,7 +45,7 @@ export function VerificationAdminDashboard() {
   const saveProduct = async (product: any) => {
     setSaving(product.code)
     try {
-      await verificationFetch("/api/verification/admin", {
+      const result = await verificationFetch("/api/verification/admin", {
         method: "PATCH",
         body: JSON.stringify({
           type: "product",
@@ -55,9 +55,36 @@ export function VerificationAdminDashboard() {
           salesPaused: product.sales_paused,
         }),
       })
-      await load()
+      updateProduct(product.code, "sale_price", Number(result.product.sale_price))
+      updateProduct(product.code, "is_active", result.product.is_active)
+      updateProduct(product.code, "sales_paused", result.product.sales_paused)
+      alert(result.product.is_active && !result.product.sales_paused ? "已开放销售，客户现在可以购买" : "配置已保存，商品当前未开放销售")
     } catch (reason) {
       alert(reason instanceof Error ? reason.message : "保存失败")
+    } finally {
+      setSaving("")
+    }
+  }
+
+  const openProductSales = async (product: any) => {
+    setSaving(product.code)
+    try {
+      const result = await verificationFetch("/api/verification/admin", {
+        method: "PATCH",
+        body: JSON.stringify({
+          type: "product",
+          code: product.code,
+          salePrice: product.sale_price,
+          isActive: true,
+          salesPaused: false,
+        }),
+      })
+      updateProduct(product.code, "sale_price", Number(result.product.sale_price))
+      updateProduct(product.code, "is_active", result.product.is_active)
+      updateProduct(product.code, "sales_paused", result.product.sales_paused)
+      alert("已开放销售，客户现在可以购买")
+    } catch (reason) {
+      alert(reason instanceof Error ? reason.message : "开放销售失败")
     } finally {
       setSaving("")
     }
@@ -151,7 +178,13 @@ export function VerificationAdminDashboard() {
                 <label className="flex items-center gap-2"><input type="checkbox" checked={product.is_active} onChange={(event) => updateProduct(product.code, "is_active", event.target.checked)} />商品启用</label>
                 <label className="flex items-center gap-2"><input type="checkbox" checked={product.sales_paused} onChange={(event) => updateProduct(product.code, "sales_paused", event.target.checked)} />暂停销售/取号</label>
               </div>
-              <Button onClick={() => saveProduct(product)} disabled={saving === product.code} className="mt-5 bg-yellow-400 text-[#111113] hover:bg-yellow-300"><Save className="mr-2 h-4 w-4" />保存配置</Button>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Button onClick={() => saveProduct(product)} disabled={saving === product.code} className="bg-yellow-400 text-[#111113] hover:bg-yellow-300"><Save className="mr-2 h-4 w-4" />保存配置</Button>
+                {(!product.is_active || product.sales_paused) && (
+                  <Button onClick={() => openProductSales(product)} disabled={saving === product.code} className="bg-green-500 text-white hover:bg-green-400">一键开放销售</Button>
+                )}
+                {product.is_active && !product.sales_paused && <span className="self-center text-sm font-medium text-green-400">当前已开放销售</span>}
+              </div>
             </div>
           ))}
         </div>

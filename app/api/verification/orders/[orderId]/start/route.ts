@@ -66,7 +66,7 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
     if (balance < 1.3) throw new UpstreamVerificationError("NO_BALANCE")
 
     const number = await getUsNumber(cardCode)
-    const maxNumbers = Math.min(5, Math.max(1, Number(product.config.max_numbers || 5)))
+    const maxNumbers = Math.min(6, Math.max(1, Number(product.config.max_numbers || 6)))
     const ttlSeconds = Number(product.config.number_ttl_seconds || 1200)
     const now = new Date()
     const { data: updated, error: updateError } = await admin

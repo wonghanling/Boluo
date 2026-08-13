@@ -57,7 +57,7 @@ export function ProductCards() {
             </div>
             {isUs && (
               <p className="mt-5 flex items-center gap-2 border-t border-white/10 pt-4 text-xs text-white/50">
-                <Clock className="h-4 w-4" /> 首次号码计入总额度，累计最多使用 5 个号码
+                <Clock className="h-4 w-4" /> 首次获取 1 个号码，符合条件时最多可更换 5 次
               </p>
             )}
           </article>

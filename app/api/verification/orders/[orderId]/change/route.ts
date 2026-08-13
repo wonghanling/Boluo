@@ -53,8 +53,7 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
       }
     }
     const usage = await getCardUsage(order.card_code)
-    const allowedRemaining = Math.min(Number(order.numbers_remaining), usage.remaining)
-    if (allowedRemaining <= 0 || usage.totalUsed >= 5) {
+    if (Number(order.numbers_remaining) <= 0 || usage.remaining <= 0) {
       throw new VerificationRequestError("该套餐的上游换号额度已用完", 409, "NO_CHANGES_LEFT")
     }
 
@@ -100,6 +99,12 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
     }
 
     const number = await getUsNumber(order.card_code)
+    const maxNumbers = Math.min(6, Math.max(1, Number(product.config.max_numbers || 6)))
+    const nextNumbersUsed = Math.min(maxNumbers, Math.max(Number(order.numbers_used) + 1, usage.totalUsed + 1))
+    const nextNumbersRemaining = Math.max(
+      0,
+      Math.min(maxNumbers - nextNumbersUsed, Number(order.numbers_remaining) - 1, usage.remaining - 1),
+    )
     const ttlSeconds = Number(product.config.number_ttl_seconds || 1200)
     const now = new Date()
     const { data: updated, error } = await admin
@@ -109,8 +114,8 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
         upstream_order_id: number.upstreamOrderId,
         phone_number: number.phoneNumber,
         verification_code: null,
-        numbers_used: Math.min(5, Math.max(order.numbers_used + 1, usage.totalUsed + 1)),
-        numbers_remaining: Math.max(0, Math.min(order.numbers_remaining - 1, usage.remaining - 1)),
+        numbers_used: nextNumbersUsed,
+        numbers_remaining: nextNumbersRemaining,
         upstream_cost: Number(order.upstream_cost) + 1.3,
         number_received_at: now.toISOString(),
         expires_at: new Date(now.getTime() + ttlSeconds * 1000).toISOString(),
@@ -131,8 +136,8 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
           fulfillment_status: "manual_review",
           upstream_order_id: number.upstreamOrderId,
           phone_number: number.phoneNumber,
-          numbers_used: Math.min(5, Math.max(order.numbers_used + 1, usage.totalUsed + 1)),
-          numbers_remaining: Math.max(0, Math.min(order.numbers_remaining - 1, usage.remaining - 1)),
+          numbers_used: nextNumbersUsed,
+          numbers_remaining: nextNumbersRemaining,
           upstream_cost: Number(order.upstream_cost) + 1.3,
           error_code: "NUMBER_RECEIVED_DB_FAILURE",
           error_message: "新号码已分配，订单需要人工核对",

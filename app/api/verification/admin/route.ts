@@ -58,22 +58,33 @@ export async function PATCH(request: NextRequest) {
 
     if (body.type === "product") {
       const salePrice = Number(body.salePrice)
-      if (!body.code || !Number.isFinite(salePrice) || salePrice < 0) {
+      const isActive = body.isActive
+      const salesPaused = body.salesPaused
+      if (
+        !body.code ||
+        !Number.isFinite(salePrice) ||
+        salePrice < 0 ||
+        typeof isActive !== "boolean" ||
+        typeof salesPaused !== "boolean"
+      ) {
         return NextResponse.json({ error: "商品配置参数不正确" }, { status: 400 })
       }
       const { data, error } = await admin
         .from("verification_products")
         .update({
           sale_price: salePrice,
-          is_active: Boolean(body.isActive),
-          sales_paused: Boolean(body.salesPaused),
+          is_active: isActive,
+          sales_paused: salesPaused,
           updated_at: new Date().toISOString(),
         })
         .eq("code", body.code)
         .select("*")
         .single()
       if (error) throw error
-      return NextResponse.json({ product: data })
+      return NextResponse.json(
+        { product: data },
+        { headers: { "Cache-Control": "no-store" } },
+      )
     }
 
     if (body.type === "order") {

@@ -24,14 +24,14 @@ VALUES
   (
     'US_SHORT',
     '美国短期验证套餐',
-    '一个当前美国号码，符合条件时累计最多使用 5 个号码。',
+    '首次获取 1 个美国号码，符合条件时最多可更换 5 次，累计最多使用 6 个号码。',
     'us_short',
     '187',
     3.90,
-    6.50,
+    7.80,
     TRUE,
     TRUE,
-    '{"max_numbers":5,"change_wait_seconds":120,"number_ttl_seconds":1200,"max_active_orders":2,"low_balance_threshold":20}'::JSONB
+    '{"max_numbers":6,"change_wait_seconds":120,"number_ttl_seconds":1200,"max_active_orders":2,"low_balance_threshold":20}'::JSONB
   ),
   (
     'UK_FIRST',
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS public.verification_orders (
   country_code TEXT NOT NULL CHECK (country_code IN ('187', '44')),
   phone_number TEXT,
   verification_code TEXT,
-  numbers_used INTEGER NOT NULL DEFAULT 0 CHECK (numbers_used >= 0 AND numbers_used <= 5),
+  numbers_used INTEGER NOT NULL DEFAULT 0 CHECK (numbers_used >= 0 AND numbers_used <= 6),
   numbers_remaining INTEGER NOT NULL DEFAULT 5 CHECK (numbers_remaining >= 0 AND numbers_remaining <= 5),
   sale_price NUMERIC(10, 2) NOT NULL CHECK (sale_price >= 0),
   upstream_cost NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (upstream_cost >= 0),

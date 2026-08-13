@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
       order = existing
     } else {
       const paymentOrderNo = generateVerificationPaymentOrderNo()
-      const initialRemaining = product.product_type === "us_short" ? Math.min(5, Math.max(1, Number(product.config.max_numbers || 5))) : 1
+      const maxNumbers = Math.min(6, Math.max(1, Number(product.config.max_numbers || 6)))
+      const initialRemaining = product.product_type === "us_short" ? Math.max(0, maxNumbers - 1) : 1
       const { data: created, error } = await admin
         .from("verification_orders")
         .insert({

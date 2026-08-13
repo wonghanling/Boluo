@@ -12,7 +12,7 @@ export default function UsVerificationPage() {
         <p className="text-sm font-medium text-yellow-400">美国 · +1</p>
         <h1 className="mt-3 text-4xl font-bold md:text-5xl">美国短期验证套餐</h1>
         <p className="mt-5 max-w-3xl leading-7 text-white/60">
-          本套餐包含一个当前美国号码。未收到验证码且达到换号条件后可更换号码，累计最多使用 5 个号码，即首次号码加最多 4 次更换。
+          本套餐先获取一个当前美国号码。未收到验证码且达到换号条件后最多可更换 5 次，累计最多使用 6 个号码。
         </p>
 
         <div className="mt-10"><ProductDetail productCode="US_SHORT">
@@ -38,7 +38,7 @@ export default function UsVerificationPage() {
           <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/[0.04] p-6">
             <h2 className="flex items-center gap-2 text-xl font-semibold text-yellow-300"><AlertTriangle className="h-5 w-5" />额度说明</h2>
             <p className="mt-4 text-sm leading-6 text-white/60">
-              套餐不代表购买 5 个独立号码。首次号码计入 5 个总额度，只有在等待超时、号码无效或符合规则时才开放换号；换号后旧号码失效。
+              套餐不代表购买 6 个同时有效的独立号码。首次号码计入总额度，之后最多更换 5 次；实际能否继续换号以上游返回的剩余额度为准，换号后旧号码失效。
             </p>
           </div>
         </section>
