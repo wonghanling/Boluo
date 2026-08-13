@@ -233,6 +233,13 @@ export default function HomePage() {
               >
                 {heroContent.primaryCta}
               </Button>
+              <Button
+                asChild
+                size="lg"
+                className="text-lg px-8 py-4 bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-2 border-[#1d1d1f] rounded-full font-medium"
+              >
+                <Link href="/verification">codex 验证登录</Link>
+              </Button>
               {/* 暂时隐藏：Visa / 礼品卡专区入口
               <Link href="/cards">
                 <Button
