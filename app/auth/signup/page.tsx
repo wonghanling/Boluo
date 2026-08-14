@@ -185,26 +185,34 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-yellow-400 text-[#1d1d1f]">
-      {/* 顶部区域 */}
-      <div className="bg-yellow-400 flex-shrink-0 pt-8 pb-16">
-        <div className="max-w-md mx-auto px-4">
-          {/* 返回按钮 */}
-          <div className="mb-6">
-            <Button
-              variant="ghost"
-              className="text-[#1d1d1f] hover:bg-yellow-400/20 p-2"
-              onClick={() => router.back()}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              返回
-            </Button>
-          </div>
-        </div>
+      <div className="mx-auto w-full max-w-6xl px-4 pt-6">
+        <Button
+          variant="ghost"
+          className="p-2 text-[#1d1d1f] hover:bg-black/5"
+          onClick={() => router.back()}
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          返回
+        </Button>
       </div>
 
-      {/* 表单区域 - 纯色背景 */}
-      <div className="flex-1 bg-yellow-400 flex items-start justify-center px-4 py-8">
-        <div className="max-w-md w-full">
+      <main className="flex flex-1 items-center bg-yellow-400 px-4 py-10 md:py-14">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1fr_460px] lg:gap-16">
+          <section className="max-w-xl py-4 text-center lg:text-left">
+            <p className="text-sm font-bold uppercase tracking-[0.24em]">BoLuo · Cloud & Network Hub</p>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight md:text-6xl">创建账户，开启你的全球 AI 服务</h1>
+            <p className="mt-6 text-base leading-7 text-[#1d1d1f]/70 md:text-lg">
+              一个账户集中管理会员代充、号码验证与服务订单，清晰查看状态，随时掌握处理进度。
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+              {['正规会员代充', '安全极速开通', '订单进度可见'].map((item) => (
+                <span key={item} className="rounded-full bg-[#1d1d1f] px-4 py-2 text-sm font-medium text-white">✓ {item}</span>
+              ))}
+            </div>
+            <p className="mt-8 text-sm font-medium text-[#1d1d1f]/60">完成注册后，即可购买并管理您的专属服务。</p>
+          </section>
+
+          <div className="w-full max-w-md justify-self-center lg:justify-self-end">
           {/* 注册卡片 */}
           <div className="bg-white rounded-2xl shadow-2xl p-8">
             {/* 头部 */}
@@ -394,8 +402,9 @@ export default function SignUpPage() {
               © 2024 迅通AI. 专业的海外AI工具代充服务
             </p>
           </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
