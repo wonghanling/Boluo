@@ -26,3 +26,11 @@ export interface VerificationProduct {
 export function isVerificationProductCode(value: string): value is VerificationProductCode {
   return Object.values(VERIFICATION_PRODUCT_CODES).includes(value as VerificationProductCode)
 }
+
+export function isAutomatedVerificationProductCode(value: string): boolean {
+  return value === VERIFICATION_PRODUCT_CODES.US_SHORT || value === VERIFICATION_PRODUCT_CODES.UK_FIRST
+}
+
+export function isUnavailableVerificationProductCode(value: string): boolean {
+  return value === VERIFICATION_PRODUCT_CODES.UK_LONG_MONTH || value === VERIFICATION_PRODUCT_CODES.UK_RENEWAL
+}

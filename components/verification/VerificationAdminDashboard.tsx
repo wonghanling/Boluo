@@ -17,6 +17,8 @@ interface AdminData {
   stats: { total: number; active: number; codeReceived: number; review: number; sales: number; cost: number; profit: number }
 }
 
+const unavailableProductCodes = new Set(["UK_LONG_MONTH", "UK_RENEWAL"])
+
 export function VerificationAdminDashboard() {
   const { user, loading: authLoading } = useAuth()
   const [data, setData] = useState<AdminData | null>(null)
@@ -175,15 +177,16 @@ export function VerificationAdminDashboard() {
               <label className="mt-5 block text-xs text-white/50">销售价（人民币）</label>
               <Input type="number" min="0" step="0.01" value={product.sale_price} onChange={(event) => updateProduct(product.code, "sale_price", event.target.value)} className="mt-2 border-white/10 bg-black/20 text-white" />
               <div className="mt-4 flex flex-wrap gap-5 text-sm">
-                <label className="flex items-center gap-2"><input type="checkbox" checked={product.is_active} onChange={(event) => updateProduct(product.code, "is_active", event.target.checked)} />商品启用</label>
-                <label className="flex items-center gap-2"><input type="checkbox" checked={product.sales_paused} onChange={(event) => updateProduct(product.code, "sales_paused", event.target.checked)} />暂停销售/取号</label>
+                <label className="flex items-center gap-2"><input type="checkbox" disabled={unavailableProductCodes.has(product.code)} checked={product.is_active} onChange={(event) => updateProduct(product.code, "is_active", event.target.checked)} />商品启用</label>
+                <label className="flex items-center gap-2"><input type="checkbox" disabled={unavailableProductCodes.has(product.code)} checked={product.sales_paused} onChange={(event) => updateProduct(product.code, "sales_paused", event.target.checked)} />暂停销售/取号</label>
               </div>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Button onClick={() => saveProduct(product)} disabled={saving === product.code} className="bg-yellow-400 text-[#111113] hover:bg-yellow-300"><Save className="mr-2 h-4 w-4" />保存配置</Button>
-                {(!product.is_active || product.sales_paused) && (
+                {!unavailableProductCodes.has(product.code) && (!product.is_active || product.sales_paused) && (
                   <Button onClick={() => openProductSales(product)} disabled={saving === product.code} className="bg-green-500 text-white hover:bg-green-400">一键开放销售</Button>
                 )}
-                {product.is_active && !product.sales_paused && <span className="self-center text-sm font-medium text-green-400">当前已开放销售</span>}
+                {!unavailableProductCodes.has(product.code) && product.is_active && !product.sales_paused && <span className="self-center text-sm font-medium text-green-400">当前已开放销售</span>}
+                {unavailableProductCodes.has(product.code) && <span className="self-center text-sm text-white/40">等待上游接口文档，已锁定</span>}
               </div>
             </div>
           ))}

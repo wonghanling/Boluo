@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createMobilePayment, createPCPayment, isMobile } from "@/lib/alipay"
-import { isVerificationProductCode } from "@/lib/verification/products"
+import { isAutomatedVerificationProductCode, isVerificationProductCode } from "@/lib/verification/products"
 import {
   createVerificationAdminClient,
   enforceVerificationRateLimit,
@@ -23,6 +23,9 @@ export async function POST(request: NextRequest) {
 
     if (!isVerificationProductCode(productCode)) {
       throw new VerificationRequestError("验证商品不存在", 404, "PRODUCT_NOT_FOUND")
+    }
+    if (!isAutomatedVerificationProductCode(productCode)) {
+      throw new VerificationRequestError("该商品等待上游接口文档，当前不能购买", 409, "PRODUCT_NOT_IMPLEMENTED")
     }
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idempotencyKey)) {
       throw new VerificationRequestError("请刷新页面后重新发起支付", 400, "INVALID_IDEMPOTENCY_KEY")
@@ -60,8 +63,10 @@ export async function POST(request: NextRequest) {
       order = existing
     } else {
       const paymentOrderNo = generateVerificationPaymentOrderNo()
-      const maxNumbers = Math.min(6, Math.max(1, Number(product.config.max_numbers || 6)))
-      const initialRemaining = product.product_type === "us_short" ? Math.max(0, maxNumbers - 1) : 1
+      const maxNumbers = product.product_type === "us_short"
+        ? Math.min(6, Math.max(1, Number(product.config.max_numbers || 6)))
+        : 1
+      const initialRemaining = product.product_type === "us_short" ? Math.max(0, maxNumbers - 1) : 0
       const { data: created, error } = await admin
         .from("verification_orders")
         .insert({
@@ -76,8 +81,9 @@ export async function POST(request: NextRequest) {
           numbers_remaining: initialRemaining,
           metadata: {
             product_name: product.name,
+            upstream_cost_estimate: product.upstream_cost_estimate,
             change_wait_seconds: Number(product.config.change_wait_seconds || 120),
-            max_numbers: initialRemaining,
+            max_numbers: maxNumbers,
           },
         })
         .select("*")

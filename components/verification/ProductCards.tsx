@@ -31,7 +31,7 @@ export function ProductCards() {
 
   return (
     <div className="grid gap-5 md:grid-cols-2">
-      {products.filter((product) => product.code !== "UK_RENEWAL").map((product) => {
+      {products.map((product) => {
         const isUs = product.product_type === "us_short"
         const paused = !product.is_active || product.sales_paused
         return (

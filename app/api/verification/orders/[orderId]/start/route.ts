@@ -10,7 +10,7 @@ import {
   requireVerificationUser,
   VerificationRequestError,
 } from "@/lib/verification/server"
-import { getUpstreamBalance, getUsNumber, UpstreamVerificationError } from "@/lib/verification/upstream"
+import { getUkNumber, getUpstreamBalance, getUsNumber, UpstreamVerificationError } from "@/lib/verification/upstream"
 
 export const dynamic = "force-dynamic"
 
@@ -28,8 +28,8 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
       .maybeSingle()
 
     if (!order) throw new VerificationRequestError("验证订单不存在", 404, "ORDER_NOT_FOUND")
-    if (order.product_type !== "us_short") {
-      throw new VerificationRequestError("该商品当前由管理员人工履约", 409, "MANUAL_FULFILLMENT")
+    if (!["us_short", "uk_first"].includes(order.product_type)) {
+      throw new VerificationRequestError("该商品等待上游接口文档，当前不能取号", 409, "PRODUCT_NOT_IMPLEMENTED")
     }
     if (order.payment_status !== "paid" || order.fulfillment_status !== "ready") {
       throw new VerificationRequestError("订单当前状态不能开始取号", 409, "INVALID_STATUS")
@@ -40,7 +40,8 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
       throw new VerificationRequestError("取号功能已暂停，请稍后重试", 409, "SALES_PAUSED")
     }
 
-    const cardCode = order.card_code || generatePrivateCardCode()
+    const isUs = order.product_type === "us_short"
+    const cardCode = isUs ? (order.card_code || generatePrivateCardCode()) : null
     const { data: claimed, error: claimError } = await admin
       .from("verification_orders")
       .update({
@@ -63,10 +64,11 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
     const balance = await getUpstreamBalance()
     const lowThreshold = Number(product.config.low_balance_threshold || 20)
     await admin.from("verification_balance_snapshots").insert({ balance, is_low: balance < lowThreshold })
-    if (balance < 1.3) throw new UpstreamVerificationError("NO_BALANCE")
+    const requiredBalance = isUs ? 1.3 : Math.max(0, Number(product.upstream_cost_estimate || 7))
+    if (balance < requiredBalance) throw new UpstreamVerificationError("NO_BALANCE")
 
-    const number = await getUsNumber(cardCode)
-    const maxNumbers = Math.min(6, Math.max(1, Number(product.config.max_numbers || 6)))
+    const number = isUs ? await getUsNumber(cardCode!) : await getUkNumber()
+    const maxNumbers = isUs ? Math.min(6, Math.max(1, Number(product.config.max_numbers || 6))) : 1
     const ttlSeconds = Number(product.config.number_ttl_seconds || 1200)
     const now = new Date()
     const { data: updated, error: updateError } = await admin
@@ -77,8 +79,8 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
         phone_number: number.phoneNumber,
         verification_code: null,
         numbers_used: 1,
-        numbers_remaining: Math.max(0, maxNumbers - 1),
-        upstream_cost: 1.3,
+        numbers_remaining: isUs ? Math.max(0, maxNumbers - 1) : 0,
+        upstream_cost: isUs ? 1.3 : 0,
         number_received_at: now.toISOString(),
         expires_at: new Date(now.getTime() + ttlSeconds * 1000).toISOString(),
         last_polled_at: null,
@@ -97,8 +99,8 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
           upstream_order_id: number.upstreamOrderId,
           phone_number: number.phoneNumber,
           numbers_used: 1,
-          numbers_remaining: Math.max(0, maxNumbers - 1),
-          upstream_cost: 1.3,
+          numbers_remaining: isUs ? Math.max(0, maxNumbers - 1) : 0,
+          upstream_cost: isUs ? 1.3 : 0,
           error_code: "NUMBER_RECEIVED_DB_FAILURE",
           error_message: "号码已分配，订单需要人工核对",
           updated_at: now.toISOString(),

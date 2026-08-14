@@ -6,6 +6,7 @@ import {
 } from "@/lib/verification/server"
 import { getUpstreamBalance } from "@/lib/verification/upstream"
 import { setUpstreamStatus } from "@/lib/verification/upstream"
+import { isUnavailableVerificationProductCode } from "@/lib/verification/products"
 
 export const dynamic = "force-dynamic"
 
@@ -43,7 +44,10 @@ export async function GET(request: NextRequest) {
       },
       { total: 0, active: 0, codeReceived: 0, review: 0, sales: 0, cost: 0 },
     )
-    return NextResponse.json({ products, orders, renewals, balance, balanceError, stats: { ...stats, profit: stats.sales - stats.cost } })
+    const safeProducts = (products || []).map((product) => isUnavailableVerificationProductCode(product.code)
+      ? { ...product, is_active: false, sales_paused: true }
+      : product)
+    return NextResponse.json({ products: safeProducts, orders, renewals, balance, balanceError, stats: { ...stats, profit: stats.sales - stats.cost } })
   } catch (error) {
     const result = errorResponse(error)
     return NextResponse.json(result.body, { status: result.status })
@@ -68,6 +72,9 @@ export async function PATCH(request: NextRequest) {
         typeof salesPaused !== "boolean"
       ) {
         return NextResponse.json({ error: "商品配置参数不正确" }, { status: 400 })
+      }
+      if (isUnavailableVerificationProductCode(String(body.code)) && isActive && !salesPaused) {
+        return NextResponse.json({ error: "该商品等待上游接口文档，暂时不能开放销售" }, { status: 409 })
       }
       const { data, error } = await admin
         .from("verification_products")

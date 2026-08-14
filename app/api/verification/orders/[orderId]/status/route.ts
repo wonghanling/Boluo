@@ -96,6 +96,9 @@ export async function POST(request: NextRequest, context: { params: { orderId: s
       .update({
         verification_code: result.code,
         fulfillment_status: "code_received",
+        upstream_cost: order.product_type === "uk_first"
+          ? Math.max(0, Number(order.metadata?.upstream_cost_estimate || 7))
+          : Number(order.upstream_cost || 0),
         code_received_at: now,
         updated_at: now,
       })

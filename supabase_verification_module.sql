@@ -42,8 +42,8 @@ VALUES
     7.00,
     7.00,
     TRUE,
-    TRUE,
-    '{"manual_fulfillment":true}'::JSONB
+    FALSE,
+    '{"manual_fulfillment":false,"change_wait_seconds":120,"number_ttl_seconds":1200,"max_active_orders":2,"low_balance_threshold":20}'::JSONB
   ),
   (
     'UK_LONG_MONTH',
@@ -53,7 +53,7 @@ VALUES
     '44',
     13.00,
     13.00,
-    TRUE,
+    FALSE,
     TRUE,
     '{"manual_fulfillment":true,"period_days":30}'::JSONB
   ),
@@ -65,7 +65,7 @@ VALUES
     '44',
     6.00,
     5.00,
-    TRUE,
+    FALSE,
     TRUE,
     '{"manual_fulfillment":true,"period_days":30}'::JSONB
   )

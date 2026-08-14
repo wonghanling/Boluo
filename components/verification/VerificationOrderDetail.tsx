@@ -9,6 +9,12 @@ import { verificationFetch } from "@/lib/verification/client"
 import { VERIFICATION_STATUS_LABELS, VerificationOrderView } from "@/types/verification"
 
 const terminalStates = new Set(["completed", "cancelled", "refund_pending", "refunded", "expired", "failed", "manual_review"])
+const productNames: Record<string, string> = {
+  US_SHORT: "美国短期验证套餐",
+  UK_FIRST: "英国首次验证",
+  UK_LONG_MONTH: "英国长期首月",
+  UK_RENEWAL: "英国号码续租",
+}
 
 export function VerificationOrderDetail({ orderId }: { orderId: string }) {
   const { user, loading: authLoading } = useAuth()
@@ -93,19 +99,27 @@ export function VerificationOrderDetail({ orderId }: { orderId: string }) {
   if (!order) return <p className="rounded-2xl border border-red-400/30 bg-red-400/10 p-5 text-red-200">{error || "订单不存在"}</p>
 
   const phoneForUse = order.phone_number ? (order.country_code === "187" ? `+1${order.phone_number}` : order.phone_number.startsWith("+") ? order.phone_number : `+44${order.phone_number}`) : ""
-  const canChange = ["waiting_code", "change_available"].includes(order.fulfillment_status) && order.numbers_remaining > 0 && changeWait === 0
+  const canChange = order.product_type === "us_short" && ["waiting_code", "change_available"].includes(order.fulfillment_status) && order.numbers_remaining > 0 && changeWait === 0
   const canCancel = order.fulfillment_status === "change_available" || (order.fulfillment_status === "waiting_code" && changeWait === 0)
 
   return (
     <div className="space-y-6">
       <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div><p className="text-xs text-white/40">订单号</p><p className="mt-1 font-mono text-sm">{order.payment_order_no}</p></div>
+          <div>
+            <p className="text-xs text-white/40">{productNames[order.product_code] || order.product_code} · {order.country_code === "187" ? "美国 +1" : "英国 +44"}</p>
+            <p className="mt-1 font-mono text-sm">订单号 {order.payment_order_no}</p>
+          </div>
           <span className="rounded-full bg-yellow-400/10 px-4 py-2 text-sm text-yellow-300">{VERIFICATION_STATUS_LABELS[order.fulfillment_status] || order.fulfillment_status}</span>
         </div>
         {error && <p className="mt-5 rounded-xl border border-red-400/20 bg-red-400/10 p-4 text-sm text-red-200">{error}</p>}
 
         {order.fulfillment_status === "awaiting_payment" && <p className="mt-8 text-white/60">订单尚未确认付款。如已付款，请等待支付宝异步通知后刷新页面。</p>}
+        {["cancelled", "refund_pending", "refunded", "expired"].includes(order.fulfillment_status) && (
+          <p className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-sm text-white/60">
+            当前订单已经结束，号码已释放，因此不再显示号码、验证码或换号操作。
+          </p>
+        )}
         {order.fulfillment_status === "ready" && (
           <div className="mt-8 rounded-2xl border border-yellow-400/20 bg-yellow-400/[0.05] p-6 text-center">
             <h2 className="text-xl font-semibold">付款成功，准备好后再开始</h2>
@@ -128,7 +142,7 @@ export function VerificationOrderDetail({ orderId }: { orderId: string }) {
           </div>
         )}
 
-        {order.product_type === "us_short" && (
+        {order.product_type === "us_short" && order.numbers_used > 0 && !["cancelled", "refund_pending", "refunded", "expired"].includes(order.fulfillment_status) && (
           <div className="mt-5 grid grid-cols-2 gap-4 text-center">
             <div className="rounded-xl border border-white/10 p-4"><p className="text-2xl font-bold">{order.numbers_used}</p><p className="mt-1 text-xs text-white/40">已使用号码数</p></div>
             <div className="rounded-xl border border-white/10 p-4"><p className="text-2xl font-bold">{order.numbers_remaining}</p><p className="mt-1 text-xs text-white/40">剩余换号次数</p></div>
@@ -138,7 +152,7 @@ export function VerificationOrderDetail({ orderId }: { orderId: string }) {
         {!terminalStates.has(order.fulfillment_status) && order.fulfillment_status !== "ready" && (
           <div className="mt-6 flex flex-wrap gap-3">
             {canChange && <Button variant="outline" disabled={!!action} onClick={() => perform("change")} className="border-yellow-400/40 bg-transparent text-yellow-300 hover:bg-yellow-400/10">{action === "change" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}更换号码</Button>}
-            {order.fulfillment_status === "waiting_code" && changeWait > 0 && <span className="self-center text-sm text-white/40">{changeWait} 秒后可申请换号</span>}
+            {order.fulfillment_status === "waiting_code" && changeWait > 0 && <span className="self-center text-sm text-white/40">{changeWait} 秒后可申请{order.product_type === "us_short" ? "换号或取消" : "取消"}</span>}
             {order.fulfillment_status === "code_received" && <Button onClick={() => perform("complete")} disabled={!!action} className="bg-yellow-400 text-[#111113] hover:bg-yellow-300"><Check className="mr-2 h-4 w-4" />完成订单</Button>}
             {canCancel && <Button variant="outline" disabled={!!action} onClick={() => perform("cancel")} className="border-red-400/30 bg-transparent text-red-300 hover:bg-red-400/10"><XCircle className="mr-2 h-4 w-4" />取消订单</Button>}
           </div>

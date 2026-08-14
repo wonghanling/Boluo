@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createVerificationAdminClient } from "@/lib/verification/server"
+import { isUnavailableVerificationProductCode } from "@/lib/verification/products"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -17,12 +18,14 @@ export async function GET() {
 
   const products = (data || []).map((product) => ({
     ...product,
+    is_active: isUnavailableVerificationProductCode(product.code) ? false : product.is_active,
+    sales_paused: isUnavailableVerificationProductCode(product.code) ? true : product.sales_paused,
     sale_price: Number(product.sale_price),
     config: {
       max_numbers: product.config?.max_numbers,
       change_wait_seconds: product.config?.change_wait_seconds,
       period_days: product.config?.period_days,
-      manual_fulfillment: product.config?.manual_fulfillment,
+      manual_fulfillment: product.code === "UK_FIRST" ? false : product.config?.manual_fulfillment,
     },
   }))
   return NextResponse.json(
