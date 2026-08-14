@@ -362,10 +362,10 @@ export default function HomePage() {
                     className="group"
                   >
                     <div
-                      className={`p-6 rounded-2xl bg-[#1d1d1f] text-white border-0 shadow-lg transition-all duration-300 h-full relative ${
+                      className={`p-6 rounded-2xl bg-transparent text-[#1d1d1f] border border-[#1d1d1f] transition-all duration-300 h-full relative ${
                         service.id === 'network'
                           ? 'opacity-60 cursor-not-allowed'
-                          : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer'
+                          : 'hover:-translate-y-1 hover:bg-yellow-400/5 cursor-pointer'
                       }`}
                       onClick={() => handleServiceClick(service)}
                     >
@@ -380,7 +380,7 @@ export default function HomePage() {
                           </div>
                         </div>
                       )}
-                      <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl mb-4 group-hover:bg-white/20 transition-colors">
+                      <div className="flex items-center justify-center w-12 h-12 border border-[#1d1d1f]/15 bg-transparent rounded-xl mb-4 group-hover:bg-yellow-400/20 transition-colors">
                         {service.id === 'chatgpt' ? (
                           <img
                             src="/ChatGPT.png"
@@ -394,20 +394,20 @@ export default function HomePage() {
                             className="w-6 h-6 object-contain"
                           />
                         ) : (
-                          <IconComponent className="h-6 w-6 text-white" />
+                          <IconComponent className="h-6 w-6 text-[#1d1d1f]" />
                         )}
                       </div>
-                      <h3 className="text-xl font-semibold mb-3 text-white">{service.name}</h3>
-                      <p className="text-white/60 mb-4">{service.description}</p>
+                      <h3 className="text-xl font-semibold mb-3 text-[#1d1d1f]">{service.name}</h3>
+                      <p className="text-[#1d1d1f]/60 mb-4">{service.description}</p>
                       <div className="space-y-2">
                         {service.features.slice(0, 6).map((feature, idx) => (
-                          <div key={idx} className="flex items-center text-sm text-white/80">
-                            <Icons.Check className="h-4 w-4 text-yellow-400 mr-2 flex-shrink-0" />
+                          <div key={idx} className="flex items-center text-sm text-[#1d1d1f]/80">
+                            <Icons.Check className="h-4 w-4 text-yellow-600 mr-2 flex-shrink-0" />
                             {feature}
                           </div>
                         ))}
                       </div>
-                      <div className="mt-4 flex items-center text-yellow-400 text-sm font-medium">
+                      <div className="mt-4 flex items-center text-yellow-600 text-sm font-medium">
                         查看套餐 <Icons.ArrowRight className="h-4 w-4 ml-1" />
                       </div>
                     </div>
@@ -509,7 +509,7 @@ export default function HomePage() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-5 md:px-6 md:py-6"
+                  className="rounded-2xl border border-white/60 bg-transparent px-5 py-5 md:px-6 md:py-6"
                 >
                   <h3 className="text-base md:text-lg font-semibold text-white mb-2">
                     {item.title}
@@ -524,7 +524,7 @@ export default function HomePage() {
             {/* 价格说明 */}
             <motion.div
               variants={fadeInUp}
-              className="mt-10 md:mt-14 rounded-2xl border border-yellow-400/20 bg-yellow-400/[0.06] px-5 py-5 md:px-8 md:py-7"
+              className="mt-10 md:mt-14 rounded-2xl border border-white/60 bg-transparent px-5 py-5 md:px-8 md:py-7"
             >
               <h3 className="text-base md:text-xl font-semibold text-yellow-400 mb-3">
                 为什么我们的价格比别人高？
