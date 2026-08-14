@@ -362,7 +362,7 @@ export default function HomePage() {
                     className="group"
                   >
                     <div
-                      className={`p-6 rounded-2xl bg-transparent text-[#1d1d1f] border border-[#1d1d1f] transition-all duration-300 h-full relative ${
+                      className={`p-6 rounded-2xl bg-transparent text-[#1d1d1f] border-4 border-double border-[#1d1d1f] transition-all duration-300 h-full relative ${
                         service.id === 'network'
                           ? 'opacity-60 cursor-not-allowed'
                           : 'hover:-translate-y-1 hover:bg-yellow-400/5 cursor-pointer'
