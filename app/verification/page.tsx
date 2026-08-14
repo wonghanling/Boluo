@@ -10,19 +10,19 @@ export const metadata: Metadata = {
 
 export default function VerificationPage() {
   return (
-    <VerificationShell>
+    <VerificationShell theme="light">
       <main className="container mx-auto px-4 py-14 md:py-20">
         <section className="mx-auto max-w-4xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-sm text-yellow-300">
+          <span className="inline-flex items-center gap-2 rounded-full border border-yellow-500/30 bg-yellow-400/15 px-4 py-2 text-sm text-yellow-700">
             <LockKeyhole className="h-4 w-4" /> 安全的号码验证服务
           </span>
           <h1 className="mt-6 text-4xl font-bold tracking-tight md:text-6xl">准备好后再取号，验证码自动刷新</h1>
-          <p className="mx-auto mt-5 max-w-2xl leading-7 text-white/60">
+          <p className="mx-auto mt-5 max-w-2xl leading-7 text-[#1d1d1f]/60">
             浏览器不会接触上游密钥。付款成功后由您主动开始取号，号码、验证码和订单状态仅本人可见。
           </p>
         </section>
 
-        <section className="mx-auto mt-14 max-w-5xl"><ProductCards /></section>
+        <section className="mx-auto mt-14 max-w-5xl"><ProductCards theme="light" /></section>
 
         <section className="mx-auto mt-16 grid max-w-5xl gap-4 md:grid-cols-3">
           {[
@@ -32,10 +32,10 @@ export default function VerificationPage() {
           ].map(([Icon, title, description]) => {
             const FeatureIcon = Icon as typeof ShieldCheck
             return (
-              <div key={String(title)} className="rounded-2xl border border-white/10 p-5">
-                <FeatureIcon className="h-6 w-6 text-yellow-400" />
+              <div key={String(title)} className="rounded-2xl border border-black/10 bg-[#f5f5f7] p-5">
+                <FeatureIcon className="h-6 w-6 text-yellow-600" />
                 <h2 className="mt-4 font-semibold">{String(title)}</h2>
-                <p className="mt-2 text-sm leading-6 text-white/50">{String(description)}</p>
+                <p className="mt-2 text-sm leading-6 text-[#1d1d1f]/50">{String(description)}</p>
               </div>
             )
           })}
