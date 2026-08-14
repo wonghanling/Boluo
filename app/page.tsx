@@ -240,6 +240,13 @@ export default function HomePage() {
               >
                 <Link href="/verification">codex 验证登录</Link>
               </Button>
+              <Button
+                asChild
+                size="lg"
+                className="text-lg px-8 py-4 bg-[#1d1d1f] text-white hover:bg-[#333336] border-0 rounded-full font-medium"
+              >
+                <a href="https://chinaapis.com/" target="_blank" rel="noopener noreferrer">ChinApis网关</a>
+              </Button>
               {/* 暂时隐藏：Visa / 礼品卡专区入口
               <Link href="/cards">
                 <Button
