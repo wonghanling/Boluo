@@ -245,15 +245,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* 顶部渐变区域 */}
-      <div className="bg-gradient-to-b from-yellow-400 to-blue-600 flex-shrink-0 pt-8 pb-16">
+    <div className="min-h-screen flex flex-col bg-white text-[#1d1d1f]">
+      {/* 顶部区域 */}
+      <div className="bg-white flex-shrink-0 border-b border-gray-100 pt-8 pb-16">
         <div className="max-w-md mx-auto px-4">
           {/* 返回按钮 */}
           <div className="mb-6">
             <Button
               variant="ghost"
-              className="text-white hover:bg-white/10 p-2"
+              className="text-[#1d1d1f] hover:bg-yellow-400/20 p-2"
               onClick={() => router.back()}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -264,14 +264,14 @@ export default function LoginPage() {
       </div>
 
       {/* 表单区域 - 纯色背景 */}
-      <div className="flex-1 bg-blue-600 flex items-start justify-center px-4 py-8">
+      <div className="flex-1 bg-white flex items-start justify-center px-4 py-8">
         <div className="max-w-md w-full">
           {/* 登录卡片 */}
           <div className="bg-white rounded-2xl shadow-2xl p-8">
             {/* 头部 */}
             <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-              <LogIn className="w-8 h-8 text-white" />
+            <div className="mx-auto w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+              <LogIn className="w-8 h-8 text-[#1d1d1f]" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">登录账户</h2>
             <p className="text-gray-600">
@@ -294,7 +294,7 @@ export default function LoginPage() {
           <div className="flex gap-2 mb-6">
             <Button
               type="button"
-              className={`flex-1 ${loginMode === 'password' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              className={`flex-1 ${loginMode === 'password' ? 'bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => {
                 setLoginMode('password')
                 setShowOtpInput(false)
@@ -305,7 +305,7 @@ export default function LoginPage() {
             </Button>
             <Button
               type="button"
-              className={`flex-1 ${loginMode === 'otp' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              className={`flex-1 ${loginMode === 'otp' ? 'bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => {
                 setLoginMode('otp')
                 setMessage(null)
@@ -377,7 +377,7 @@ export default function LoginPage() {
             <div className="flex justify-end">
               <button
                 type="button"
-                className="text-sm text-blue-600 hover:text-blue-500 font-medium"
+                className="text-sm text-yellow-600 hover:text-yellow-700 font-medium"
                 onClick={handleForgotPassword}
               >
                 忘记密码？
@@ -387,7 +387,7 @@ export default function LoginPage() {
             {/* 登录按钮 */}
             <Button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-medium"
+              className="w-full bg-yellow-400 hover:bg-yellow-300 text-[#1d1d1f] py-3 text-lg font-medium"
               disabled={isLoading}
             >
               {isLoading ? "登录中..." : "登录"}
@@ -424,7 +424,7 @@ export default function LoginPage() {
                   <Button
                     type="button"
                     onClick={handleSendOtp}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-medium"
+                    className="w-full bg-yellow-400 hover:bg-yellow-300 text-[#1d1d1f] py-3 text-lg font-medium"
                     disabled={isSendingOtp || !otpEmail}
                   >
                     {isSendingOtp ? "发送中..." : "发送验证码"}
@@ -468,7 +468,7 @@ export default function LoginPage() {
                         setShowOtpInput(false)
                         setOtp("")
                       }}
-                      className="text-sm text-blue-600 hover:text-blue-500"
+                      className="text-sm text-yellow-600 hover:text-yellow-700"
                     >
                       重新发送验证码
                     </button>
@@ -484,7 +484,7 @@ export default function LoginPage() {
               还没有账户？
               <Link
                 href="/auth/signup"
-                className="text-blue-600 hover:text-blue-500 font-medium ml-1"
+                className="text-yellow-600 hover:text-yellow-700 font-medium ml-1"
               >
                 立即注册
               </Link>
@@ -516,7 +516,7 @@ export default function LoginPage() {
 
           {/* 页脚信息 */}
           <div className="mt-8 text-center">
-            <p className="text-white/80 text-sm">
+            <p className="text-[#1d1d1f]/50 text-sm">
               © 2024 迅通AI. 专业的海外AI工具代充服务
             </p>
           </div>
