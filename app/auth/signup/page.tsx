@@ -184,9 +184,9 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#1d1d1f]">
+    <div className="min-h-screen flex flex-col bg-yellow-400 text-[#1d1d1f]">
       {/* 顶部区域 */}
-      <div className="bg-white flex-shrink-0 border-b border-gray-100 pt-8 pb-16">
+      <div className="bg-yellow-400 flex-shrink-0 pt-8 pb-16">
         <div className="max-w-md mx-auto px-4">
           {/* 返回按钮 */}
           <div className="mb-6">
@@ -203,7 +203,7 @@ export default function SignUpPage() {
       </div>
 
       {/* 表单区域 - 纯色背景 */}
-      <div className="flex-1 bg-white flex items-start justify-center px-4 py-8">
+      <div className="flex-1 bg-yellow-400 flex items-start justify-center px-4 py-8">
         <div className="max-w-md w-full">
           {/* 注册卡片 */}
           <div className="bg-white rounded-2xl shadow-2xl p-8">
