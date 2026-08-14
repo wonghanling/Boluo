@@ -362,10 +362,10 @@ export default function HomePage() {
                     className="group"
                   >
                     <div
-                      className={`p-6 rounded-2xl bg-transparent text-[#1d1d1f] border-4 border-double border-[#1d1d1f] transition-all duration-300 h-full relative ${
+                      className={`p-6 rounded-2xl bg-gradient-to-b from-[#0e0f13] via-[#18191d] to-[#34353a] text-white border-4 border-double border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition-all duration-300 h-full relative ${
                         service.id === 'network'
                           ? 'opacity-60 cursor-not-allowed'
-                          : 'hover:-translate-y-1 hover:bg-yellow-400/5 cursor-pointer'
+                          : 'hover:-translate-y-1 hover:border-white/40 cursor-pointer'
                       }`}
                       onClick={() => handleServiceClick(service)}
                     >
@@ -380,7 +380,7 @@ export default function HomePage() {
                           </div>
                         </div>
                       )}
-                      <div className="flex items-center justify-center w-12 h-12 border border-[#1d1d1f]/15 bg-transparent rounded-xl mb-4 group-hover:bg-yellow-400/20 transition-colors">
+                      <div className="flex items-center justify-center w-12 h-12 border border-white/15 bg-white/5 rounded-xl mb-4 group-hover:bg-white/10 transition-colors">
                         {service.id === 'chatgpt' ? (
                           <img
                             src="/ChatGPT.png"
@@ -394,20 +394,20 @@ export default function HomePage() {
                             className="w-6 h-6 object-contain"
                           />
                         ) : (
-                          <IconComponent className="h-6 w-6 text-[#1d1d1f]" />
+                          <IconComponent className="h-6 w-6 text-white" />
                         )}
                       </div>
-                      <h3 className="text-xl font-semibold mb-3 text-[#1d1d1f]">{service.name}</h3>
-                      <p className="text-[#1d1d1f]/60 mb-4">{service.description}</p>
+                      <h3 className="text-xl font-semibold mb-3 text-white">{service.name}</h3>
+                      <p className="text-white/60 mb-4">{service.description}</p>
                       <div className="space-y-2">
                         {service.features.slice(0, 6).map((feature, idx) => (
-                          <div key={idx} className="flex items-center text-sm text-[#1d1d1f]/80">
-                            <Icons.Check className="h-4 w-4 text-yellow-600 mr-2 flex-shrink-0" />
+                          <div key={idx} className="flex items-center text-sm text-white/80">
+                            <Icons.Check className="h-4 w-4 text-white/50 mr-2 flex-shrink-0" />
                             {feature}
                           </div>
                         ))}
                       </div>
-                      <div className="mt-4 flex items-center text-yellow-600 text-sm font-medium">
+                      <div className="mt-4 flex items-center text-yellow-400 text-sm font-medium">
                         查看套餐 <Icons.ArrowRight className="h-4 w-4 ml-1" />
                       </div>
                     </div>
