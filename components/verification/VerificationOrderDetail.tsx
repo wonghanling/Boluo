@@ -24,6 +24,7 @@ export function VerificationOrderDetail({ orderId }: { orderId: string }) {
   const [error, setError] = useState("")
   const [now, setNow] = useState(Date.now())
   const retryDelay = useRef(5000)
+  const paymentRetryDelay = useRef(5000)
 
   const loadOrder = useCallback(async () => {
     const result = await verificationFetch(`/api/verification/orders/${orderId}`)
@@ -66,6 +67,31 @@ export function VerificationOrderDetail({ orderId }: { orderId: string }) {
     timer = setTimeout(poll, 1000)
     return () => { cancelled = true; clearTimeout(timer) }
   }, [order?.fulfillment_status, orderId])
+
+  useEffect(() => {
+    if (!order || order.payment_status !== "pending" || order.fulfillment_status !== "awaiting_payment") return
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout>
+    const pollPayment = async () => {
+      try {
+        const result = await verificationFetch(`/api/verification/orders/${orderId}`, { method: "POST", body: "{}" })
+        if (cancelled) return
+        setOrder(result.order)
+        setError("")
+        paymentRetryDelay.current = 5000
+        if (result.order.payment_status === "pending" && result.order.fulfillment_status === "awaiting_payment") {
+          timer = setTimeout(pollPayment, 5000)
+        }
+      } catch (reason) {
+        if (cancelled) return
+        setError(reason instanceof Error ? reason.message : "付款状态确认失败，系统将自动重试")
+        paymentRetryDelay.current = Math.min(paymentRetryDelay.current * 2, 30000)
+        timer = setTimeout(pollPayment, paymentRetryDelay.current)
+      }
+    }
+    timer = setTimeout(pollPayment, 800)
+    return () => { cancelled = true; clearTimeout(timer) }
+  }, [order?.payment_status, order?.fulfillment_status, orderId])
 
   const changeAvailableAt = useMemo(() => {
     if (!order?.number_received_at) return null
@@ -114,7 +140,7 @@ export function VerificationOrderDetail({ orderId }: { orderId: string }) {
         </div>
         {error && <p className="mt-5 rounded-xl border border-red-400/20 bg-red-400/10 p-4 text-sm text-red-200">{error}</p>}
 
-        {order.fulfillment_status === "awaiting_payment" && <p className="mt-8 text-white/60">订单尚未确认付款。如已付款，请等待支付宝异步通知后刷新页面。</p>}
+        {order.fulfillment_status === "awaiting_payment" && <p className="mt-8 text-white/60">正在向支付宝确认付款状态，页面会自动刷新，请勿重复支付。</p>}
         {["cancelled", "refund_pending", "refunded", "expired"].includes(order.fulfillment_status) && (
           <p className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-sm text-white/60">
             当前订单已经结束，号码已释放，因此不再显示号码、验证码或换号操作。

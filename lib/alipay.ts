@@ -83,6 +83,27 @@ export function verifyCallback(params: any): boolean {
   return sdk.checkNotifySign(params);
 }
 
+// 支付宝异步通知可能同时返回 seller_id 和 seller_email。
+// 兼容历史上把支付宝登录邮箱填入 ALIPAY_SELLER_ID 的部署配置。
+export function matchesConfiguredAlipaySeller(params: Record<string, string>): boolean {
+  const configuredSellerId = process.env.ALIPAY_SELLER_ID?.trim();
+  const configuredSellerEmail = process.env.ALIPAY_SELLER_EMAIL?.trim().toLowerCase();
+
+  const expectedId = configuredSellerId && !configuredSellerId.includes('@')
+    ? configuredSellerId
+    : '';
+  const expectedEmail = configuredSellerEmail
+    || (configuredSellerId?.includes('@') ? configuredSellerId.toLowerCase() : '');
+
+  const idMatches = Boolean(expectedId && params.seller_id === expectedId);
+  const emailMatches = Boolean(
+    expectedEmail
+      && params.seller_email?.trim().toLowerCase() === expectedEmail,
+  );
+
+  return idMatches || emailMatches;
+}
+
 // 查询订单支付状态
 export async function queryPayment(outTradeNo: string) {
   const sdk = getAlipaySdk();

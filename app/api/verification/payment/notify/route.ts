@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { verifyCallback } from "@/lib/alipay"
+import { matchesConfiguredAlipaySeller, verifyCallback } from "@/lib/alipay"
 import { createVerificationAdminClient } from "@/lib/verification/server"
 
 export const dynamic = "force-dynamic"
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const paidAmount = Number(params.total_amount)
     const validTradeStatus = params.trade_status === "TRADE_SUCCESS" || params.trade_status === "TRADE_FINISHED"
     const expectedAppId = process.env.ALIPAY_APP_ID
-    const expectedSellerId = process.env.ALIPAY_SELLER_ID
+    const sellerMatches = matchesConfiguredAlipaySeller(params)
 
     if (
       !validTradeStatus ||
@@ -28,8 +28,7 @@ export async function POST(request: NextRequest) {
       !Number.isFinite(paidAmount) ||
       !expectedAppId ||
       params.app_id !== expectedAppId ||
-      !expectedSellerId ||
-      params.seller_id !== expectedSellerId
+      !sellerMatches
     ) {
       return new NextResponse("fail", { status: 400 })
     }
