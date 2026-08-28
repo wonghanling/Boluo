@@ -65,6 +65,7 @@ export default function HomePage() {
   const [selectedService, setSelectedService] = React.useState<Service | null>(null)
   const [serviceModalOpen, setServiceModalOpen] = React.useState(false)
   const [isPaying, setIsPaying] = React.useState(false) // 🛡️ 防重复支付
+  const [showVerificationQr, setShowVerificationQr] = React.useState(false)
 
   const copyWechatId = () => {
     navigator.clipboard.writeText(contactInfo.wechat)
@@ -233,13 +234,38 @@ export default function HomePage() {
               >
                 {heroContent.primaryCta}
               </Button>
-              <Button
-                asChild
-                size="lg"
-                className="text-lg px-8 py-4 bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-2 border-[#1d1d1f] rounded-full font-medium"
+              <div
+                className="group relative"
+                onMouseEnter={() => setShowVerificationQr(true)}
+                onMouseLeave={() => setShowVerificationQr(false)}
               >
-                <Link href="/verification">codex 验证登录</Link>
-              </Button>
+                <Button
+                  type="button"
+                  size="lg"
+                  aria-expanded={showVerificationQr}
+                  aria-label="显示号码验证客服二维码"
+                  className="text-lg px-8 py-4 bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-2 border-[#1d1d1f] rounded-full font-medium"
+                  onClick={() => setShowVerificationQr((visible) => !visible)}
+                >
+                  codex 验证登录
+                </Button>
+                <div
+                  className={`absolute left-1/2 top-full z-50 mt-3 w-56 -translate-x-1/2 rounded-2xl border-2 border-[#1d1d1f] bg-white p-4 shadow-2xl transition duration-200 ${
+                    showVerificationQr
+                      ? "visible translate-y-0 opacity-100"
+                      : "invisible -translate-y-2 opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+                  }`}
+                >
+                  <Image
+                    src="/wechat-qrcode.jpg"
+                    alt="微信扫码咨询号码验证"
+                    width={192}
+                    height={192}
+                    className="mx-auto h-48 w-48 rounded-xl object-cover"
+                  />
+                  <p className="mt-3 text-center text-sm font-medium text-[#1d1d1f]">微信扫码咨询号码验证</p>
+                </div>
+              </div>
               <Button
                 asChild
                 size="lg"
