@@ -100,7 +100,7 @@ export const services: Service[] = [
       },
       {
         name: "PLUS 月卡",
-        price: "¥429",
+        price: "¥439",
         period: "月",
         features: [
           "高频开发与长上下文"
@@ -109,7 +109,7 @@ export const services: Service[] = [
       },
       {
         name: "SVIP 月卡",
-        price: "¥599",
+        price: "¥619",
         period: "月",
         features: [
           "多项目并行"
@@ -117,7 +117,7 @@ export const services: Service[] = [
       },
       {
         name: "ULTRA 月卡",
-        price: "¥899",
+        price: "¥919",
         period: "月",
         features: [
           "团队共用"
@@ -125,7 +125,7 @@ export const services: Service[] = [
       },
       {
         name: "MAX 月卡",
-        price: "¥1209",
+        price: "¥1218",
         period: "月",
         features: [
           "不计量地写"
