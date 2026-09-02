@@ -8,53 +8,55 @@ export const services: Service[] = [
     icon: "MessageSquare",
     href: "/services/chatgpt",
     features: [
-      "多种套餐灵活选择",
-      "专业代充服务",
-      "安全快速开通",
-      "起价￥35"
+      "安卓区：Codex Plus / Pro 20X",
+      "苹果区：Codex Plus / Pro 5X / Pro 20X",
+      "代充自己的账号 / 可购买账号",
+      "起价￥148"
     ],
     pricing: [
       {
-        name: "免费版代开通",
-        price: "¥35",
+        name: "安卓区 · Codex Plus",
+        price: "¥148",
         period: "",
         features: [
-          "代开通ChatGPT免费账号",
-          "基础功能使用"
+          "代充自己的账号",
+          "可购买账号"
         ]
       },
       {
-        name: "共享版",
-        price: "¥65",
-        period: "月",
+        name: "安卓区 · Codex Pro 20X",
+        price: "¥1290",
+        period: "",
         features: [
-          "ChatGPT Plus共享账号",
-          "GPT-5功能权限",
-          "优先访问新功能",
-          "高速响应速度"
-        ],
-        popular: true
+          "代充自己的账号",
+          "可购买账号"
+        ]
       },
       {
-        name: "独享代充",
+        name: "苹果区 · Codex Plus",
         price: "¥148",
-        period: "月",
+        period: "",
         features: [
-          "无限制您的账号",
-          "完全独享使用",
-          "GPT-5无限制",
-          "全部高级功能"
+          "代充自己的账号",
+          "可购买账号"
         ]
       },
       {
-        name: "Pro专业版",
-        price: "¥1500",
-        period: "月",
+        name: "苹果区 · Codex Pro 5X",
+        price: "¥680",
+        period: "",
         features: [
-          "ChatGPT Pro账号",
-          "最高性能限制",
-          "优先客服支持",
-          "专业级功能"
+          "代充自己的账号",
+          "可购买账号"
+        ]
+      },
+      {
+        name: "苹果区 · Codex Pro 20X",
+        price: "¥1290",
+        period: "",
+        features: [
+          "代充自己的账号",
+          "可购买账号"
         ]
       }
     ]
@@ -66,56 +68,67 @@ export const services: Service[] = [
     icon: "Code",
     href: "/services/claude",
     features: [
-      "新号申请（含手机号验证）",
-      "日付/周付/月付选择",
-      "一次性代办服务",
-      "提供详细教程引导"
+      "按天 / 周卡 / 多档月卡",
+      "官方客户端直连原生 Claude Code",
+      "七档套餐灵活选择",
+      "起价￥11"
     ],
     pricing: [
       {
-        name: "新号申请",
-        price: "¥29",
-        period: "一次性",
-        features: [
-          "全新 Claude Code 账号",
-          "包含手机号验证",
-          "合规申请材料",
-          "详细使用教程"
-        ]
-      },
-      {
-        name: "日付套餐",
-        price: "¥13",
+        name: "按天体验",
+        price: "¥11",
         period: "天",
         features: [
-          "Claude Code 完整功能",
-          "无限制使用",
-          "最新功能访问",
-          "技术支持"
+          "先试一天再决定"
         ]
       },
       {
-        name: "周付套餐",
-        price: "¥130",
+        name: "周卡",
+        price: "¥109",
         period: "周",
         features: [
-          "Claude Code 完整功能",
-          "无限制使用",
-          "最新功能访问",
-          "技术支持"
+          "短期项目冲刺"
+        ]
+      },
+      {
+        name: "VIP 月卡",
+        price: "¥319",
+        period: "月",
+        features: [
+          "日常开发够用"
+        ]
+      },
+      {
+        name: "PLUS 月卡",
+        price: "¥429",
+        period: "月",
+        features: [
+          "高频开发与长上下文"
         ],
         popular: true
       },
       {
-        name: "月付套餐",
-        price: "¥320",
+        name: "SVIP 月卡",
+        price: "¥599",
         period: "月",
         features: [
-          "Claude Code 完整功能",
-          "无限制使用",
-          "最新功能访问",
-          "技术支持",
-          "享受月付优惠"
+          "多项目并行"
+        ]
+      },
+      {
+        name: "ULTRA 月卡",
+        price: "¥899",
+        period: "月",
+        features: [
+          "团队共用"
+        ]
+      },
+      {
+        name: "MAX 月卡",
+        price: "¥1209",
+        period: "月",
+        features: [
+          "不计量地写"
         ]
       }
     ]
