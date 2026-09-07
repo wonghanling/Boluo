@@ -8,14 +8,14 @@ export const services: Service[] = [
     icon: "MessageSquare",
     href: "/services/chatgpt",
     features: [
-      "安卓区：Codex Plus / Pro 20X",
-      "苹果区：Codex Plus / Pro 5X / Pro 20X",
-      "代充自己的账号 / 可购买账号",
-      "起价￥148"
+      "Codex Plus ¥148",
+      "Codex Pro 5X ¥680",
+      "Codex Pro 20X ¥1280",
+      "代充自己的账号 / 可购买账号"
     ],
     pricing: [
       {
-        name: "安卓区 · Codex Plus",
+        name: "Codex Plus",
         price: "¥148",
         period: "",
         features: [
@@ -24,25 +24,7 @@ export const services: Service[] = [
         ]
       },
       {
-        name: "安卓区 · Codex Pro 20X",
-        price: "¥1290",
-        period: "",
-        features: [
-          "代充自己的账号",
-          "可购买账号"
-        ]
-      },
-      {
-        name: "苹果区 · Codex Plus",
-        price: "¥148",
-        period: "",
-        features: [
-          "代充自己的账号",
-          "可购买账号"
-        ]
-      },
-      {
-        name: "苹果区 · Codex Pro 5X",
+        name: "Codex Pro 5X",
         price: "¥680",
         period: "",
         features: [
@@ -51,8 +33,8 @@ export const services: Service[] = [
         ]
       },
       {
-        name: "苹果区 · Codex Pro 20X",
-        price: "¥1290",
+        name: "Codex Pro 20X",
+        price: "¥1280",
         period: "",
         features: [
           "代充自己的账号",
