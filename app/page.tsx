@@ -213,7 +213,7 @@ export default function HomePage() {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-lg md:text-xl text-[#1d1d1f]/70 mb-12 max-w-2xl mx-auto"
+              className="text-lg md:text-xl text-[#1d1d1f]/70 mb-4 max-w-2xl mx-auto"
             >
               {heroContent.description}
             </motion.p>
@@ -225,7 +225,7 @@ export default function HomePage() {
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-sm md:text-base text-blue-600 mb-8 max-w-3xl mx-auto font-medium text-center px-4"
+              className="text-sm md:text-base text-white mb-8 max-w-3xl mx-auto font-medium text-center px-4"
             >
               扫码客服可获得卡密，再点击在线自动充值；加微信有保障、有售后
             </motion.p>
@@ -513,7 +513,7 @@ export default function HomePage() {
                 Plus / Pro / Pro 20x 会员代充
               </p>
               <p className="mt-2 text-3xl md:text-5xl font-bold text-yellow-400">
-                ¥148 <span className="text-lg md:text-2xl font-medium text-white/60">起</span>
+                ¥145 <span className="text-lg md:text-2xl font-medium text-white/60">起</span>
               </p>
               <p className="mt-4 text-sm md:text-base text-white/60 max-w-2xl mx-auto leading-relaxed">
                 使用您自己的 ChatGPT 账号开通会员，无需提供账号密码，付款后通常几分钟完成。

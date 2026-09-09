@@ -78,7 +78,7 @@ export function PurchaseDialog({
   const canDirectPay =
     !qrOnly && !!selectedPlanData && !Number.isNaN(parsePrice(selectedPlanData.price))
   const requiresPaymentLinkNote =
-    service?.id === "chatgpt" && selectedPlanData?.price.includes("148")
+    service?.id === "chatgpt" && selectedPlanData?.price.includes("145")
 
   const handleSubmit = async () => {
     if (!service) return

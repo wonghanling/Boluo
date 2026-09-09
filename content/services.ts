@@ -8,7 +8,7 @@ export const services: Service[] = [
     icon: "MessageSquare",
     href: "/services/chatgpt",
     features: [
-      "Codex Plus ¥148",
+      "Codex Plus ¥145",
       "Codex Pro 5X ¥680",
       "Codex Pro 20X ¥1280",
       "代充自己的账号 / 可购买账号"
@@ -16,7 +16,7 @@ export const services: Service[] = [
     pricing: [
       {
         name: "Codex Plus",
-        price: "¥148",
+        price: "¥145",
         period: "",
         features: [
           "代充自己的账号",
