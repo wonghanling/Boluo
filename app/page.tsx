@@ -219,9 +219,15 @@ export default function HomePage() {
             </motion.p>
             <motion.p
               variants={fadeInUp}
-              className="text-base md:text-lg text-[#1d1d1f] mb-8 max-w-3xl mx-auto font-medium text-center px-4"
+              className="text-base md:text-lg text-[#1d1d1f] mb-2 max-w-3xl mx-auto font-medium text-center px-4"
             >
               领取您的会员/无密码接触充值您的账号
+            </motion.p>
+            <motion.p
+              variants={fadeInUp}
+              className="text-sm md:text-base text-blue-600 mb-8 max-w-3xl mx-auto font-medium text-center px-4"
+            >
+              扫码客服可获得卡密，再点击在线自动充值；加微信有保障、有售后
             </motion.p>
             <motion.div
               variants={fadeInUp}
