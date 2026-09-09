@@ -66,6 +66,7 @@ export default function HomePage() {
   const [serviceModalOpen, setServiceModalOpen] = React.useState(false)
   const [isPaying, setIsPaying] = React.useState(false) // 🛡️ 防重复支付
   const [showVerificationQr, setShowVerificationQr] = React.useState(false)
+  const [showRechargeVideo, setShowRechargeVideo] = React.useState(false)
 
   const copyWechatId = () => {
     navigator.clipboard.writeText(contactInfo.wechat)
@@ -338,6 +339,13 @@ export default function HomePage() {
                   <span className="mr-2 text-[#1d1d1f] text-xl">✓</span>
                   可以开发票。
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowRechargeVideo(true)}
+                  className="mt-3 inline-flex items-center rounded-full bg-[#1d1d1f] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#333336]"
+                >
+                  充值步骤
+                </button>
               </div>
 
               {/* 暂时隐藏：查看服务详情 / FAQ 按钮
@@ -946,6 +954,39 @@ export default function HomePage() {
               </section>
 
             </div>
+          </div>
+        </div>
+      )}
+
+      {showRechargeVideo && (
+        <div
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setShowRechargeVideo(false)}
+        >
+          <div
+            className="w-full max-w-3xl rounded-2xl bg-[#050608] p-4 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-white">充值步骤</h2>
+              <button
+                type="button"
+                aria-label="关闭充值步骤视频"
+                onClick={() => setShowRechargeVideo(false)}
+                className="rounded-full px-3 py-1 text-2xl leading-none text-white/70 hover:bg-white/10 hover:text-white"
+              >
+                ×
+              </button>
+            </div>
+            <video
+              controls
+              autoPlay
+              playsInline
+              className="max-h-[75vh] w-full rounded-xl bg-black"
+              src="/recharge-guide.mp4"
+            >
+              您的浏览器不支持视频播放。
+            </video>
           </div>
         </div>
       )}
