@@ -254,7 +254,7 @@ export default function HomePage() {
                   className="text-lg px-8 py-4 bg-yellow-400 text-[#1d1d1f] hover:bg-yellow-300 border-2 border-[#1d1d1f] rounded-full font-medium"
                   onClick={() => setShowVerificationQr((visible) => !visible)}
                 >
-                  codex 验证登录
+                  codex 手机号验证
                 </Button>
                 <div
                   className={`absolute left-1/2 top-full z-50 mt-3 w-56 -translate-x-1/2 rounded-2xl border-2 border-[#1d1d1f] bg-white p-4 shadow-2xl transition duration-200 ${
