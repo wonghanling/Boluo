@@ -278,7 +278,7 @@ export default function HomePage() {
                 size="lg"
                 className="text-lg px-8 py-4 bg-blue-600 text-white hover:bg-blue-500 border-0 rounded-full font-medium"
               >
-                <a href="https://gpt66.cc/" target="_blank" rel="noopener noreferrer">在线充值套餐</a>
+                <a href="https://cdk.gynb666.com/" target="_blank" rel="noopener noreferrer">在线充值套餐</a>
               </Button>
               {/* 暂时隐藏：Visa / 礼品卡专区入口
               <Link href="/cards">
