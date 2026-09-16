@@ -280,7 +280,6 @@ export default function HomePage() {
               >
                 <a href="https://cdk.gynb666.com/" target="_blank" rel="noopener noreferrer">在线充值套餐</a>
               </Button>
-              {/* 暂时隐藏：Visa / 礼品卡专区入口
               <Link href="/cards">
                 <Button
                   size="lg"
@@ -289,7 +288,6 @@ export default function HomePage() {
                   Visa / 礼品卡专区
                 </Button>
               </Link>
-              */}
             </motion.div>
 
             {/* 动态提示 - 改为三个绿色勾列表 */}
