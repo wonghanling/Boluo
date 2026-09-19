@@ -172,7 +172,7 @@ export default function HomePage() {
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <Image
-                src="/boluoing-logo.png"
+                src="/BoLuo-logo.svg"
                 alt="BoLuo菠萝logo"
                 width={32}
                 height={32}

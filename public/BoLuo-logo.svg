@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1024" height="1024" viewBox="0 0 1024 1024"
+     role="img" aria-labelledby="title desc">
+  <title id="title">BoLuo Cloud and Network Hub logo</title>
+  <desc id="desc">A centered near-black cloud and connected-node symbol above the BoLuo wordmark on a transparent background.</desc>
+
+  <g fill="none" stroke="#17171B" stroke-width="46"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- Cloud outline -->
+    <path d="M349 557
+             H290
+             C214 557 152 495 152 419
+             C152 343 214 281 290 281
+             C309 281 327 285 344 292
+             C373 226 438 180 512 180
+             C586 180 651 226 680 292
+             C697 285 715 281 734 281
+             C810 281 872 343 872 419
+             C872 495 810 557 734 557
+             H675"/>
+
+    <!-- Network connections -->
+    <path d="M512 354 V432 M512 432 L405 500 M512 432 L619 500"/>
+  </g>
+
+  <!-- Network nodes -->
+  <g fill="#17171B">
+    <circle cx="512" cy="329" r="55"/>
+    <circle cx="394" cy="511" r="55"/>
+    <circle cx="630" cy="511" r="55"/>
+  </g>
+
+  <!-- Editable wordmark. Convert text to outlines before sending to a printer if required. -->
+  <text x="512" y="770"
+        fill="#17171B"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="176"
+        font-weight="900"
+        letter-spacing="-8">BoLuo</text>
+</svg>
