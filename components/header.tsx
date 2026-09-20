@@ -62,16 +62,15 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 w-full overflow-x-clip border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 max-w-full items-center justify-between overflow-x-clip">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center">
             <Image
-              src="/boluoing-logo.png"
+              src="/BoLuo-logo.svg"
               alt="BoLuo Logo"
-              width={24}
-              height={24}
-              className="w-6 h-6 opacity-100"
+              width={56}
+              height={56}
+              className="h-14 w-14 object-contain opacity-100"
               priority
             />
-            <span className="font-bold text-xl">BoLuo</span>
           </Link>
 
           {/* 桌面导航 */}

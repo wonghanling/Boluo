@@ -165,32 +165,6 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col">
-      {/* Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-30 overflow-x-clip bg-white/95 border-b border-gray-200 backdrop-blur-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <Image
-                src="/BoLuo-logo.svg"
-                alt="BoLuo菠萝logo"
-                width={32}
-                height={32}
-                className="w-8 h-8"
-              />
-              <span className="text-xl font-bold text-gray-800">BoLuo</span>
-            </div>
-
-            {/* Navigation Links */}
-            <div className="hidden items-center space-x-6 sm:flex">
-              <a href="#hero" className="text-gray-600 hover:text-gray-900 transition-colors">首页</a>
-              <a href="#services" className="text-gray-600 hover:text-gray-900 transition-colors">服务</a>
-              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">联系我们</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section id="hero" className="px-4 pt-36 pb-20 md:pt-44 md:pb-32 bg-gradient-to-b from-yellow-300 to-yellow-400 text-center">
         <div className="container mx-auto">
