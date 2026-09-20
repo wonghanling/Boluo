@@ -61,7 +61,7 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full overflow-x-clip border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-16 max-w-full items-center justify-between overflow-x-clip">
+        <div className="container relative mx-auto flex h-16 max-w-full items-center justify-between overflow-x-clip">
           <Link href="/" className="flex items-center">
             <Image
               src="/BoLuo-logo.svg"
@@ -74,7 +74,7 @@ export function Header() {
           </Link>
 
           {/* 桌面导航 */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center space-x-6 md:flex">
             {navigation.map((item) => (
               <Link
                 key={item.name}
