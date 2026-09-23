@@ -13,11 +13,19 @@ type CatalogOption = {
   productSlug: string
   label: string
   currency: string
+  region: string | null
   faceValue: number | null
   isVariable: boolean
   min: number | null
   max: number | null
   inStock: boolean
+}
+
+type CatalogRegion = {
+  code: string
+  label: string
+  currency: string
+  inStockCount: number
 }
 
 type QuoteView = {
@@ -30,6 +38,8 @@ type QuoteView = {
   inStock: boolean
   estimatedNewCardRemaining: number
   estimatedNewCardFeeUsd: number
+  region: string | null
+  showRewarbleFees: boolean
 }
 
 type RelogradePurchasePanelProps = {
@@ -46,9 +56,13 @@ function parseAmount(value: string) {
 export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePanelProps) {
   const brand = RELOGRADE_BRANDS[brandId]
   const currencies = brand.currencies as readonly string[]
+  const groupedByRegion = brand.groupedByRegion
+  const showRewarbleFees = brand.showRewarbleFees
   const theme = getCardTheme(product.id)
 
-  const [currency, setCurrency] = React.useState(currencies[0])
+  const [currency, setCurrency] = React.useState(currencies[0] || "USD")
+  const [region, setRegion] = React.useState("")
+  const [regions, setRegions] = React.useState<CatalogRegion[]>([])
   const [options, setOptions] = React.useState<CatalogOption[]>([])
   const [catalogStatus, setCatalogStatus] = React.useState<"loading" | "ready" | "error">("loading")
   const [selectedSlug, setSelectedSlug] = React.useState("")
@@ -77,16 +91,27 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
     const load = async () => {
       setCatalogStatus("loading")
       try {
-        const response = await fetch(
-          `/api/relograde/catalog?brand=${brandId}&currency=${currency}`,
-          { cache: "no-store" },
-        )
+        const params = new URLSearchParams({ brand: brandId })
+        if (currency) params.set("currency", currency)
+        if (groupedByRegion && region) params.set("region", region)
+        const response = await fetch(`/api/relograde/catalog?${params.toString()}`, {
+          cache: "no-store",
+        })
         const result = await response.json()
         if (!response.ok || !result.success) throw new Error(result.error || "目录加载失败")
         if (cancelled) return
+        const nextRegions = (result.regions || []) as CatalogRegion[]
         const nextOptions = (result.options || []) as CatalogOption[]
+        setRegions(nextRegions)
+        if (groupedByRegion && !region && nextRegions[0]) {
+          setRegion(nextRegions[0].code)
+          setCurrency(nextRegions[0].currency)
+        } else if (result.currency) {
+          setCurrency(result.currency)
+        }
         setOptions(nextOptions)
-        setSelectedSlug(nextOptions[0]?.productSlug || "")
+        const firstInStock = nextOptions.find((item) => item.inStock) || nextOptions[0]
+        setSelectedSlug(firstInStock?.productSlug || "")
         setCustomAmount("")
         setQuote(null)
         setQuoteStatus("idle")
@@ -102,7 +127,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
     return () => {
       cancelled = true
     }
-  }, [brandId, currency])
+  }, [brandId, currency, groupedByRegion, region])
 
   React.useEffect(() => {
     if (!selected || !amountValid) {
@@ -124,6 +149,8 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
             currency,
             faceValue,
             preferVariable: Boolean(selected.isVariable),
+            region: groupedByRegion ? region : undefined,
+            productSlug: selected.productSlug,
           }),
         })
         const result = await response.json()
@@ -143,7 +170,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
       cancelled = true
       window.clearTimeout(timer)
     }
-  }, [amountValid, brandId, currency, faceValue, selected?.isVariable, selected?.productSlug])
+  }, [amountValid, brandId, currency, faceValue, groupedByRegion, region, selected?.isVariable, selected?.productSlug])
 
   const handleSubmit = async () => {
     const nextErrors: { email?: string; contact?: string; amount?: string } = {}
@@ -174,6 +201,8 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
             currency,
             faceValue,
             preferVariable: Boolean(selected?.isVariable),
+            region: groupedByRegion ? region : undefined,
+            productSlug: selected?.productSlug,
           },
         }),
       })
@@ -214,7 +243,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
               <p className="mt-1.5 text-[13px] leading-5 text-white/82">{product.subtitle}</p>
             </div>
             <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/84">
-              Rewarble 兑换码
+              {showRewarbleFees ? "可开卡 / 可充值" : "礼品卡兑换码"}
             </span>
           </div>
           <div className="relative z-10 mt-4 h-[90px] w-full sm:h-[112px]">
@@ -235,9 +264,17 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
               </p>
             </div>
             <div className="rounded-[18px] px-3.5 py-3" style={{ backgroundColor: theme.statsBackground }}>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/62">开卡后约可用</p>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-white/62">
+                {showRewarbleFees ? "开卡后约可用" : "到账面额"}
+              </p>
               <p className="mt-1.5 text-[18px] font-semibold">
-                {quote ? `${quote.estimatedNewCardRemaining.toFixed(2)} ${currency}` : "--"}
+                {showRewarbleFees
+                  ? quote
+                    ? `${quote.estimatedNewCardRemaining.toFixed(2)} ${currency}`
+                    : "--"
+                  : amountValid
+                    ? `${faceValue.toFixed(2)} ${currency}`
+                    : "--"}
               </p>
             </div>
             <div className="rounded-[18px] px-3.5 py-3" style={{ backgroundColor: theme.statsBackground }}>
@@ -268,7 +305,29 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">购买信息</p>
         <h2 className="mt-2 text-[24px] font-semibold tracking-tight text-slate-950">选择面额并付款</h2>
 
-        {currencies.length > 1 && (
+        {groupedByRegion && (
+          <div className="mt-5">
+            <label className="mb-2 block text-[12px] font-semibold text-slate-900">国家 / 地区</label>
+            <select
+              value={region}
+              onChange={(event) => {
+                const next = regions.find((item) => item.code === event.target.value)
+                setRegion(event.target.value)
+                if (next) setCurrency(next.currency)
+              }}
+              className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[14px] text-slate-900"
+            >
+              {regions.map((item) => (
+                <option key={item.code} value={item.code}>
+                  {item.label}（{item.currency}
+                  {item.inStockCount ? "" : " · 缺货"}）
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {currencies.length > 1 && !groupedByRegion && (
           <div className="mt-5">
             <label className="mb-2 block text-[12px] font-semibold text-slate-900">币种</label>
             <select
@@ -371,18 +430,28 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
             <span>钱包到账面额</span>
             <span className="text-slate-950">{amountValid ? `${faceValue.toFixed(2)} ${currency}` : "--"}</span>
           </div>
-          <div className="mt-2.5 flex items-center justify-between">
-            <span>开新卡估算扣费</span>
-            <span className="text-slate-950">
-              {quote ? `约 $${quote.estimatedNewCardFeeUsd.toFixed(2)}` : "--"}
-            </span>
-          </div>
-          <div className="mt-2.5 flex items-center justify-between">
-            <span>开新卡后约可用</span>
-            <span className="text-slate-950">
-              {quote ? `${quote.estimatedNewCardRemaining.toFixed(2)} ${currency}` : "--"}
-            </span>
-          </div>
+          {showRewarbleFees && (
+            <>
+              <div className="mt-2.5 flex items-center justify-between">
+                <span>开新卡估算扣费</span>
+                <span className="text-slate-950">
+                  {quote ? `约 $${quote.estimatedNewCardFeeUsd.toFixed(2)}` : "--"}
+                </span>
+              </div>
+              <div className="mt-2.5 flex items-center justify-between">
+                <span>开新卡后约可用</span>
+                <span className="text-slate-950">
+                  {quote ? `${quote.estimatedNewCardRemaining.toFixed(2)} ${currency}` : "--"}
+                </span>
+              </div>
+              <div className="mt-2.5 flex items-center justify-between">
+                <span>已有卡充值估算</span>
+                <span className="text-slate-950">
+                  {amountValid ? `约 $${(0.99 + faceValue * 0.055).toFixed(2)}` : "--"}
+                </span>
+              </div>
+            </>
+          )}
           <div className="mt-2.5 flex items-center justify-between">
             <span>汇率</span>
             <span className="text-slate-950">{quote ? `1 USD = ${quote.usdCny.toFixed(4)} CNY` : "--"}</span>
@@ -404,7 +473,9 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
           {isPaying ? "跳转支付中..." : "立即付款"}
         </Button>
         <p className="mt-3 text-[11px] leading-5 text-slate-500">
-          付款成功后本页会给出 Rewarble 兑换码。请到 https://rewarble.com/redeem 兑换。开卡费、月费、KYC 由 Rewarble 收取，以兑换时页面为准。
+          {showRewarbleFees
+            ? "付款后获得 Rewarble 兑换码，到 https://rewarble.com/redeem 兑换进钱包。可以开新卡，也可以给已有卡充值（充值更便宜）。开卡费、充值费、月费、KYC 由 Rewarble 收取，以兑换时页面为准。"
+            : "付款成功后本页会给出礼品卡兑换码。请在对应国家的官方账户兑换，跨区通常无法使用。"}
         </p>
       </div>
     </div>

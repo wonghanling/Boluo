@@ -41,6 +41,8 @@ export async function POST(request: NextRequest) {
       const currency = String(relograde.currency || 'USD').toUpperCase()
       const faceValue = Number(relograde.faceValue)
       const preferVariable = Boolean(relograde.preferVariable)
+      const region = relograde.region ? String(relograde.region).toLowerCase() : undefined
+      const productSlug = relograde.productSlug ? String(relograde.productSlug) : undefined
 
       if (!isRelogradeBrand(brandId) || !Number.isFinite(faceValue) || faceValue <= 0) {
         return NextResponse.json({ error: '礼品卡参数无效' }, { status: 400 })
@@ -51,6 +53,8 @@ export async function POST(request: NextRequest) {
         currency,
         faceValue,
         preferVariable,
+        region,
+        productSlug,
       })
 
       if (!quote.inStock) {
@@ -58,7 +62,9 @@ export async function POST(request: NextRequest) {
       }
 
       chargedAmount = quote.sellCny
-      serviceTitle = `${title} ${currency} ${faceValue}`
+      serviceTitle = region
+        ? `${title} ${region.toUpperCase()} ${currency} ${faceValue}`
+        : `${title} ${currency} ${faceValue}`
     }
 
     // 生成订单号

@@ -96,10 +96,10 @@ function CardSuccessContent() {
                   rel="noreferrer"
                   className="inline-flex h-11 items-center rounded-full bg-[#1faa45] px-5 text-[14px] font-semibold text-white"
                 >
-                  去 Rewarble 兑换
+                  {order.redemption_link ? "打开兑换页" : "去 Rewarble 兑换"}
                 </a>
                 <p className="text-[12px] leading-5 text-slate-500">
-                  打开兑换页，粘贴兑换码。开卡费、月费和 KYC 由 Rewarble 收取，以当时页面为准。
+                  打开兑换页，粘贴兑换码。Visa / Mastercard 兑进钱包后可开新卡或给已有卡充值；礼品卡请在对应国家官方账户兑换。
                 </p>
               </div>
             )}

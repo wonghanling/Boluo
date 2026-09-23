@@ -10,6 +10,8 @@ export async function POST(request: NextRequest) {
     const currency = String(body.currency || "USD").toUpperCase()
     const faceValue = Number(body.faceValue)
     const preferVariable = Boolean(body.preferVariable)
+    const region = body.region ? String(body.region).toLowerCase() : undefined
+    const productSlug = body.productSlug ? String(body.productSlug) : undefined
 
     if (!isRelogradeBrand(brandId)) {
       return NextResponse.json({ error: "不支持的卡种" }, { status: 400 })
@@ -23,6 +25,8 @@ export async function POST(request: NextRequest) {
       currency,
       faceValue,
       preferVariable,
+      region,
+      productSlug,
     })
 
     return NextResponse.json({
@@ -37,6 +41,8 @@ export async function POST(request: NextRequest) {
         inStock: quote.inStock,
         estimatedNewCardRemaining: quote.estimatedNewCardRemaining,
         estimatedNewCardFeeUsd: quote.estimatedNewCardFeeUsd,
+        region: quote.region,
+        showRewarbleFees: quote.showRewarbleFees,
       },
     })
   } catch (error: any) {

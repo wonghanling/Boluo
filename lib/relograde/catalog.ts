@@ -1,8 +1,13 @@
 import { getFxRates, listProducts, type RelogradeProduct } from "./client"
 import { estimateNewCardLoad, sellPriceCny } from "./pricing"
-import { RELOGRADE_BRANDS, isRelogradeBrand, type RelogradeBrandId } from "./catalog-public"
+import {
+  RELOGRADE_BRANDS,
+  formatRegionLabel,
+  isRelogradeBrand,
+  type RelogradeBrandId,
+} from "./catalog-public"
 
-export { RELOGRADE_BRANDS, isRelogradeBrand }
+export { RELOGRADE_BRANDS, formatRegionLabel, isRelogradeBrand }
 export type { RelogradeBrandId }
 
 const productCache = new Map<string, { expiresAt: number; products: RelogradeProduct[] }>()
@@ -54,9 +59,9 @@ export async function getBrandProducts(brandId: RelogradeBrandId): Promise<Relog
   const page = await listProducts({
     brandSlug: brand.brandSlug,
     paymentCurrency: brand.paymentCurrencyDefault,
-    limit: 50,
+    limit: 200,
   })
-  const products = (page.data ?? []).filter((item) => item.isStocked !== false)
+  const products = page.data ?? []
   productCache.set(brandId, { expiresAt: Date.now() + PRODUCT_TTL_MS, products })
   return products
 }
@@ -67,7 +72,13 @@ export function invalidateRelogradeCache(slugs?: string[]) {
     fxCache.expiresAt = 0
     return
   }
-  const hit = slugs.some((slug) => slug.startsWith("rewarble-visa") || slug.startsWith("rewarble-mastercard"))
+  const hit = slugs.some(
+    (slug) =>
+      slug.startsWith("rewarble-visa") ||
+      slug.startsWith("rewarble-mastercard") ||
+      slug.startsWith("apple-") ||
+      slug.startsWith("google-"),
+  )
   if (hit) productCache.clear()
 }
 
@@ -75,6 +86,7 @@ export type CatalogOption = {
   productSlug: string
   label: string
   currency: string
+  region: string | null
   faceValue: number | null
   isVariable: boolean
   min: number | null
@@ -82,11 +94,54 @@ export type CatalogOption = {
   inStock: boolean
 }
 
-export function toCatalogOptions(products: RelogradeProduct[], currency: string): CatalogOption[] {
+export type CatalogRegion = {
+  code: string
+  label: string
+  currency: string
+  inStockCount: number
+}
+
+function productRegion(product: RelogradeProduct): string {
+  return (product.redeemValue || product.region || "").toLowerCase()
+}
+
+export function listCatalogRegions(products: RelogradeProduct[]): CatalogRegion[] {
+  const map = new Map<string, CatalogRegion>()
+  for (const product of products) {
+    const code = productRegion(product)
+    if (!code) continue
+    const currency = (product.faceValueCurrency || "").toUpperCase()
+    const current = map.get(code)
+    const inStock = product.isStocked !== false ? 1 : 0
+    if (current) {
+      current.inStockCount += inStock
+    } else {
+      map.set(code, {
+        code,
+        label: formatRegionLabel(code),
+        currency,
+        inStockCount: inStock,
+      })
+    }
+  }
+  return Array.from(map.values()).sort((a, b) => {
+    if (b.inStockCount !== a.inStockCount) return b.inStockCount - a.inStockCount
+    return a.label.localeCompare(b.label, "zh")
+  })
+}
+
+export function toCatalogOptions(
+  products: RelogradeProduct[],
+  currency: string,
+  region?: string,
+): CatalogOption[] {
   const wanted = currency.toUpperCase()
+  const wantedRegion = (region || "").toLowerCase()
   const matched = products.filter((product) => {
     const code = (product.faceValueCurrency || "").toUpperCase()
-    return code === wanted
+    if (code !== wanted) return false
+    if (wantedRegion && productRegion(product) !== wantedRegion) return false
+    return true
   })
 
   const fixed = matched
@@ -96,6 +151,7 @@ export function toCatalogOptions(products: RelogradeProduct[], currency: string)
       productSlug: product.slug,
       label: `${wanted} ${Number(product.faceValueAmount)}`,
       currency: wanted,
+      region: productRegion(product) || null,
       faceValue: Number(product.faceValueAmount),
       isVariable: false,
       min: Number(product.faceValueAmount),
@@ -109,6 +165,7 @@ export function toCatalogOptions(products: RelogradeProduct[], currency: string)
       productSlug: product.slug,
       label: `自定义 ${wanted} ${product.faceValueMin ?? 30}–${product.faceValueMax ?? 1000}`,
       currency: wanted,
+      region: productRegion(product) || null,
       faceValue: null,
       isVariable: true,
       min: product.faceValueMin ?? 30,
@@ -124,14 +181,28 @@ export function findProductForQuote(
   currency: string,
   faceValue: number,
   preferVariable: boolean,
+  region?: string,
+  productSlug?: string,
 ): RelogradeProduct | null {
+  if (productSlug) {
+    return products.find((product) => product.slug === productSlug) || null
+  }
+
   const wanted = currency.toUpperCase()
-  const inCurrency = products.filter(
-    (product) => (product.faceValueCurrency || "").toUpperCase() === wanted,
-  )
+  const wantedRegion = (region || "").toLowerCase()
+  const inCurrency = products.filter((product) => {
+    if ((product.faceValueCurrency || "").toUpperCase() !== wanted) return false
+    if (wantedRegion && productRegion(product) !== wantedRegion) return false
+    return true
+  })
 
   if (!preferVariable) {
     const exact = inCurrency.find(
+      (product) =>
+        !product.isVariableProduct &&
+        Number(product.faceValueAmount) === Number(faceValue) &&
+        product.isStocked !== false,
+    ) || inCurrency.find(
       (product) =>
         !product.isVariableProduct && Number(product.faceValueAmount) === Number(faceValue),
     )
@@ -184,6 +255,8 @@ export type QuoteResult = {
   inStock: boolean
   estimatedNewCardRemaining: number
   estimatedNewCardFeeUsd: number
+  region: string | null
+  showRewarbleFees: boolean
 }
 
 export async function quoteBrandProduct(input: {
@@ -191,6 +264,8 @@ export async function quoteBrandProduct(input: {
   currency: string
   faceValue: number
   preferVariable?: boolean
+  region?: string
+  productSlug?: string
 }): Promise<QuoteResult> {
   const faceValue = Number(input.faceValue)
   if (!Number.isFinite(faceValue) || faceValue <= 0) {
@@ -206,9 +281,14 @@ export async function quoteBrandProduct(input: {
     input.currency,
     faceValue,
     Boolean(input.preferVariable),
+    input.region,
+    input.productSlug,
   )
   if (!product) {
     throw new Error("没有匹配的在售商品")
+  }
+  if (product.isStocked === false) {
+    throw new Error("该面额暂时缺货")
   }
 
   const { costAmount, costCurrency } = computeCost(product, faceValue)
@@ -236,8 +316,10 @@ export async function quoteBrandProduct(input: {
     marginRate: priced.marginRate,
     usdCny: usdTo.CNY,
     faceUsd: Number(faceUsd.toFixed(4)),
-    inStock: product.isStocked !== false,
+    inStock: true,
     estimatedNewCardRemaining: estimate.remainingFace,
     estimatedNewCardFeeUsd: estimate.feeAmount,
+    region: productRegion(product) || input.region || null,
+    showRewarbleFees: RELOGRADE_BRANDS[input.brandId].showRewarbleFees,
   }
 }

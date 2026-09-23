@@ -88,6 +88,8 @@ export type RelogradeProduct = {
   brandName?: string
   category?: string
   redeemType?: string
+  redeemValue?: string
+  region?: string
   isVariableProduct?: boolean
   paymentCurrency?: string
 }
