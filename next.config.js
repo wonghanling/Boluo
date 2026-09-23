@@ -7,8 +7,7 @@ const nextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  // Remove output: 'export' for Render deployment
-  // Use output: 'export' only for static hosting
+  output: 'standalone',
 }
 
 module.exports = nextConfig
