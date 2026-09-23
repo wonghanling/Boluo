@@ -15,7 +15,8 @@ export class RelogradeError extends Error {
 }
 
 function requireEnv(name: string): string {
-  const value = process.env[name]?.trim()
+  const raw = process.env[name]
+  const value = raw ? raw.trim() : ""
   if (!value) throw new RelogradeError(`缺少环境变量 ${name}`, 500, "config")
   return value
 }

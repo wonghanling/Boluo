@@ -31,14 +31,19 @@ export type VoucherOrderRow = {
 }
 
 function hasServiceRole(): boolean {
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
-  return Boolean(key) && !key.includes("your_service_role")
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!key) return false
+  const trimmed = key.trim()
+  return trimmed.length > 0 && trimmed.indexOf("your_service_role") === -1
 }
 
 export function createRelogradeAdminClient(): SupabaseClient | null {
   if (!hasServiceRole()) return null
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const rawKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!rawUrl || !rawKey) return null
+  const url = rawUrl.trim()
+  const key = rawKey.trim()
   if (!url || !key) return null
   return createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
