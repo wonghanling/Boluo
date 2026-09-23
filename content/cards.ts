@@ -73,12 +73,12 @@ export const cardProducts: CardProduct[] = [
     badge: "Global",
     subtitle: "虚拟 Visa 卡",
     description:
-      "请输入需要购买的美元金额。系统会先将所选金额换算为美元，再加上固定 2.00 USD 服务费，最后按人民币结算。",
+      "付款后立即获得 Rewarble 兑换码，请到 rewarble.com/redeem 兑换。钱包到账后如需开 Visa 虚拟卡，Rewarble 会另收开卡费（目前约 $3.49 + 5.5%），月费约 €2.50，约 $750 可能触发实名。费率以兑换时页面为准。",
     accent: "from-[#0f3fb3] via-[#1c60f2] to-[#66a1ff]",
     image: "/visa-10.svg",
-    deliveryText: "卡号 / 卡密 / 二维码发送至邮箱",
-    features: ["支持自定义金额", "一次性消费", "不支持软件订阅"],
-    purchaseNote: "Visa 卡属于一次性消费卡，不支持用于订阅类自动扣费。",
+    deliveryText: "兑换码即时发送，到 rewarble.com/redeem 兑换",
+    features: ["Rewarble 兑换码即时发货", "支持固定面额和自定义金额", "开卡费由 Rewarble 收取，不计入本站售价"],
+    purchaseNote: "本站出售的是兑换码，不是成品卡号。$30 面额单独开新卡可能不够，建议已有卡充值或叠加使用。超过约 $750 可能需要 Rewarble 实名。",
     supportsSubscription: false,
     purchaseRule: {
       requiresCountrySelection: false,
@@ -103,12 +103,12 @@ export const cardProducts: CardProduct[] = [
     badge: "Global",
     subtitle: "虚拟 Mastercard 卡",
     description:
-      "请输入需要购买的美元金额。系统会先将所选金额换算为美元，再加上固定 2.00 USD 服务费，最后按人民币结算。",
+      "付款后立即获得 Rewarble 兑换码，请到 rewarble.com/redeem 兑换。钱包到账后如需开 Mastercard 虚拟卡，Rewarble 会另收开卡费（目前约 $3.49 + 5.5%），月费约 €2.50，约 $750 可能触发实名。费率以兑换时页面为准。",
     accent: "from-[#111111] via-[#2d2d2d] to-[#575757]",
     image: "/mastercard-modern-design-.svg",
-    deliveryText: "卡号 / 卡密 / 二维码发送至邮箱",
-    features: ["支持自定义金额", "一次性消费", "不支持软件订阅"],
-    purchaseNote: "Mastercard 卡属于一次性消费卡，不支持用于订阅类自动扣费。",
+    deliveryText: "兑换码即时发送，到 rewarble.com/redeem 兑换",
+    features: ["支持 USD / EUR", "Rewarble 兑换码即时发货", "开卡费由 Rewarble 收取，不计入本站售价"],
+    purchaseNote: "本站出售的是兑换码，不是成品卡号。$30 / €30 单独开新卡可能不够，建议已有卡充值或叠加使用。超过约 $750 可能需要 Rewarble 实名。",
     supportsSubscription: false,
     purchaseRule: {
       requiresCountrySelection: false,

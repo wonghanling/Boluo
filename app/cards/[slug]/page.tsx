@@ -1,7 +1,9 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CardPurchaseDetail } from "@/components/CardPurchaseDetail"
+import { RelogradePurchasePanel } from "@/components/RelogradePurchasePanel"
 import { cardProducts, getCardProductBySlug } from "@/content/cards"
+import { isRelogradeBrand } from "@/lib/relograde/catalog-public"
 
 export function generateStaticParams() {
   return cardProducts.map((product) => ({
@@ -40,7 +42,11 @@ export default function CardDetailPage({
           </Link>
         </div>
 
-        <CardPurchaseDetail product={product} />
+        {isRelogradeBrand(product.id) ? (
+          <RelogradePurchasePanel product={product} brandId={product.id} />
+        ) : (
+          <CardPurchaseDetail product={product} />
+        )}
       </div>
     </main>
   )
