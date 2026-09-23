@@ -65,6 +65,22 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6AD02ADA0651438E9DE9EFBC8FBABF98 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DA09455155FF49DC9837D3793E388368 }}
 
+      - name: Disable Oryx remote build on Azure
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp config appsettings set \
+              --name boluoing-hk \
+              --resource-group boluoing-hk_group \
+              --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false ENABLE_ORYX_BUILD=false \
+              --output none
+            az webapp config set \
+              --name boluoing-hk \
+              --resource-group boluoing-hk_group \
+              --startup-file "node server.js" \
+              --output none
+            az webapp restart --name boluoing-hk --resource-group boluoing-hk_group --output none
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
