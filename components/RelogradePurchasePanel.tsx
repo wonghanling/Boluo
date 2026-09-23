@@ -104,8 +104,9 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
         const nextOptions = (result.options || []) as CatalogOption[]
         setRegions(nextRegions)
         if (groupedByRegion && !region && nextRegions[0]) {
-          setRegion(nextRegions[0].code)
-          setCurrency(nextRegions[0].currency)
+          const firstLive = nextRegions.find((item) => item.inStockCount > 0) || nextRegions[0]
+          setRegion(firstLive.code)
+          setCurrency(firstLive.currency)
         } else if (result.currency) {
           setCurrency(result.currency)
         }
@@ -320,7 +321,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
               {regions.map((item) => (
                 <option key={item.code} value={item.code}>
                   {item.label}（{item.currency}
-                  {item.inStockCount ? "" : " · 缺货"}）
+                {item.inStockCount ? "" : " · 整区缺货"}）
                 </option>
               ))}
             </select>
@@ -468,7 +469,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
         <Button
           className="mt-5 h-11 w-full rounded-[18px] border-0 bg-[#1faa45] text-[15px] font-semibold text-white hover:bg-[#18973c]"
           onClick={handleSubmit}
-          disabled={isPaying || !quote}
+          disabled={isPaying || !quote || !selected?.inStock}
         >
           {isPaying ? "跳转支付中..." : "立即付款"}
         </Button>

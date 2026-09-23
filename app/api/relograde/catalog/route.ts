@@ -23,7 +23,8 @@ export async function GET(request: NextRequest) {
     const brand = RELOGRADE_BRANDS[brandId as RelogradeBrandId]
     const products = await getBrandProducts(brandId as RelogradeBrandId)
     const regions = brand.groupedByRegion ? listCatalogRegions(products) : []
-    const selectedRegion = region || (regions[0] && regions[0].code) || ""
+    const defaultRegion = regions.find((item) => item.inStockCount > 0) || regions[0]
+    const selectedRegion = region || (defaultRegion && defaultRegion.code) || ""
     const selectedCurrency =
       currency ||
       (selectedRegion && regions.find((item) => item.code === selectedRegion)?.currency) ||
