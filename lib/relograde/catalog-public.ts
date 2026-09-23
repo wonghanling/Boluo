@@ -15,6 +15,8 @@ export const REGION_LABELS: Record<string, string> = {
   in: "印度",
   it: "意大利",
   jp: "日本",
+  kr: "韩国",
+  mx: "墨西哥",
   nl: "荷兰",
   pl: "波兰",
   pt: "葡萄牙",

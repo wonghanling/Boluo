@@ -388,7 +388,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="mb-2 block text-[12px] font-semibold text-slate-900">接收邮箱</label>
+            <label className="mb-2 block text-[12px] font-semibold text-slate-900">联系邮箱</label>
             <Input
               type="email"
               value={email}
@@ -427,7 +427,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
 
         <div className="mt-5 rounded-[20px] border border-slate-200 bg-slate-50 p-4 text-[12px] text-slate-600">
           <div className="flex items-center justify-between">
-            <span>钱包到账面额</span>
+            <span>{showRewarbleFees ? "钱包到账面额" : "兑换码面额"}</span>
             <span className="text-slate-950">{amountValid ? `${faceValue.toFixed(2)} ${currency}` : "--"}</span>
           </div>
           {showRewarbleFees && (
@@ -474,8 +474,8 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
         </Button>
         <p className="mt-3 text-[11px] leading-5 text-slate-500">
           {showRewarbleFees
-            ? "付款后获得 Rewarble 兑换码，到 https://rewarble.com/redeem 兑换进钱包。可以开新卡，也可以给已有卡充值（充值更便宜）。开卡费、充值费、月费、KYC 由 Rewarble 收取，以兑换时页面为准。"
-            : "付款成功后本页会给出礼品卡兑换码。请在对应国家的官方账户兑换，跨区通常无法使用。"}
+            ? "付款成功后兑换码直接显示在本页，请自行复制保存。到 https://rewarble.com/redeem 兑换进钱包，可开新卡或给已有卡充值（充值更便宜）。开卡费、充值费、月费、KYC 由 Rewarble 收取，以兑换时页面为准。邮箱和联系方式仅用于订单查询与售后。"
+            : "付款成功后兑换码直接显示在本页，请自行复制保存。请在对应国家的官方账户兑换，跨区通常无法使用。邮箱和联系方式仅用于订单查询与售后。"}
         </p>
       </div>
     </div>

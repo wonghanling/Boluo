@@ -125,7 +125,9 @@ export function listCatalogRegions(products: RelogradeProduct[]): CatalogRegion[
     }
   }
   return Array.from(map.values()).sort((a, b) => {
-    if (b.inStockCount !== a.inStockCount) return b.inStockCount - a.inStockCount
+    const aOut = a.inStockCount === 0
+    const bOut = b.inStockCount === 0
+    if (aOut !== bOut) return aOut ? 1 : -1
     return a.label.localeCompare(b.label, "zh")
   })
 }
