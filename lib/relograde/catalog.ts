@@ -298,7 +298,7 @@ export async function quoteBrandProduct(input: {
 
   const costCny = convertToCny(costAmount, costCurrency, usdTo)
   const faceUsd = convertToUsd(faceValue, input.currency, usdTo)
-  const priced = sellPriceCny(costCny, faceUsd)
+  const priced = sellPriceCny(costCny, faceUsd, RELOGRADE_BRANDS[input.brandId].pricingKind)
   const estimate = estimateNewCardLoad(faceValue, input.currency)
 
   return {

@@ -32,6 +32,7 @@ export const RELOGRADE_BRANDS = {
     currencies: ["USD"] as const,
     groupedByRegion: false,
     showRewarbleFees: true,
+    pricingKind: "paymentcard",
   },
   mastercard: {
     id: "mastercard",
@@ -40,6 +41,7 @@ export const RELOGRADE_BRANDS = {
     currencies: ["USD", "EUR"] as const,
     groupedByRegion: false,
     showRewarbleFees: true,
+    pricingKind: "paymentcard",
   },
   "apple-gift-card": {
     id: "apple-gift-card",
@@ -48,6 +50,7 @@ export const RELOGRADE_BRANDS = {
     currencies: [] as const,
     groupedByRegion: true,
     showRewarbleFees: false,
+    pricingKind: "giftcard",
   },
   "google-play": {
     id: "google-play",
@@ -56,6 +59,7 @@ export const RELOGRADE_BRANDS = {
     currencies: [] as const,
     groupedByRegion: true,
     showRewarbleFees: false,
+    pricingKind: "giftcard",
   },
 } as const
 
