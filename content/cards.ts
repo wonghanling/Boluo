@@ -137,7 +137,7 @@ export const cardProducts: CardProduct[] = [
     accent: "from-[#111827] via-[#374151] to-[#9ca3af]",
     image: "/apple-pay-3.svg",
     deliveryText: "付款后兑换码直接显示在页面，请自行保存",
-    features: ["按国家拉取 Relograde 在售面额", "实时进价结算人民币", "兑换码自动发货"],
+    features: ["付款后页面立即出码，不发邮件", "实时进价结算人民币", "请选择与账户一致的国家"],
     purchaseNote: "请选择与你 Apple ID 国家一致的礼品卡，跨区一般无法兑换。",
     supportsSubscription: true,
     purchaseRule: {
@@ -169,7 +169,7 @@ export const cardProducts: CardProduct[] = [
     accent: "from-[#14532d] via-[#16a34a] to-[#86efac]",
     image: "/google-pay-2.svg",
     deliveryText: "付款后兑换码直接显示在页面，请自行保存",
-    features: ["按国家拉取 Relograde 在售面额", "实时进价结算人民币", "兑换码自动发货"],
+    features: ["付款后页面立即出码，不发邮件", "实时进价结算人民币", "请选择与账户一致的国家"],
     purchaseNote: "请选择与你 Google Play 国家一致的礼品卡，跨区一般无法兑换。",
     supportsSubscription: true,
     purchaseRule: {

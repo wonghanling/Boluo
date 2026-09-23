@@ -98,8 +98,8 @@ function CardSuccessContent() {
                 >
                   {order.redemption_link ? "打开兑换页" : "去 Rewarble 兑换"}
                 </a>
-                <p className="text-[12px] leading-5 text-slate-500">
-                  打开兑换页，粘贴兑换码。Visa / Mastercard 兑进钱包后可开新卡或给已有卡充值；礼品卡请在对应国家官方账户兑换。
+                <p className="rounded-[14px] bg-amber-50 px-3 py-2 text-[13px] font-medium leading-5 text-amber-950">
+                  兑换码只显示在本页，不会发到邮箱。请立刻复制保存。
                 </p>
               </div>
             )}
