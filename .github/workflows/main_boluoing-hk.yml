@@ -52,7 +52,8 @@ jobs:
           mkdir -p deploy/.next/static
           cp -r .next/static/. deploy/.next/static/
           if [ -d public ]; then cp -r public deploy/; fi
-          node -e "const fs=require('fs'); const p='deploy/package.json'; const pkg=fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):{name:'boluoing',private:true}; pkg.scripts={...(pkg.scripts||{}),start:'node server.js'}; fs.writeFileSync(p, JSON.stringify(pkg,null,2));"
+          printf '%s\n' '[config]' 'SCM_DO_BUILD_DURING_DEPLOYMENT=false' > deploy/.deployment
+          rm -f deploy/package.json deploy/package-lock.json
 
       - name: Zip standalone artifact
         run: cd deploy && zip -r ../release.zip .
