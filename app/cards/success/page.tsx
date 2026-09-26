@@ -30,6 +30,16 @@ function CardSuccessContent() {
   const [order, setOrder] = React.useState<OrderView | null>(null)
   const [error, setError] = React.useState("")
   const [copied, setCopied] = React.useState(false)
+  const [openedClaim, setOpenedClaim] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!orderId) return
+    try {
+      setOpenedClaim(window.localStorage.getItem(`boluo-claim-opened:${orderId}`) === "1")
+    } catch {
+      setOpenedClaim(false)
+    }
+  }, [orderId])
 
   React.useEffect(() => {
     if (!orderId) return
@@ -109,16 +119,30 @@ function CardSuccessContent() {
 
             {delivered && hasClaimPage && (
               <div className="mt-5 space-y-3">
-                <a
-                  href={order.redemption_link!}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-11 items-center rounded-full bg-[#1faa45] px-5 text-[14px] font-semibold text-white"
-                >
-                  打开兑换页，复制兑换码
-                </a>
+                {openedClaim ? (
+                  <p className="rounded-[14px] border border-slate-300 bg-white px-3 py-3 text-[14px] font-medium leading-6 text-slate-900">
+                    兑换页已经打开过。请使用刚才复制的兑换码。刷新本页不会再次提供入口。
+                  </p>
+                ) : (
+                  <a
+                    href={order.redemption_link!}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex h-11 items-center rounded-full bg-[#1faa45] px-5 text-[14px] font-semibold text-white"
+                    onClick={() => {
+                      try {
+                        window.localStorage.setItem(`boluo-claim-opened:${orderId}`, "1")
+                      } catch {
+                        // ignore
+                      }
+                      setOpenedClaim(true)
+                    }}
+                  >
+                    打开兑换页，复制兑换码
+                  </a>
+                )}
                 <p className="rounded-[14px] border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium leading-5 text-slate-900">
-                  请在打开的兑换页复制兑换码并保存。兑换码不会发到邮箱。这个页面可以重复打开，兑换码不会因为多打开几次就变。
+                  请在兑换页立刻复制兑换码并保存。不会发到邮箱。入口只在本机打开一次。
                 </p>
               </div>
             )}
