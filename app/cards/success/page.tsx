@@ -39,7 +39,7 @@ function CardSuccessContent() {
       try {
         const response = await fetch(`/api/relograde/order?orderId=${encodeURIComponent(orderId)}`, {
           cache: "no-store",
-          signal: AbortSignal.timeout(55000),
+          signal: AbortSignal.timeout(20000),
         })
         const result = await response.json()
         if (!response.ok) throw new Error(result.error || "查询失败")
@@ -52,7 +52,7 @@ function CardSuccessContent() {
           setError(err?.message || "查询失败")
         }
       }
-      if (!cancelled) timer = window.setTimeout(load, 3000)
+      if (!cancelled) timer = window.setTimeout(load, 2500)
     }
     load()
     return () => {
@@ -81,17 +81,17 @@ function CardSuccessContent() {
         </p>
 
         {!delivered && !failed && (
-          <div className="mt-8 rounded-[24px] border border-amber-200 bg-amber-50 p-6">
+          <div className="mt-8 rounded-[24px] border border-slate-300 bg-slate-100 p-6">
             <div className="flex items-center gap-3">
-              <span className="h-5 w-5 animate-spin rounded-full border-2 border-amber-300 border-t-amber-700" />
-              <p className="text-[16px] font-semibold text-amber-950">
-                {order ? "正在向上游取兑换码" : "正在确认支付"}
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
+              <p className="text-[16px] font-semibold text-slate-950">
+                {order?.status === "pending_payment" || !order ? "正在确认支付" : "正在向上游取兑换码"}
               </p>
             </div>
-            <p className="mt-3 text-[13px] leading-6 text-amber-900/80">
-              {order
-                ? "支付已收到。通常 10–30 秒，本页会自动更新，请不要关闭。"
-                : "正在向支付宝确认这笔付款，请稍候。"}
+            <p className="mt-3 text-[13px] leading-6 text-slate-600">
+              {order?.status === "pending_payment" || !order
+                ? "正在向支付宝确认这笔付款，请稍候。"
+                : "支付已收到。通常 10–30 秒，本页会自动更新，请不要关闭。"}
             </p>
           </div>
         )}
@@ -117,7 +117,7 @@ function CardSuccessContent() {
                 >
                   打开兑换页，复制兑换码
                 </a>
-                <p className="rounded-[14px] bg-amber-50 px-3 py-2 text-[13px] font-medium leading-5 text-amber-950">
+                <p className="rounded-[14px] border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium leading-5 text-slate-900">
                   请在打开的兑换页复制兑换码并保存。兑换码不会发到邮箱。这个页面可以重复打开，兑换码不会因为多打开几次就变。
                 </p>
               </div>
@@ -145,7 +145,7 @@ function CardSuccessContent() {
                 >
                   {copied ? "已复制" : "复制兑换码"}
                 </button>
-                <p className="rounded-[14px] bg-amber-50 px-3 py-2 text-[13px] font-medium leading-5 text-amber-950">
+                <p className="rounded-[14px] border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium leading-5 text-slate-900">
                   兑换码只显示在本页，不会发到邮箱。请立刻复制保存。
                 </p>
               </div>

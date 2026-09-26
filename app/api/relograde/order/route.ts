@@ -93,11 +93,15 @@ export async function GET(request: NextRequest) {
             || (payment as { trade_no?: string }).trade_no
             || "",
         ) || null
-        void markPaidAndFulfill(orderId, tradeNo)
-        return NextResponse.json({
-          success: true,
-          order: { ...data, status: "fulfilling" },
-        })
+        await markPaidAndFulfill(orderId, tradeNo)
+        const { data: refreshed } = await admin
+          .from("voucher_orders")
+          .select(PUBLIC_FIELDS)
+          .eq("order_id", orderId)
+          .maybeSingle()
+        if (refreshed) {
+          return NextResponse.json({ success: true, order: refreshed })
+        }
       }
     } catch (queryError) {
       console.error("主动查询支付宝失败:", queryError)

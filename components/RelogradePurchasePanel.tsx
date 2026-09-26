@@ -302,9 +302,9 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
         </div>
       </div>
 
-      <div className="rounded-[22px] border border-amber-300 bg-amber-50 px-4 py-3.5 text-amber-950 shadow-[0_10px_24px_rgba(245,158,11,0.12)]">
+      <div className="rounded-[22px] border border-slate-300 bg-slate-100 px-4 py-3.5 text-slate-950">
         <p className="text-[16px] font-semibold tracking-tight">付款后兑换码直接显示在本页</p>
-        <p className="mt-1 text-[13px] leading-5 text-amber-900/85">
+        <p className="mt-1 text-[13px] leading-5 text-slate-600">
           不会发送到邮箱。请当场复制保存。邮箱和联系方式只用于订单查询与售后。
         </p>
       </div>
