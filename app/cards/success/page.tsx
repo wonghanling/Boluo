@@ -74,20 +74,24 @@ function CardSuccessContent() {
           Payment
         </p>
         <h1 className="mt-2 text-[28px] font-semibold tracking-tight text-slate-950">
-          {delivered ? "兑换码已就绪" : failed ? "出码失败" : waiting ? "正在生成兑换码" : "支付结果"}
+          {delivered ? "兑换码已就绪" : failed ? "出码失败" : "正在生成兑换码"}
         </h1>
         <p className="mt-3 text-[14px] leading-6 text-slate-600">
           {orderId ? `订单号 ${orderId}` : "未找到订单号。如果已付款，请凭邮箱联系客服。"}
         </p>
 
-        {waiting && (
+        {!delivered && !failed && (
           <div className="mt-8 rounded-[24px] border border-amber-200 bg-amber-50 p-6">
             <div className="flex items-center gap-3">
               <span className="h-5 w-5 animate-spin rounded-full border-2 border-amber-300 border-t-amber-700" />
-              <p className="text-[16px] font-semibold text-amber-950">正在向上游取兑换码</p>
+              <p className="text-[16px] font-semibold text-amber-950">
+                {order ? "正在向上游取兑换码" : "正在确认支付"}
+              </p>
             </div>
             <p className="mt-3 text-[13px] leading-6 text-amber-900/80">
-              支付已收到。通常 10–30 秒，本页会自动更新，请不要关闭。
+              {order
+                ? "支付已收到。通常 10–30 秒，本页会自动更新，请不要关闭。"
+                : "正在向支付宝确认这笔付款，请稍候。"}
             </p>
           </div>
         )}

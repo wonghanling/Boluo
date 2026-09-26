@@ -83,20 +83,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "订单不存在" }, { status: 404 })
   }
 
-  if (data.status === "pending_payment") {
+  if (data.status === "pending_payment" || data.status === "paid") {
     try {
-      const payment = await queryPayment(orderId)
-      if (isPaidTrade(payment)) {
+      const payment =
+        data.status === "paid" ? { tradeStatus: "TRADE_SUCCESS" } : await queryPayment(orderId)
+      if (isPaidTrade(payment) || data.status === "paid") {
         const tradeNo = String(payment?.tradeNo || payment?.trade_no || "") || null
-        await markPaidAndFulfill(orderId, tradeNo)
-        const { data: refreshed } = await admin
-          .from("voucher_orders")
-          .select(PUBLIC_FIELDS)
-          .eq("order_id", orderId)
-          .maybeSingle()
-        if (refreshed) {
-          return NextResponse.json({ success: true, order: refreshed })
-        }
+        void markPaidAndFulfill(orderId, tradeNo)
+        return NextResponse.json({
+          success: true,
+          order: { ...data, status: "fulfilling" },
+        })
       }
     } catch (queryError) {
       console.error("主动查询支付宝失败:", queryError)
