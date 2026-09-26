@@ -37,6 +37,7 @@ function CardSuccessContent() {
       try {
         const response = await fetch(`/api/relograde/order?orderId=${encodeURIComponent(orderId)}`, {
           cache: "no-store",
+          signal: AbortSignal.timeout(55000),
         })
         const result = await response.json()
         if (!response.ok) throw new Error(result.error || "查询失败")
