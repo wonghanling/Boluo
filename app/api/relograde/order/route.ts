@@ -88,7 +88,11 @@ export async function GET(request: NextRequest) {
       const payment =
         data.status === "paid" ? { tradeStatus: "TRADE_SUCCESS" } : await queryPayment(orderId)
       if (isPaidTrade(payment) || data.status === "paid") {
-        const tradeNo = String(payment?.tradeNo || payment?.trade_no || "") || null
+        const tradeNo = String(
+          (payment as { tradeNo?: string; trade_no?: string }).tradeNo
+            || (payment as { trade_no?: string }).trade_no
+            || "",
+        ) || null
         void markPaidAndFulfill(orderId, tradeNo)
         return NextResponse.json({
           success: true,
