@@ -49,23 +49,31 @@ export async function fulfillRelogradeOrder(input: {
     .maybeSingle()
 
   if (existing?.status === "delivered") return
-  if (existing?.status === "fulfilling" && existing.relograde_trx) {
+  if (existing?.relograde_trx) {
     try {
-      const order = await waitUntilFinished(existing.relograde_trx)
-      await saveVoucher(admin, input.orderId, order)
+      const order = await waitUntilFinished(existing.relograde_trx, 4)
+      if (order.orderStatus === "finished") {
+        await saveVoucher(admin, input.orderId, order)
+        return
+      }
     } catch (error) {
       await markFailed(admin, input.orderId, error)
     }
     return
   }
 
-  await admin
+  const { data: locked } = await admin
     .from("voucher_orders")
     .update({
       status: "fulfilling",
       error_message: null,
     })
     .eq("order_id", input.orderId)
+    .in("status", ["pending_payment", "paid"])
+    .select("id")
+    .maybeSingle()
+
+  if (!locked) return
 
   const item: { productSlug: string; amount: number; faceValue?: number } = {
     productSlug: input.quote.productSlug,
