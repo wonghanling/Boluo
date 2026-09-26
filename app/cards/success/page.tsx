@@ -111,10 +111,10 @@ function CardSuccessContent() {
                   rel="noreferrer"
                   className="inline-flex h-11 items-center rounded-full bg-[#1faa45] px-5 text-[14px] font-semibold text-white"
                 >
-                  打开兑换页，复制礼品卡码
+                  打开兑换页，复制兑换码
                 </a>
                 <p className="rounded-[14px] bg-amber-50 px-3 py-2 text-[13px] font-medium leading-5 text-amber-950">
-                  真正要兑换的码在下一页，以「测试」开头的那一串。请在兑换页复制保存，不会发到邮箱。本页不展示会变动的领取凭证。
+                  请在打开的兑换页复制兑换码并保存。兑换码不会发到邮箱。这个页面可以重复打开，兑换码不会因为多打开几次就变。
                 </p>
               </div>
             )}
