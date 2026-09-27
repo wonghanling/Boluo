@@ -5,10 +5,14 @@ import { RelogradePurchasePanel } from "@/components/RelogradePurchasePanel"
 import { cardProducts, getCardProductBySlug } from "@/content/cards"
 import { isRelogradeBrand } from "@/lib/relograde/catalog-public"
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
-  return cardProducts.map((product) => ({
-    slug: product.slug,
-  }))
+  return cardProducts
+    .filter((product) => !product.comingSoon)
+    .map((product) => ({
+      slug: product.slug,
+    }))
 }
 
 export default function CardDetailPage({
