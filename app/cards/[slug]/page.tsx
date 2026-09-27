@@ -18,12 +18,12 @@ export default function CardDetailPage({
 }) {
   const product = getCardProductBySlug(params.slug)
 
-  if (!product) {
+  if (!product || product.comingSoon) {
     notFound()
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#f4f4f5]">
       <div className="mx-auto w-full max-w-[1360px] px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16 lg:pt-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>

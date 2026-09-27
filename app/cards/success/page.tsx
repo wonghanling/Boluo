@@ -78,7 +78,7 @@ function CardSuccessContent() {
   const hasClaimPage = Boolean(order?.redemption_link)
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#f4f4f5]">
       <div className="mx-auto w-full max-w-[640px] px-4 py-12">
         <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-slate-400">
           Payment
@@ -128,7 +128,7 @@ function CardSuccessContent() {
                     href={order.redemption_link!}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex h-11 items-center rounded-full bg-[#1faa45] px-5 text-[14px] font-semibold text-white"
+                    className="inline-flex h-11 items-center rounded-full bg-slate-950 px-5 text-[14px] font-semibold text-white"
                     onClick={() => {
                       try {
                         window.localStorage.setItem(`boluo-claim-opened:${orderId}`, "1")

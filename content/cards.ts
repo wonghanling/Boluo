@@ -38,6 +38,7 @@ export type CardProduct = {
   purchaseNote: string
   supportsSubscription: boolean
   purchaseRule: PurchaseRule
+  comingSoon?: boolean
 }
 
 const fixed = (currency: string, values: Array<number | string>): FixedPurchaseOption[] =>
@@ -207,6 +208,7 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家选择商品", "支持固定商品或混合规则", "付款后页面立即出码"],
     purchaseNote: "Xbox 各国家区服商品差异较大，请先确认国家后再选择具体产品。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -292,6 +294,7 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家显示规则", "支持固定面值或输入金额", "付款后页面立即出码"],
     purchaseNote: "Amazon 礼品卡会根据国家区服展示不同的购买规则。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -321,6 +324,7 @@ export const cardProducts: CardProduct[] = [
     features: ["默认美国区", "支持自定义美元金额", "付款后页面立即出码"],
     purchaseNote: "eBay 礼品卡默认使用美国区规则，无需再选择国家。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: false,
       countries: [
@@ -343,6 +347,7 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家选择商品", "仅支持固定商品或固定面值", "付款后页面立即出码"],
     purchaseNote: "Nintendo 各国家区服商品差异较大，请先确认国家后再下单。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -468,6 +473,7 @@ export const cardProducts: CardProduct[] = [
     features: ["默认美国区", "支持自定义美元金额", "发货至邮箱"],
     purchaseNote: "PayPal 默认使用美国区规则，无需再选择国家。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: false,
       countries: [

@@ -230,7 +230,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
       <div className="rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f4f7fb_100%)] p-4 shadow-[0_20px_50px_rgba(15,23,42,0.08)] sm:p-5">
         <div
           className="relative overflow-hidden rounded-[24px] px-5 py-5 text-white shadow-[0_26px_60px_rgba(15,23,42,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] sm:px-6 sm:py-6"
-          style={{ backgroundImage: theme.gradient }}
+          style={{ backgroundImage: "linear-gradient(160deg,#18181b 0%,#3f3f46 100%)" }}
         >
           <div className="absolute inset-0" style={{ backgroundImage: theme.overlayHighlight }} />
           <div className="relative z-10 flex items-start justify-between gap-3">
@@ -474,7 +474,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
         </div>
 
         <Button
-          className="mt-5 h-11 w-full rounded-[18px] border-0 bg-[#1faa45] text-[15px] font-semibold text-white hover:bg-[#18973c]"
+          className="mt-5 h-11 w-full rounded-[18px] border-0 bg-slate-950 text-[15px] font-semibold text-white hover:bg-slate-800"
           onClick={handleSubmit}
           disabled={isPaying || !quote || !selected?.inStock}
         >
