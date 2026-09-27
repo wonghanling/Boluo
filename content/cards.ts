@@ -496,6 +496,7 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家显示规则", "支持输入金额或固定面值", "付款后页面立即出码"],
     purchaseNote: "Roblox 礼品卡会根据国家区服显示不同的购买规则。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -523,6 +524,7 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家显示规则", "仅支持固定面值", "付款后页面立即出码"],
     purchaseNote: "Spotify 礼品卡仅支持固定面值，不提供自定义金额。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -547,6 +549,7 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家显示规则", "仅支持固定面值", "付款后页面立即出码"],
     purchaseNote: "Steam 礼品卡仅支持固定面值，当前目录不提供美国区和加拿大区。",
     supportsSubscription: false,
+    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
