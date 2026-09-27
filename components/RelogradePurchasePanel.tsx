@@ -226,7 +226,8 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[760px] flex-col gap-4 xl:max-w-[720px]">
+    <div className="grid w-full gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+      <div className="flex flex-col gap-4">
       <div className="rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f4f7fb_100%)] p-4 shadow-[0_20px_50px_rgba(15,23,42,0.08)] sm:p-5">
         <div
           className="relative overflow-hidden rounded-[24px] px-5 py-5 text-white shadow-[0_26px_60px_rgba(15,23,42,0.22),inset_0_1px_0_rgba(255,255,255,0.24)] sm:px-6 sm:py-6"
@@ -303,10 +304,11 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
       </div>
 
       <div className="rounded-[22px] border border-white/12 bg-white/[0.06] px-4 py-3.5 text-white">
-        <p className="text-[16px] font-semibold tracking-tight">付款后兑换码直接显示在本页</p>
+        <p className="text-[16px] font-semibold tracking-tight">付款后本页出现兑换入口</p>
         <p className="mt-1 text-[13px] leading-5 text-white/70">
-          不会发送到邮箱。请当场复制保存。邮箱和联系方式只用于订单查询与售后。
+          点开兑换页复制兑换码。不发邮件，请当场保存。邮箱和联系方式只用于订单查询与售后。
         </p>
+      </div>
       </div>
 
       <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_20px_50px_rgba(15,23,42,0.06)] sm:p-5">
@@ -478,10 +480,10 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
           onClick={handleSubmit}
           disabled={isPaying || !quote || !selected?.inStock}
         >
-          {isPaying ? "跳转支付中..." : "立即付款 · 本页立即出码"}
+          {isPaying ? "跳转支付中..." : "立即付款"}
         </Button>
         <p className="mt-3 text-center text-[13px] font-medium leading-5 text-slate-800">
-          付款成功后兑换码会出现在本页，请自行复制保存，不发邮件。
+          付款成功后本页出现兑换入口，点进兑换页复制兑换码，不发邮件。
         </p>
         <p className="mt-2 text-[11px] leading-5 text-slate-500">
           {showRewarbleFees

@@ -170,7 +170,7 @@ function CardSuccessContent() {
                   {copied ? "已复制" : "复制兑换码"}
                 </button>
                 <p className="rounded-[14px] border border-white/15 bg-white/[0.05] px-3 py-2 text-[13px] font-medium leading-5 text-white/85">
-                  兑换码只显示在本页，不会发到邮箱。请立刻复制保存。
+              兑换码不会发到邮箱。请立刻复制保存。
                 </p>
               </div>
             )}
