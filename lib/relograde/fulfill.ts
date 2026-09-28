@@ -49,9 +49,14 @@ export async function fulfillRelogradeOrder(input: {
     .maybeSingle()
 
   if (existing?.status === "delivered") return
-  if (existing?.relograde_trx) {
+
+  const existingTrx = existing?.relograde_trx || ""
+  // claiming: 开头是抢锁哨兵，说明另一个请求正在下单，这里直接退出，不要再下一单
+  if (existingTrx.startsWith("claiming:")) return
+
+  if (existingTrx) {
     try {
-      const order = await waitUntilFinished(existing.relograde_trx, 4)
+      const order = await waitUntilFinished(existingTrx, 4)
       if (order.orderStatus === "finished") {
         await saveVoucher(admin, input.orderId, order)
         return
@@ -62,14 +67,19 @@ export async function fulfillRelogradeOrder(input: {
     return
   }
 
+  // 抢锁：必须同时满足「状态可下单」且「还没有上游单号」，
+  // 且把 relograde_trx 先占成一个哨兵值，避免并发请求同时通过检查各下一单。
+  const claim = `claiming:${input.orderId}`
   const { data: locked } = await admin
     .from("voucher_orders")
     .update({
       status: "fulfilling",
       error_message: null,
+      relograde_trx: claim,
     })
     .eq("order_id", input.orderId)
     .in("status", ["pending_payment", "paid"])
+    .is("relograde_trx", null)
     .select("id")
     .maybeSingle()
 
@@ -127,6 +137,12 @@ export async function fulfillRelogradeOrder(input: {
         // ignore cancel failures; order may already be delivered or gone
       }
     }
+    // 下单失败要清掉抢锁哨兵，否则这一单会永远卡住无法重试
+    await admin
+      .from("voucher_orders")
+      .update({ relograde_trx: trx })
+      .eq("order_id", input.orderId)
+      .eq("relograde_trx", claim)
     await markFailed(admin, input.orderId, error)
   }
 }

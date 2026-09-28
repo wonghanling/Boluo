@@ -44,14 +44,21 @@ async function markPaidAndFulfill(orderId: string, tradeNo: string | null) {
     .maybeSingle()
 
   if (!data || data.status === "delivered" || data.status === "fulfilling") return
+  if (data.relograde_trx) return
 
-  await admin
+  // 只有仍处于待支付时才标记为已支付，避免把 fulfilling 锁覆盖掉造成重复下单
+  const { data: marked } = await admin
     .from("voucher_orders")
     .update({
       status: "paid",
       paid_at: data.paid_at || new Date().toISOString(),
     })
     .eq("order_id", orderId)
+    .eq("status", "pending_payment")
+    .select("id")
+    .maybeSingle()
+
+  if (!marked && data.status !== "paid") return
 
   const snapshot = (data.quote_snapshot || {}) as QuoteResult
   if (!snapshot.productSlug) return
