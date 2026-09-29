@@ -25,6 +25,10 @@ async function markPaidAndFulfill(orderId: string, tradeNo: string | null) {
   if (url && key) {
     const supabase = createClient(url, key, {
       auth: { autoRefreshToken: false, persistSession: false },
+      global: {
+        fetch: (input, init) =>
+          fetch(input as RequestInfo | URL, { ...(init || {}), cache: "no-store" }),
+      },
     })
     await supabase
       .from("orders")

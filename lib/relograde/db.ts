@@ -47,5 +47,11 @@ export function createRelogradeAdminClient(): SupabaseClient | null {
   if (!url || !key) return null
   return createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      // Next.js 会缓存服务端 fetch，导致订单状态读到旧值（页面一直转圈）。
+      // 这里强制每次都取最新数据。
+      fetch: (input, init) =>
+        fetch(input as RequestInfo | URL, { ...(init || {}), cache: "no-store" }),
+    },
   })
 }

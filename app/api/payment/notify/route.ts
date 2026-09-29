@@ -11,7 +11,13 @@ export const dynamic = 'force-dynamic'
 function getServiceClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-  return createClient(supabaseUrl, supabaseServiceKey)
+  return createClient(supabaseUrl, supabaseServiceKey, {
+    global: {
+      // 关掉 Next.js 的 fetch 缓存，避免读到旧的订单状态
+      fetch: (input, init) =>
+        fetch(input as RequestInfo | URL, { ...(init || {}), cache: "no-store" }),
+    },
+  })
 }
 
 async function fulfillIfVoucher(orderId: string) {
