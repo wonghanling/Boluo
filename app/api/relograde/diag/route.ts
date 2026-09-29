@@ -64,11 +64,33 @@ export async function GET(request: NextRequest) {
     }
   })
 
+  // 用和 /order 完全相同的读法再读一次，对比差异
+  const sameFields =
+    "order_id,status,face_value,face_value_currency,sell_cny,voucher_code,redemption_link,voucher_expires_at,error_message,delivered_at"
+  const { data: single, error: singleError } = await admin
+    .from("voucher_orders")
+    .select(sameFields)
+    .eq("order_id", orderId)
+    .maybeSingle()
+
+  const { data: listSame, error: listSameError } = await admin
+    .from("voucher_orders")
+    .select(sameFields)
+    .eq("order_id", orderId)
+
   return NextResponse.json({
     orderId,
     rowCount: rows?.length ?? 0,
     rows: summary,
     alipay,
     alipayError,
+    // 下面三项用于定位 /order 为什么读到旧状态
+    sameFieldsMaybeSingle: single
+      ? { status: (single as { status?: string }).status, delivered_at: (single as { delivered_at?: string }).delivered_at }
+      : null,
+    sameFieldsMaybeSingleError: singleError ? singleError.message : null,
+    sameFieldsListCount: listSame?.length ?? 0,
+    sameFieldsListStatuses: (listSame ?? []).map((r) => (r as { status?: string }).status),
+    sameFieldsListError: listSameError ? listSameError.message : null,
   })
 }
