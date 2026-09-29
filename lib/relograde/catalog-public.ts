@@ -63,6 +63,16 @@ export const RELOGRADE_BRANDS = {
     showRewarbleFees: false,
     pricingKind: "giftcard",
   },
+  steam: {
+    id: "steam",
+    brandSlug: "steam",
+    paymentCurrencyDefault: "USD",
+    // Steam 钱包码按币种锁定，不按国家。码的币种必须和 Steam 账户钱包币种一致
+    currencies: ["USD", "EUR", "GBP", "SGD", "HKD", "TWD", "THB", "PHP", "MYR", "INR", "VND", "PLN"] as const,
+    groupedByRegion: false,
+    showRewarbleFees: false,
+    pricingKind: "giftcard",
+  },
 } as const
 
 export type RelogradeBrandId = keyof typeof RELOGRADE_BRANDS

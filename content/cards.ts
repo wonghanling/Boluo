@@ -139,7 +139,7 @@ export const cardProducts: CardProduct[] = [
     image: "/apple-pay-3.svg",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["付款后点兑换入口取码，不发邮件", "实时进价结算人民币", "请选择与账户一致的国家"],
-    purchaseNote: "请选择与你 Apple ID 国家一致的礼品卡，跨区一般无法兑换。",
+    purchaseNote: "请选择与你 Apple ID 国家一致的礼品卡，跨区一般无法兑换。新注册或无消费记录的 Apple ID 可能被 Apple 风控要求补充购买凭证，建议使用有消费记录的老账户，并在账户所属国家/地区网络环境下兑换。风控由 Apple 判定，我们无法干预。",
     supportsSubscription: true,
     purchaseRule: {
       requiresCountrySelection: true,
@@ -171,7 +171,7 @@ export const cardProducts: CardProduct[] = [
     image: "/google-pay-2.svg",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["付款后点兑换入口取码，不发邮件", "实时进价结算人民币", "请选择与账户一致的国家"],
-    purchaseNote: "请选择与你 Google Play 国家一致的礼品卡，跨区一般无法兑换。",
+    purchaseNote: "请选择与你 Google Play 国家一致的礼品卡，跨区一般无法兑换。新注册或无消费记录的 Google 账户可能被风控拦下，提示需要提供购买凭证；有消费记录的老账户通常不会。建议在账户所属国家/地区网络环境下兑换，不要挂代理。风控由 Google 判定，我们无法干预。",
     supportsSubscription: true,
     purchaseRule: {
       requiresCountrySelection: true,
@@ -542,14 +542,13 @@ export const cardProducts: CardProduct[] = [
     badge: "Gift Card",
     subtitle: "Steam Wallet 礼品卡",
     description:
-      "请先选择目标国家或地区，再选择该地区对应的固定面值。",
+      "付款后获得 Steam 钱包充值码。Steam 码按币种锁定：请选择与你 Steam 账户钱包币种一致的币种，否则无法兑换。国区（人民币）账户无法使用本页任何币种。",
     accent: "from-[#0f172a] via-[#1e3a8a] to-[#0ea5e9]",
     image: "/steam-icon-logo.svg",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
-    features: ["按国家显示规则", "仅支持固定面值", "付款后点兑换入口取码"],
-    purchaseNote: "Steam 礼品卡仅支持固定面值，当前目录不提供美国区和加拿大区。",
+    features: ["12 个币种实时在售", "实时进价结算人民币", "付款后点兑换入口取码"],
+    purchaseNote: "Steam 钱包码锁币种。USD 码只能兑美元钱包账户，THB 码只能兑泰国账户，以此类推。兑换前请在 Steam 确认你的钱包币种，买错无法退换。",
     supportsSubscription: false,
-    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
