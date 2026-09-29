@@ -92,6 +92,7 @@ export async function fulfillRelogradeOrder(input: {
   if (input.quote.isVariable) item.faceValue = input.quote.faceValue
 
   let trx: string | null = null
+  let upstreamFinished = false
   try {
     const created = await createOrder({
       items: [item],
@@ -100,10 +101,15 @@ export async function fulfillRelogradeOrder(input: {
     })
     trx = created.trx
 
-    await admin
-      .from("voucher_orders")
-      .update({ relograde_trx: trx })
-      .eq("order_id", input.orderId)
+    // 真单号必须落库成功，否则后续无法回捞。失败就重试几次。
+    for (let i = 0; i < 3; i += 1) {
+      const { error } = await admin
+        .from("voucher_orders")
+        .update({ relograde_trx: trx })
+        .eq("order_id", input.orderId)
+      if (!error) break
+      await sleep(600)
+    }
 
     let finished: RelogradeOrder
     try {
@@ -119,7 +125,9 @@ export async function fulfillRelogradeOrder(input: {
       finished = await waitUntilFinished(trx)
     }
 
-    if (finished.orderStatus !== "finished") {
+    upstreamFinished = finished.orderStatus === "finished"
+
+    if (!upstreamFinished) {
       throw new RelogradeError(
         `上游订单状态 ${finished.orderStatus}`,
         502,
@@ -130,19 +138,31 @@ export async function fulfillRelogradeOrder(input: {
 
     await saveVoucher(admin, input.orderId, finished)
   } catch (error) {
-    if (trx) {
+    // 上游已经完成的单绝不能取消，否则等于把已付款的货作废
+    if (trx && !upstreamFinished) {
+      let alreadyFinished = false
       try {
-        await cancelOrder(trx)
+        const latest = await findOrder(trx)
+        alreadyFinished = latest.orderStatus === "finished"
       } catch {
-        // ignore cancel failures; order may already be delivered or gone
+        // 查不到就按未完成处理
+      }
+      if (!alreadyFinished) {
+        try {
+          await cancelOrder(trx)
+        } catch {
+          // ignore cancel failures
+        }
       }
     }
-    // 下单失败要清掉抢锁哨兵，否则这一单会永远卡住无法重试
+
+    // 清掉抢锁哨兵：有真单号就写真单号（留给下次回捞），没有就清空以便重试
     await admin
       .from("voucher_orders")
       .update({ relograde_trx: trx })
       .eq("order_id", input.orderId)
-      .eq("relograde_trx", claim)
+      .like("relograde_trx", "claiming:%")
+
     await markFailed(admin, input.orderId, error)
   }
 }

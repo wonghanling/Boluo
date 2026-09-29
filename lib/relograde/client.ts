@@ -199,6 +199,20 @@ export async function cancelOrder(trx: string): Promise<void> {
   })
 }
 
+/** 列出最近的上游订单，用于按 reference 回捞已出码但本地丢失的单。 */
+export async function listOrders(params: {
+  limit?: number
+  page?: number
+  sortOrder?: "asc" | "desc"
+} = {}): Promise<{ data?: RelogradeOrder[] }> {
+  const search = new URLSearchParams()
+  if (params.limit) search.set("limit", String(params.limit))
+  if (params.page) search.set("page", String(params.page))
+  if (params.sortOrder) search.set("sortOrder", params.sortOrder)
+  const qs = search.toString()
+  return relogradeFetch(`/order${qs ? `?${qs}` : ""}`)
+}
+
 export function extractVoucher(order: RelogradeOrder): {
   voucherCode: string | null
   voucherSerial: string | null

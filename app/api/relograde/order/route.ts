@@ -43,8 +43,25 @@ async function markPaidAndFulfill(orderId: string, tradeNo: string | null) {
     .eq("order_id", orderId)
     .maybeSingle()
 
-  if (!data || data.status === "delivered" || data.status === "fulfilling") return
-  if (data.relograde_trx) return
+  if (!data || data.status === "delivered") return
+
+  const snapshot = (data.quote_snapshot || {}) as QuoteResult
+  if (!snapshot.productSlug) return
+
+  const trx = String(data.relograde_trx || "")
+  const isSentinel = trx.startsWith("claiming:")
+
+  // 已经有真实上游单号：只去回捞那一单的兑换码，绝不会再下单（fulfill 内部走 recovery 分支）
+  if (trx && !isSentinel) {
+    await fulfillRelogradeOrder({ orderId, quote: snapshot })
+    return
+  }
+
+  // 哨兵还在，说明另一个请求正在下单，直接退出，等它写回真实单号
+  if (isSentinel) return
+
+  // 走到这里 relograde_trx 为空，说明还没下过单
+  if (data.status === "fulfilling") return
 
   // 只有仍处于待支付时才标记为已支付，避免把 fulfilling 锁覆盖掉造成重复下单
   const { data: marked } = await admin
@@ -59,9 +76,6 @@ async function markPaidAndFulfill(orderId: string, tradeNo: string | null) {
     .maybeSingle()
 
   if (!marked && data.status !== "paid") return
-
-  const snapshot = (data.quote_snapshot || {}) as QuoteResult
-  if (!snapshot.productSlug) return
 
   await fulfillRelogradeOrder({
     orderId,
