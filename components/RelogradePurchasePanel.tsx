@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import type { CardProduct } from "@/content/cards"
 import { getCardTheme } from "@/lib/card-theme"
-import { RELOGRADE_BRANDS, type RelogradeBrandId } from "@/lib/relograde/catalog-public"
+import { getBrandMeta, type RelogradeBrandId } from "@/lib/relograde/catalog-public"
 
 type CatalogOption = {
   productSlug: string
@@ -54,7 +54,7 @@ function parseAmount(value: string) {
 }
 
 export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePanelProps) {
-  const brand = RELOGRADE_BRANDS[brandId]
+  const brand = getBrandMeta(brandId)!
   const currencies = brand.currencies as readonly string[]
   const groupedByRegion = brand.groupedByRegion
   const showRewarbleFees = brand.showRewarbleFees

@@ -1,14 +1,29 @@
 import { getFxRates, listProducts, type RelogradeProduct } from "./client"
 import { estimateNewCardLoad, sellPriceCny } from "./pricing"
 import {
-  RELOGRADE_BRANDS,
+  RELOGRADE_BRAND_LIST,
+  RELOGRADE_BRAND_MAP,
   formatRegionLabel,
+  getBrandMeta,
   isRelogradeBrand,
   type RelogradeBrandId,
+  type RelogradeBrandMeta,
 } from "./catalog-public"
 
-export { RELOGRADE_BRANDS, formatRegionLabel, isRelogradeBrand }
-export type { RelogradeBrandId }
+export {
+  RELOGRADE_BRAND_LIST,
+  RELOGRADE_BRAND_MAP,
+  formatRegionLabel,
+  getBrandMeta,
+  isRelogradeBrand,
+}
+export type { RelogradeBrandId, RelogradeBrandMeta }
+
+function requireBrand(brandId: string): RelogradeBrandMeta {
+  const meta = getBrandMeta(brandId)
+  if (!meta) throw new Error(`不支持的品牌: ${brandId}`)
+  return meta
+}
 
 const productCache = new Map<string, { expiresAt: number; products: RelogradeProduct[] }>()
 const fxCache: { expiresAt: number; usdTo: Record<string, number> } = {
@@ -55,7 +70,7 @@ export async function getBrandProducts(brandId: RelogradeBrandId): Promise<Relog
   const cached = productCache.get(brandId)
   if (cached && Date.now() < cached.expiresAt) return cached.products
 
-  const brand = RELOGRADE_BRANDS[brandId]
+  const brand = requireBrand(brandId)
   const page = await listProducts({
     brandSlug: brand.brandSlug,
     paymentCurrency: brand.paymentCurrencyDefault,
@@ -300,7 +315,7 @@ export async function quoteBrandProduct(input: {
 
   const costCny = convertToCny(costAmount, costCurrency, usdTo)
   const faceUsd = convertToUsd(faceValue, input.currency, usdTo)
-  const priced = sellPriceCny(costCny, faceUsd, RELOGRADE_BRANDS[input.brandId].pricingKind)
+  const priced = sellPriceCny(costCny, faceUsd, requireBrand(input.brandId).pricingKind)
   const estimate = estimateNewCardLoad(faceValue, input.currency)
 
   return {
@@ -322,6 +337,6 @@ export async function quoteBrandProduct(input: {
     estimatedNewCardRemaining: estimate.remainingFace,
     estimatedNewCardFeeUsd: estimate.feeAmount,
     region: productRegion(product) || input.region || null,
-    showRewarbleFees: RELOGRADE_BRANDS[input.brandId].showRewarbleFees,
+    showRewarbleFees: requireBrand(input.brandId).showRewarbleFees,
   }
 }

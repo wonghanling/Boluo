@@ -1,3 +1,5 @@
+import { generatedCardProducts } from "./cards-generated"
+
 export type FixedPurchaseOption = {
   label: string
   amount?: number
@@ -79,7 +81,7 @@ export const cardProducts: CardProduct[] = [
     image: "/visa-10.svg",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["付款后点兑换入口取码", "可开新卡，也可给已有卡充值", "开卡费由 Rewarble 收取，不计入本站售价"],
-    purchaseNote: "本站出售的是兑换码，不是成品卡号。兑进钱包后：新开卡目前约 $3.49 + 5.5%；已有卡充值更便宜，约 $0.99 + 5.5%。$30 单独开新卡可能不够，适合已有卡充值或叠加。超过约 $750 可能需要 Rewarble 实名。",
+    purchaseNote: "本站出售的是兑换码，不是成品卡号。兑进钱包后：新开卡目前约 $3.49 + 5.5%；已有卡充值更便宜，约 $0.99 + 5.5%。$30 单独开新卡可能不够，适合已有卡充值或叠加。超过约 $750 可能需要 Rewarble 实名。卡片有效期至少 1 年，但需要保持激活状态才能刷卡：激活期结束后卡会自动暂停，每次充值可免费延长激活时长（最多 7 次），也可以在卡片页单独付费激活。",
     supportsSubscription: false,
     purchaseRule: {
       requiresCountrySelection: false,
@@ -109,7 +111,7 @@ export const cardProducts: CardProduct[] = [
     image: "/mastercard-modern-design-.svg",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["支持 USD / EUR", "可开新卡，也可给已有卡充值", "开卡费由 Rewarble 收取，不计入本站售价"],
-    purchaseNote: "本站出售的是兑换码，不是成品卡号。已有卡请走充值，比新开便宜。$30 / €30 单独开新卡可能不够，适合充值或叠加。超过约 $750 可能需要 Rewarble 实名。",
+    purchaseNote: "本站出售的是兑换码，不是成品卡号。已有卡请走充值，比新开便宜。$30 / €30 单独开新卡可能不够，适合充值或叠加。超过约 $750 可能需要 Rewarble 实名。卡片有效期至少 1 年，但需要保持激活状态才能刷卡：激活期结束后卡会自动暂停，每次充值可免费延长激活时长（最多 7 次），也可以在卡片页单独付费激活。",
     supportsSubscription: false,
     purchaseRule: {
       requiresCountrySelection: false,
@@ -208,7 +210,6 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家选择商品", "支持固定商品或混合规则", "付款后点兑换入口取码"],
     purchaseNote: "Xbox 各国家区服商品差异较大，请先确认国家后再选择具体产品。",
     supportsSubscription: false,
-    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -294,7 +295,6 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家显示规则", "支持固定面值或输入金额", "付款后点兑换入口取码"],
     purchaseNote: "Amazon 礼品卡会根据国家区服展示不同的购买规则。",
     supportsSubscription: false,
-    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -347,7 +347,6 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家选择商品", "仅支持固定商品或固定面值", "付款后点兑换入口取码"],
     purchaseNote: "Nintendo 各国家区服商品差异较大，请先确认国家后再下单。",
     supportsSubscription: false,
-    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -473,7 +472,6 @@ export const cardProducts: CardProduct[] = [
     features: ["默认美国区", "支持自定义美元金额", "发货至邮箱"],
     purchaseNote: "PayPal 默认使用美国区规则，无需再选择国家。",
     supportsSubscription: false,
-    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: false,
       countries: [
@@ -496,7 +494,6 @@ export const cardProducts: CardProduct[] = [
     features: ["按国家显示规则", "支持输入金额或固定面值", "付款后点兑换入口取码"],
     purchaseNote: "Roblox 礼品卡会根据国家区服显示不同的购买规则。",
     supportsSubscription: false,
-    comingSoon: true,
     purchaseRule: {
       requiresCountrySelection: true,
       countries: [
@@ -574,6 +571,8 @@ export const cardProducts: CardProduct[] = [
   },
 ]
 
+export const allCardProducts: CardProduct[] = [...cardProducts, ...generatedCardProducts]
+
 export function getCardProductBySlug(slug: string) {
-  return cardProducts.find((product) => product.slug === slug)
+  return allCardProducts.find((product) => product.slug === slug)
 }

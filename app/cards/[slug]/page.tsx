@@ -2,13 +2,13 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CardPurchaseDetail } from "@/components/CardPurchaseDetail"
 import { RelogradePurchasePanel } from "@/components/RelogradePurchasePanel"
-import { cardProducts, getCardProductBySlug } from "@/content/cards"
+import { allCardProducts, getCardProductBySlug } from "@/content/cards"
 import { isRelogradeBrand } from "@/lib/relograde/catalog-public"
 
 export const dynamicParams = true
 
 export function generateStaticParams() {
-  return cardProducts
+  return allCardProducts
     .filter((product) => !product.comingSoon)
     .map((product) => ({
       slug: product.slug,

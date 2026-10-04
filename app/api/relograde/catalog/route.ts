@@ -6,7 +6,7 @@ import {
   toCatalogOptions,
   type RelogradeBrandId,
 } from "@/lib/relograde/catalog"
-import { RELOGRADE_BRANDS } from "@/lib/relograde/catalog-public"
+import { getBrandMeta } from "@/lib/relograde/catalog-public"
 
 export const dynamic = "force-dynamic"
 
@@ -20,7 +20,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const brand = RELOGRADE_BRANDS[brandId as RelogradeBrandId]
+    const brand = getBrandMeta(brandId)
+    if (!brand) {
+      return NextResponse.json({ error: "不支持的品牌" }, { status: 400 })
+    }
     const products = await getBrandProducts(brandId as RelogradeBrandId)
     const regions = brand.groupedByRegion ? listCatalogRegions(products) : []
     const defaultRegion = regions.find((item) => item.inStockCount > 0) || regions[0]
