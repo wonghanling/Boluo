@@ -13,8 +13,8 @@ function getCatalogImageClass(productId: string) {
 function CardTile({ product }: { product: CardProduct }) {
   const theme = getCardTheme(product.id)
   const locked = Boolean(product.comingSoon)
-  const isAmazon = product.id === "amazon"
   const hasImage = Boolean(product.image)
+  const isCardFace = product.image.startsWith("/card/")
 
   const body = (
     <>
@@ -38,8 +38,13 @@ function CardTile({ product }: { product: CardProduct }) {
               src={product.image}
               alt={product.name}
               fill
-              className={`object-contain ${getCatalogImageClass(product.id)}`}
-              style={{ filter: isAmazon ? "brightness(0) invert(1)" : theme.logoFilter }}
+              className={
+                isCardFace
+                  ? "object-contain object-center"
+                  : `object-contain ${getCatalogImageClass(product.id)}`
+              }
+              // /card/ 下是完整卡面图，不能套滤镜，否则会被洗成纯白
+              style={isCardFace ? undefined : { filter: theme.logoFilter }}
               sizes="420px"
             />
           ) : (

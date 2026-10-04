@@ -390,7 +390,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
                 setErrors((prev) => ({ ...prev, amount: undefined }))
               }}
               placeholder={`范围 ${selected.min} - ${selected.max}`}
-              className="h-10 rounded-xl border-slate-200"
+              className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
             {errors.amount && <p className="mt-2 text-sm text-red-600">{errors.amount}</p>}
           </div>
@@ -407,7 +407,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
                 setErrors((prev) => ({ ...prev, email: undefined }))
               }}
               placeholder="you@example.com"
-              className="h-10 rounded-xl border-slate-200"
+              className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
             {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
           </div>
@@ -420,7 +420,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
                 setErrors((prev) => ({ ...prev, contact: undefined }))
               }}
               placeholder="微信 / Telegram / 手机号"
-              className="h-10 rounded-xl border-slate-200"
+              className="h-10 rounded-xl border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
             {errors.contact && <p className="mt-2 text-sm text-red-600">{errors.contact}</p>}
           </div>
@@ -430,7 +430,7 @@ export function RelogradePurchasePanel({ product, brandId }: RelogradePurchasePa
               value={note}
               onChange={(event) => setNote(event.target.value)}
               placeholder="可选"
-              className="min-h-[88px] rounded-[20px] border-slate-200"
+              className="min-h-[88px] rounded-[20px] border-slate-200 bg-white text-[16px] text-slate-900 placeholder:text-slate-400 sm:text-[14px]"
             />
           </div>
         </div>
