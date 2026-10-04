@@ -78,7 +78,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "付款后立即获得 Rewarble 兑换码，请到 rewarble.com/redeem 兑换。兑进钱包后可以开新 Visa，也可以给已有卡充值。新开卡目前约 $3.49 + 5.5%，已有卡充值约 $0.99 + 5.5%，月费约 €2.50，约 $750 可能触发实名。费率以兑换时页面为准。",
     accent: "from-[#0f3fb3] via-[#1c60f2] to-[#66a1ff]",
-    image: "/visa-10.svg",
+    image: "/card/rewarble-visa.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["付款后点兑换入口取码", "可开新卡，也可给已有卡充值", "开卡费由 Rewarble 收取，不计入本站售价"],
     purchaseNote: "本站出售的是兑换码，不是成品卡号。兑进钱包后：新开卡目前约 $3.49 + 5.5%；已有卡充值更便宜，约 $0.99 + 5.5%。$30 单独开新卡可能不够，适合已有卡充值或叠加。超过约 $750 可能需要 Rewarble 实名。卡片有效期至少 1 年，但需要保持激活状态才能刷卡：激活期结束后卡会自动暂停，每次充值可免费延长激活时长（最多 7 次），也可以在卡片页单独付费激活。",
@@ -108,7 +108,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "付款后立即获得 Rewarble 兑换码，请到 rewarble.com/redeem 兑换。兑进钱包后可以开新 Mastercard，也可以给已有卡充值。新开卡目前约 $3.49 + 5.5%，已有卡充值约 $0.99 + 5.5%，月费约 €2.50，约 $750 可能触发实名。费率以兑换时页面为准。",
     accent: "from-[#111111] via-[#2d2d2d] to-[#575757]",
-    image: "/mastercard-modern-design-.svg",
+    image: "/card/rewarble-mastercard.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["支持 USD / EUR", "可开新卡，也可给已有卡充值", "开卡费由 Rewarble 收取，不计入本站售价"],
     purchaseNote: "本站出售的是兑换码，不是成品卡号。已有卡请走充值，比新开便宜。$30 / €30 单独开新卡可能不够，适合充值或叠加。超过约 $750 可能需要 Rewarble 实名。卡片有效期至少 1 年，但需要保持激活状态才能刷卡：激活期结束后卡会自动暂停，每次充值可免费延长激活时长（最多 7 次），也可以在卡片页单独付费激活。",
@@ -138,7 +138,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "付款后获得 Apple 礼品卡兑换码。请先选择国家/地区，再选择该区在售面额。美国区若缺货会标明。兑换码请在对应国家的 Apple/iTunes 账户使用。",
     accent: "from-[#111827] via-[#374151] to-[#9ca3af]",
-    image: "/apple-pay-3.svg",
+    image: "/card/apple.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["付款后点兑换入口取码，不发邮件", "实时进价结算人民币", "请选择与账户一致的国家"],
     purchaseNote: "请选择与你 Apple ID 国家一致的礼品卡，跨区一般无法兑换。新注册或无消费记录的 Apple ID 可能被 Apple 风控要求补充购买凭证，建议使用有消费记录的老账户，并在账户所属国家/地区网络环境下兑换。风控由 Apple 判定，我们无法干预。",
@@ -170,7 +170,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "付款后获得 Google Play 礼品卡兑换码。请先选择国家/地区，再选择该区在售面额。请在对应国家的 Google 账户兑换。",
     accent: "from-[#14532d] via-[#16a34a] to-[#86efac]",
-    image: "/google-pay-2.svg",
+    image: "/card/google.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["付款后点兑换入口取码，不发邮件", "实时进价结算人民币", "请选择与账户一致的国家"],
     purchaseNote: "请选择与你 Google Play 国家一致的礼品卡，跨区一般无法兑换。新注册或无消费记录的 Google 账户可能被风控拦下，提示需要提供购买凭证；有消费记录的老账户通常不会。建议在账户所属国家/地区网络环境下兑换，不要挂代理。风控由 Google 判定，我们无法干预。",
@@ -205,7 +205,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "请先选择目标国家或地区。不同国家区服的商品与面值差异较大，部分地区只支持固定产品，巴西区同时支持固定商品和指定金额输入。",
     accent: "from-[#0f5132] via-[#1b7f43] to-[#7ddc5f]",
-    image: "/xbox-one-2.svg",
+    image: "/card/xbox.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["按国家选择商品", "支持固定商品或混合规则", "付款后点兑换入口取码"],
     purchaseNote: "Xbox 各国家区服商品差异较大，请先确认国家后再选择具体产品。",
@@ -290,7 +290,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "请先选择目标国家或地区。部分国家支持输入金额，德国区使用固定面值，其他国家按对应规则显示。",
     accent: "from-[#111827] via-[#1f2937] to-[#f59e0b]",
-    image: "/amazon-pay-1.svg",
+    image: "/card/amazon.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["按国家显示规则", "支持固定面值或输入金额", "付款后点兑换入口取码"],
     purchaseNote: "Amazon 礼品卡会根据国家区服展示不同的购买规则。",
@@ -342,7 +342,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "请先选择目标国家或地区，再选择对应区服可购买的 Nintendo 商品或固定面值。",
     accent: "from-[#991b1b] via-[#dc2626] to-[#fb7185]",
-    image: "/nintendo-switch-1.svg",
+    image: "/card/nintendo.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["按国家选择商品", "仅支持固定商品或固定面值", "付款后点兑换入口取码"],
     purchaseNote: "Nintendo 各国家区服商品差异较大，请先确认国家后再下单。",
@@ -467,7 +467,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "PayPal 默认按美国区处理。请输入需要购买的美元金额，系统会自动完成后续换算。",
     accent: "from-[#003087] via-[#0070ba] to-[#00a1e0]",
-    image: "/paypal-4.svg",
+    image: "/card/paypal.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["默认美国区", "支持自定义美元金额", "发货至邮箱"],
     purchaseNote: "PayPal 默认使用美国区规则，无需再选择国家。",
@@ -489,7 +489,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "请先选择目标国家或地区。部分地区支持输入金额，美国区使用固定面值。",
     accent: "from-[#111111] via-[#3f3f46] to-[#a1a1aa]",
-    image: "/roblox-10.svg",
+    image: "/card/roblox.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["按国家显示规则", "支持输入金额或固定面值", "付款后点兑换入口取码"],
     purchaseNote: "Roblox 礼品卡会根据国家区服显示不同的购买规则。",
@@ -541,7 +541,7 @@ export const cardProducts: CardProduct[] = [
     description:
       "付款后获得 Steam 钱包充值码。Steam 码按币种锁定：请选择与你 Steam 账户钱包币种一致的币种，否则无法兑换。国区（人民币）账户无法使用本页任何币种。",
     accent: "from-[#0f172a] via-[#1e3a8a] to-[#0ea5e9]",
-    image: "/steam-icon-logo.svg",
+    image: "/card/steam.webp",
     deliveryText: "付款后本页出现兑换入口，点进去复制兑换码",
     features: ["12 个币种实时在售", "实时进价结算人民币", "付款后点兑换入口取码"],
     purchaseNote: "Steam 钱包码锁币种。USD 码只能兑美元钱包账户，THB 码只能兑泰国账户，以此类推。兑换前请在 Steam 确认你的钱包币种，买错无法退换。",

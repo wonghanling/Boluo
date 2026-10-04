@@ -1,7 +1,5 @@
-// 本文件由上游目录生成。
-// id = 站内标识（页面地址与接口参数，已上线的不可改动）
-// brandSlug = 上游 Relograde 的品牌 slug
-// 已上线并验证过出码的 5 个品牌配置为锁定值，改动前后完全一致。
+// 由上游目录生成。id 为站内标识（已上线的不可改），brandSlug 为上游 slug。
+// 已验证出码的 5 个品牌配置为锁定值。
 
 export type RelogradeBrandMeta = {
   id: string
@@ -13,6 +11,7 @@ export type RelogradeBrandMeta = {
   paymentCurrencyDefault: string
   showRewarbleFees: boolean
   redeemType: string
+  image: string
   colors: readonly [string, string, string]
 }
 
@@ -27,6 +26,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/steam.webp",
     colors: ["#0f172a", "#1e3a8a", "#0ea5e9"],
   },
   {
@@ -39,6 +39,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble.webp",
     colors: ["#1d4ed8", "#3b82f6", "#93c5fd"],
   },
   {
@@ -51,6 +52,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/paypal.webp",
     colors: ["#003087", "#0070ba", "#5bb7ea"],
   },
   {
@@ -63,6 +65,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "service",
+    image: "/card/amazon.webp",
     colors: ["#0f172a", "#232f3e", "#ff9900"],
   },
   {
@@ -75,6 +78,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/venmo.webp",
     colors: ["#0b5cd5", "#3d95ce", "#8ec5f0"],
   },
   {
@@ -87,6 +91,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-revolut.webp",
     colors: ["#0b0b0b", "#2b2b2b", "#5c5c5c"],
   },
   {
@@ -99,6 +104,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: true,
     redeemType: "currency",
+    image: "/card/rewarble-visa.webp",
     colors: ["#0f3fb3", "#1c60f2", "#66a1ff"],
   },
   {
@@ -111,6 +117,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-wise.webp",
     colors: ["#10b981", "#34d399", "#a7f3d0"],
   },
   {
@@ -123,6 +130,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/skrill.webp",
     colors: ["#6b1b7b", "#8e24aa", "#ce93d8"],
   },
   {
@@ -135,6 +143,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-crypto.webp",
     colors: ["#0f172a", "#1e293b", "#475569"],
   },
   {
@@ -147,6 +156,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/advcash.webp",
     colors: ["#065f46", "#0d9488", "#5eead4"],
   },
   {
@@ -159,6 +169,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-luxon-pay.webp",
     colors: ["#1e1b4b", "#4338ca", "#a5b4fc"],
   },
   {
@@ -171,6 +182,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/astropay.webp",
     colors: ["#064e3b", "#0f766e", "#5eead4"],
   },
   {
@@ -183,6 +195,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/volet.webp",
     colors: ["#4d7c0f", "#84cc16", "#d9f99d"],
   },
   {
@@ -195,6 +208,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/payz.webp",
     colors: ["#57534e", "#78716c", "#d6d3d1"],
   },
   {
@@ -207,6 +221,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/paysera.webp",
     colors: ["#1e3a8a", "#2563eb", "#93c5fd"],
   },
   {
@@ -219,6 +234,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/webmoney.webp",
     colors: ["#0369a1", "#0ea5e9", "#bae6fd"],
   },
   {
@@ -231,6 +247,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/neteller.webp",
     colors: ["#14532d", "#16a34a", "#86efac"],
   },
   {
@@ -243,6 +260,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: true,
     redeemType: "currency",
+    image: "/card/rewarble-mastercard.webp",
     colors: ["#111111", "#2d2d2d", "#575757"],
   },
   {
@@ -255,6 +273,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-chatgpt.webp",
     colors: ["#064e3b", "#0f766e", "#5eead4"],
   },
   {
@@ -267,6 +286,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-midjourney.webp",
     colors: ["#312e81", "#6366f1", "#c7d2fe"],
   },
   {
@@ -279,6 +299,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-temu.webp",
     colors: ["#c2410c", "#f97316", "#fdba74"],
   },
   {
@@ -291,6 +312,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-aliexpress.webp",
     colors: ["#9a3412", "#ea580c", "#fed7aa"],
   },
   {
@@ -303,6 +325,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-facebook-ads.webp",
     colors: ["#1e3a8a", "#1877f2", "#93c5fd"],
   },
   {
@@ -315,6 +338,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-discord.webp",
     colors: ["#3730a3", "#5865f2", "#c7d2fe"],
   },
   {
@@ -327,6 +351,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-fiverr.webp",
     colors: ["#064e3b", "#1dbf73", "#86efac"],
   },
   {
@@ -339,6 +364,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-buymeacoffee.webp",
     colors: ["#78350f", "#b45309", "#fcd34d"],
   },
   {
@@ -351,6 +377,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/rewarble-patreon.webp",
     colors: ["#1c1917", "#44403c", "#a8a29e"],
   },
   {
@@ -363,6 +390,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/playstation.webp",
     colors: ["#003087", "#0070d1", "#7dd3fc"],
   },
   {
@@ -375,6 +403,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/xbox.webp",
     colors: ["#064e3b", "#107c10", "#86efac"],
   },
   {
@@ -387,6 +416,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/nintendo.webp",
     colors: ["#991b1b", "#e60012", "#fca5a5"],
   },
   {
@@ -399,6 +429,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/blizzard.webp",
     colors: ["#0f172a", "#1e40af", "#93c5fd"],
   },
   {
@@ -411,6 +442,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/roblox.webp",
     colors: ["#1c1917", "#e2231a", "#fca5a5"],
   },
   {
@@ -423,6 +455,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/freefire.webp",
     colors: ["#7c2d12", "#ea580c", "#fdba74"],
   },
   {
@@ -435,6 +468,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/pubg.webp",
     colors: ["#422006", "#a16207", "#fde68a"],
   },
   {
@@ -447,6 +481,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/riot-games.webp",
     colors: ["#7f1d1d", "#d13639", "#fca5a5"],
   },
   {
@@ -459,6 +494,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/mobile-legends.webp",
     colors: ["#1e1b4b", "#4f46e5", "#a5b4fc"],
   },
   {
@@ -471,6 +507,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/fortnite.webp",
     colors: ["#1e1b4b", "#6d28d9", "#c4b5fd"],
   },
   {
@@ -483,6 +520,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/world-of-warcraft.webp",
     colors: ["#422006", "#b45309", "#fcd34d"],
   },
   {
@@ -495,6 +533,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/ea.webp",
     colors: ["#1c1917", "#dc2626", "#fca5a5"],
   },
   {
@@ -507,6 +546,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "AUD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/nexon.webp",
     colors: ["#172554", "#2563eb", "#93c5fd"],
   },
   {
@@ -519,6 +559,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/imvu.webp",
     colors: ["#4a044e", "#a21caf", "#f0abfc"],
   },
   {
@@ -531,6 +572,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/apple.webp",
     colors: ["#111827", "#374151", "#9ca3af"],
   },
   {
@@ -543,6 +585,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/google.webp",
     colors: ["#14532d", "#16a34a", "#86efac"],
   },
   {
@@ -555,6 +598,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/netflix.webp",
     colors: ["#450a0a", "#e50914", "#fca5a5"],
   },
   {
@@ -567,6 +611,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/disney.webp",
     colors: ["#0f172a", "#1e40af", "#93c5fd"],
   },
   {
@@ -579,6 +624,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/razer.webp",
     colors: ["#14532d", "#44d62c", "#bbf7d0"],
   },
   {
@@ -591,6 +637,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/twitch.webp",
     colors: ["#4c1d95", "#9146ff", "#ddd6fe"],
   },
   {
@@ -603,6 +650,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/uber.webp",
     colors: ["#0f0f0f", "#2d2d2d", "#6b7280"],
   },
   {
@@ -615,6 +663,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/airbnb.webp",
     colors: ["#7f1d1d", "#ff5a5f", "#fecaca"],
   },
   {
@@ -627,6 +676,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/walmart.webp",
     colors: ["#1e3a8a", "#0071ce", "#93c5fd"],
   },
   {
@@ -639,6 +689,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/target.webp",
     colors: ["#7f1d1d", "#cc0000", "#fca5a5"],
   },
   {
@@ -651,6 +702,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/etsy.webp",
     colors: ["#9a3412", "#f56400", "#fdba74"],
   },
   {
@@ -663,6 +715,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/zalando.webp",
     colors: ["#1c1917", "#44403c", "#d6d3d1"],
   },
   {
@@ -675,6 +728,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "CAD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/sephora.webp",
     colors: ["#0a0a0a", "#262626", "#737373"],
   },
   {
@@ -687,6 +741,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/douglas.webp",
     colors: ["#1c1917", "#44403c", "#a8a29e"],
   },
   {
@@ -699,6 +754,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/eneba.webp",
     colors: ["#1e1b4b", "#4f46e5", "#a5b4fc"],
   },
   {
@@ -711,6 +767,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/bol-com.webp",
     colors: ["#0369a1", "#0ea5e9", "#bae6fd"],
   },
   {
@@ -723,6 +780,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "USD",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/doordash.webp",
     colors: ["#7f1d1d", "#ff3008", "#fecaca"],
   },
   {
@@ -735,6 +793,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/justeat.webp",
     colors: ["#9a3412", "#ff8000", "#fed7aa"],
   },
   {
@@ -747,6 +806,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "currency",
+    image: "/card/deliveroo.webp",
     colors: ["#0f766e", "#00ccbc", "#99f6e4"],
   },
   {
@@ -759,6 +819,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/takeaway.webp",
     colors: ["#9a3412", "#ff8000", "#fed7aa"],
   },
   {
@@ -771,6 +832,7 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/lieferando.webp",
     colors: ["#9a3412", "#ff8000", "#fed7aa"],
   },
   {
@@ -783,7 +845,164 @@ export const RELOGRADE_BRAND_LIST: RelogradeBrandMeta[] = [
     paymentCurrencyDefault: "EUR",
     showRewarbleFees: false,
     redeemType: "region",
+    image: "/card/thuisbezorgd.webp",
     colors: ["#9a3412", "#ff8000", "#fed7aa"],
+  },
+  {
+    id: "paysafecard",
+    brandSlug: "paysafecard",
+    name: "PaysafeCard",
+    pricingKind: "paymentcard",
+    groupedByRegion: true,
+    currencies: [],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "region",
+    image: "/card/paysafecard.webp",
+    colors: ["#1e3a8a", "#1d4ed8", "#93c5fd"],
+  },
+  {
+    id: "neosurf",
+    brandSlug: "neosurf",
+    name: "Neosurf",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR", "GBP"],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/neosurf.webp",
+    colors: ["#831843", "#ec4899", "#fbcfe8"],
+  },
+  {
+    id: "flexepin",
+    brandSlug: "flexepin",
+    name: "Flexepin",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["CAD", "EUR", "NZD", "USD"],
+    paymentCurrencyDefault: "USD",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/flexepin.webp",
+    colors: ["#0f172a", "#1e40af", "#60a5fa"],
+  },
+  {
+    id: "cashlib",
+    brandSlug: "cashlib",
+    name: "Cashlib",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR"],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/cashlib.webp",
+    colors: ["#1e3a8a", "#3b82f6", "#bfdbfe"],
+  },
+  {
+    id: "transcash",
+    brandSlug: "transcash",
+    name: "Transcash",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR"],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/transcash.webp",
+    colors: ["#0a0a0a", "#dc2626", "#fca5a5"],
+  },
+  {
+    id: "pcs",
+    brandSlug: "pcs",
+    name: "PCS",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR"],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/pcs.webp",
+    colors: ["#1c1917", "#f97316", "#fdba74"],
+  },
+  {
+    id: "cashtocode",
+    brandSlug: "cashtocode",
+    name: "CashtoCode",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["INR", "JPY", "NGN", "NZD", "USD"],
+    paymentCurrencyDefault: "USD",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/cashtocode.webp",
+    colors: ["#0369a1", "#38bdf8", "#bae6fd"],
+  },
+  {
+    id: "mifinity",
+    brandSlug: "mifinity",
+    name: "MiFinity",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["AUD", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "INR", "JPY", "NOK", "PLN", "SEK", "USD", "ZAR"],
+    paymentCurrencyDefault: "USD",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/mifinity.webp",
+    colors: ["#164e63", "#0891b2", "#a5f3fc"],
+  },
+  {
+    id: "bitsa",
+    brandSlug: "bitsa",
+    name: "Bitsa",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR"],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/bitsa.webp",
+    colors: ["#0369a1", "#38bdf8", "#bae6fd"],
+  },
+  {
+    id: "aircash",
+    brandSlug: "aircash",
+    name: "Aircash",
+    pricingKind: "paymentcard",
+    groupedByRegion: true,
+    currencies: [],
+    paymentCurrencyDefault: "EUR",
+    showRewarbleFees: false,
+    redeemType: "region",
+    image: "/card/aircash.webp",
+    colors: ["#7f1d1d", "#dc2626", "#fca5a5"],
+  },
+  {
+    id: "cryptovoucher",
+    brandSlug: "cryptovoucher",
+    name: "Crypto Voucher",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR", "USD"],
+    paymentCurrencyDefault: "USD",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/cryptovoucher.webp",
+    colors: ["#0a0a0a", "#262626", "#737373"],
+  },
+  {
+    id: "giftmecrypto",
+    brandSlug: "giftmecrypto",
+    name: "Gift Me Crypto",
+    pricingKind: "paymentcard",
+    groupedByRegion: false,
+    currencies: ["EUR", "USD"],
+    paymentCurrencyDefault: "USD",
+    showRewarbleFees: false,
+    redeemType: "currency",
+    image: "/card/giftmecrypto.webp",
+    colors: ["#064e3b", "#059669", "#6ee7b7"],
   },
 ]
 
