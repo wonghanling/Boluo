@@ -42,7 +42,7 @@ export function Header() {
       name: "服务",
       href: "#services"
     },
-    { name: "安装教程", href: "/install-guide" },
+    { name: "安装教程", href: "/codex-gpt-claude" },
     { name: "联系我们", href: "#contact" }
   ]
 
