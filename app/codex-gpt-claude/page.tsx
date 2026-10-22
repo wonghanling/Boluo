@@ -9,9 +9,10 @@ import {
   KeyRound,
   Laptop,
   MessageCircle,
-  ShieldCheck,
   Smartphone,
   Wifi,
+  X,
+  ZoomIn,
 } from "lucide-react"
 
 export const metadata: Metadata = {
@@ -101,7 +102,7 @@ export default function CodexGptClaudePage() {
         <div className="container mx-auto max-w-6xl">
           <SectionTitle number="01" eyebrow="手机端安装" title="ChatGPT" icon={Smartphone} />
           <div className="grid gap-10 py-14 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
-            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">1</span><h3 className="mt-5 text-3xl font-black tracking-tight">准备账号与网络</h3></div>
+            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">1</span><h3 className="mt-5 text-3xl font-black tracking-tight">准备账号与网络</h3><p className="mt-4 max-w-sm leading-7 text-black/60">先查看下方 6 张教程图，再点击右侧 ¥49 / 季度区域里的“注册并登录”按钮。</p></div>
             <div className="space-y-6">
               <div className="border-l-4 border-[#f7d744] bg-white p-6 shadow-[0_16px_50px_rgba(0,0,0,0.05)] sm:p-8">
                 <div className="flex items-start gap-4"><KeyRound className="mt-1 h-6 w-6 shrink-0" aria-hidden="true" /><div><h4 className="text-xl font-black">准备 Google 账号</h4><p className="mt-2 leading-7 text-black/65">准备一个 Google 账号，邮箱地址应以 <strong className="font-black text-black">@gmail.com</strong> 结尾，后续用于打开 Google Play 并下载 ChatGPT。</p></div></div>
@@ -114,12 +115,23 @@ export default function CodexGptClaudePage() {
               </div>
             </div>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div id="network-gallery" className="scroll-mt-24 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {networkSteps.map(([src, width, height, title, description], index) => (
-              <figure key={src} className="group overflow-hidden border border-black/10 bg-white">
-                <div className="relative overflow-hidden bg-[#e8e4dc]"><Image src={src} alt={`${index + 1}. ${title}`} width={width} height={height} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-auto w-full transition duration-500 group-hover:scale-[1.015]" /><span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#f7d744] font-mono text-sm font-black shadow">{index + 1}</span></div>
-                <figcaption className="p-5"><h4 className="font-black">{title}</h4><p className="mt-2 text-sm leading-6 text-black/60">{description}</p></figcaption>
-              </figure>
+              <div key={src} className="contents">
+                <figure className="group overflow-hidden border border-black/10 bg-white">
+                  <a href={`#network-step-${index + 1}`} aria-label={`放大查看：${title}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-black">
+                    <div className="relative overflow-hidden bg-[#e8e4dc]"><Image src={src} alt={`${index + 1}. ${title}`} width={width} height={height} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-auto w-full transition duration-500 group-hover:scale-[1.015]" /><span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#f7d744] font-mono text-sm font-black shadow">{index + 1}</span><span className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full bg-black/80 px-3 py-2 text-xs font-black text-white"><ZoomIn className="h-4 w-4" aria-hidden="true" />点击放大</span></div>
+                  </a>
+                  <figcaption className="p-5"><h4 className="font-black">{title}</h4><p className="mt-2 text-sm leading-6 text-black/60">{description}</p></figcaption>
+                </figure>
+                <div id={`network-step-${index + 1}`} className="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 target:flex">
+                  <a href="#network-gallery" className="absolute inset-0" aria-label="关闭大图" />
+                  <div className="relative z-10">
+                    <Image src={src} alt={`${title}大图`} width={width} height={height} sizes="94vw" className="max-h-[90vh] w-auto max-w-[94vw] object-contain shadow-2xl" />
+                    <a href="#network-gallery" className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-black/80 text-white transition hover:bg-[#f7d744] hover:text-black" aria-label="关闭大图"><X className="h-5 w-5" aria-hidden="true" /></a>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
 
@@ -170,10 +182,11 @@ export default function CodexGptClaudePage() {
         <div className="container mx-auto max-w-6xl">
           <SectionTitle number="03" eyebrow="套餐与采购" title="Claude" icon={CircleDollarSign} />
           <div className="grid gap-10 py-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
-            <p className="text-2xl font-black leading-tight">Claude 安装教程暂未开放，当前可查看套餐并联系客服采购。</p>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="bg-white p-6"><ShieldCheck className="h-7 w-7" aria-hidden="true" /><h3 className="mt-7 text-lg font-black">个人套餐</h3><p className="mt-2 leading-7 text-black/60">根据下方图片选择需要的 Claude 套餐，扫码联系客服办理。</p></div>
-              <div className="bg-[#f7d744] p-6"><CircleDollarSign className="h-7 w-7" aria-hidden="true" /><h3 className="mt-7 text-lg font-black">企业采购与开票</h3><p className="mt-2 leading-7 text-black/60">企业采购、100–500 采购及开票需求，请联系客服确认价格与开票信息。</p></div>
+            <div><p className="text-2xl font-black leading-tight">以下套餐图片全部为企业采购价</p><p className="mt-4 text-lg font-bold text-black/55">拒绝封号焦虑 · 稳定使用</p></div>
+            <div className="bg-[#f7d744] p-7 sm:p-9">
+              <CircleDollarSign className="h-8 w-8" aria-hidden="true" />
+              <h3 className="mt-7 text-2xl font-black">100–500 起批</h3>
+              <p className="mt-3 max-w-2xl leading-7 text-black/65">下方 7–13 图展示的套餐均为企业采购方案。企业采购与开票需求，请联系客服确认具体数量、价格和开票信息。</p>
             </div>
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
