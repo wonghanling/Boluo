@@ -1,245 +1,192 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import {
   ArrowLeft,
-  ArrowRight,
-  CircleHelp,
+  ArrowUpRight,
+  BadgeCheck,
+  CircleDollarSign,
+  KeyRound,
   Laptop,
   MessageCircle,
-  Monitor,
   ShieldCheck,
   Smartphone,
-  TabletSmartphone,
   Wifi,
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "客户端安装教程",
-  description: "BoLuo 网络服务客户端安装、订阅导入与连接教程。",
+  title: "GPT、Codex 与 Claude 教程",
+  description: "手机端 ChatGPT、电脑端 Codex 安装使用与 Claude 套餐咨询教程。",
 }
 
-const platforms = [
-  {
-    id: "windows",
-    name: "Windows",
-    note: "台式机 / 笔记本",
-    icon: Monitor,
-    steps: [
-      ["获取安装包", "联系客服获取 Windows 客户端下载地址，并确认下载的是与电脑系统匹配的版本。"],
-      ["安装客户端", "打开下载的安装包，按提示完成安装。遇到系统安全提示时，请先核对文件来源。"],
-      ["导入订阅", "打开客户端，选择“从链接导入”或“从剪贴板导入”，粘贴客服提供的订阅地址。"],
-      ["连接测试", "更新订阅并选择一个可用节点，开启连接或系统代理，然后打开网页测试网络。"],
-    ],
-  },
-  {
-    id: "macos",
-    name: "macOS",
-    note: "MacBook / iMac",
-    icon: Laptop,
-    steps: [
-      ["确认芯片版本", "在“关于本机”中查看芯片类型，再向客服获取适合 Apple 芯片或 Intel 芯片的安装包。"],
-      ["完成安装", "打开安装包，将客户端拖入“应用程序”。若系统阻止打开，请在“隐私与安全性”中确认来源后重试。"],
-      ["导入订阅", "启动客户端，找到订阅管理入口，粘贴客服提供的订阅地址并更新。"],
-      ["开启连接", "选择节点并允许客户端添加网络配置，连接后打开网页确认网络是否正常。"],
-    ],
-  },
-  {
-    id: "android",
-    name: "Android",
-    note: "安卓手机 / 平板",
-    icon: Smartphone,
-    steps: [
-      ["下载安装", "使用客户提供的应用商店链接或安装包。通过安装包安装时，仅临时允许该来源安装应用。"],
-      ["打开客户端", "安装完成后打开客户端；如有网络或通知权限提示，请按实际使用需要授权。"],
-      ["导入订阅", "点击添加或导入按钮，粘贴订阅地址，等待节点列表更新完成。"],
-      ["允许连接", "选择节点并点击连接。首次使用会出现 VPN 连接请求，确认后即可开始测试。"],
-    ],
-  },
-  {
-    id: "ios",
-    name: "iPhone / iPad",
-    note: "iOS / iPadOS",
-    icon: TabletSmartphone,
-    steps: [
-      ["获取下载方式", "不同地区的 App Store 可用情况不同，请先联系客服获取当前可用客户端与下载说明。"],
-      ["安装客户端", "按照客服提供的方式完成安装并打开应用，不要从不明网页输入 Apple ID 或验证码。"],
-      ["导入订阅", "在客户端中选择添加订阅，粘贴订阅地址并更新节点列表。"],
-      ["允许 VPN 配置", "选择节点并连接，系统询问是否添加 VPN 配置时点击允许，然后验证网页是否能正常打开。"],
-    ],
-  },
+const networkSteps = [
+  ["/jiaocheng/1.png", 1436, 1096, "注册并购买套餐", "点击“商店”，选择 ¥49 / 季度套餐。"],
+  ["/jiaocheng/2.png", 1435, 1096, "进入仪表盘", "购买完成后，点击顶部“仪表盘”。"],
+  ["/jiaocheng/3.png", 1450, 1085, "下载对应客户端", "按设备选择 iOS、Android、macOS 或 Windows，可同时给电脑和手机安装。"],
+  ["/jiaocheng/4.png", 1254, 1254, "打开客户端", "安装后打开应用，进入节点选择。"],
+  ["/jiaocheng/5.png", 1232, 1277, "选择节点并打开全局", "选择可用节点，再开启全局模式。"],
+  ["/jiaocheng/6.jpg", 1080, 1540, "确认 VPN 已连接", "手机顶部出现 VPN 标志，即表示连接成功。"],
 ] as const
 
-const troubleshooting = [
-  ["安装包无法打开", "确认下载已完成，并核对系统、芯片类型与客户端版本是否匹配。"],
-  ["订阅导入失败", "重新复制完整订阅地址，检查前后是否多出空格，再刷新一次订阅。"],
-  ["显示已连接但无法上网", "更新订阅、切换其他节点，然后关闭并重新开启连接。"],
-  ["仍然无法解决", "把设备型号、系统版本、客户端版本和报错截图一起发给客服，处理会更快。"],
+const googleSteps = [
+  ["/jiaocheng/15.jpg", 1080, 1520, "安装 GO 安装器"],
+  ["/jiaocheng/16.jpg", 1080, 1476, "打开 Google Play 商店"],
+  ["/jiaocheng/17.jpg", 1080, 2520, "搜索并下载 ChatGPT"],
 ] as const
 
-export default function InstallGuidePage() {
+const claudePosters = [
+  ["/jiaocheng/7.png", "Claude 套餐总览 01"],
+  ["/jiaocheng/8.png", "Claude 套餐总览 02"],
+  ["/jiaocheng/9.png", "Claude 套餐总览 03"],
+  ["/jiaocheng/10.png", "Claude 套餐总览 04"],
+  ["/jiaocheng/11.png", "Claude 体验与基础套餐"],
+  ["/jiaocheng/12.png", "Claude 进阶与高额度套餐"],
+  ["/jiaocheng/13.png", "Claude 企业与院校合作"],
+] as const
+
+function SectionTitle({ number, eyebrow, title, icon: Icon }: { number: string; eyebrow: string; title: string; icon: typeof Smartphone }) {
   return (
-    <div className="min-h-screen bg-[#f4f1e8] text-[#1d1d1f] selection:bg-yellow-300 selection:text-[#1d1d1f] dark:bg-[#111214] dark:text-white">
-      <section className="border-b border-black/10 bg-yellow-300 px-4 pb-16 pt-12 dark:border-white/10 dark:bg-yellow-300 dark:text-[#1d1d1f] md:pb-24 md:pt-20">
+    <div className="grid gap-7 border-b-2 border-current pb-9 md:grid-cols-[0.55fr_1.45fr] md:items-end md:gap-14">
+      <div className="flex items-center gap-4">
+        <span className="font-mono text-sm font-black">{number}</span>
+        <Icon className="h-8 w-8" strokeWidth={1.8} aria-hidden="true" />
+      </div>
+      <div>
+        <p className="text-sm font-bold opacity-50">{eyebrow}</p>
+        <h2 className="mt-2 text-4xl font-black tracking-[-0.04em] sm:text-5xl md:text-6xl">{title}</h2>
+      </div>
+    </div>
+  )
+}
+
+function CustomerQr() {
+  return (
+    <div className="grid overflow-hidden border-2 border-black bg-white text-black md:grid-cols-[1fr_auto]">
+      <div className="flex flex-col justify-center p-7 md:p-10">
+        <div className="flex items-center gap-3"><MessageCircle className="h-6 w-6" aria-hidden="true" /><p className="text-sm font-black">微信客服</p></div>
+        <h3 className="mt-5 text-2xl font-black tracking-tight md:text-3xl">扫码联系，说明你的办理需求</h3>
+        <p className="mt-3 leading-7 text-black/60">获取手机安装包、账号验证、Claude 套餐、企业采购或开票均可咨询。</p>
+      </div>
+      <div className="border-t-2 border-black bg-[#f7d744] p-5 md:border-l-2 md:border-t-0">
+        <Image src="/jiaocheng/14.jpg" alt="微信客服二维码" width={612} height={684} sizes="200px" className="mx-auto h-auto w-48 bg-white" />
+      </div>
+    </div>
+  )
+}
+
+export default function CodexGptClaudePage() {
+  return (
+    <main className="min-h-screen bg-[#f4f0e7] text-[#171717] selection:bg-[#f7d744] selection:text-black">
+      <section className="overflow-hidden bg-[#151515] px-4 pb-14 pt-10 text-white md:pb-20 md:pt-16">
         <div className="container mx-auto max-w-6xl">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-black/30 px-4 py-2 text-sm font-semibold transition-colors hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-yellow-300"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            返回首页
+          <Link href="/" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-bold text-white/75 transition hover:border-[#f7d744] hover:text-[#f7d744]">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />返回首页
           </Link>
-
-          <div className="mt-12 grid items-end gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+          <div className="mt-12 grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end lg:gap-20">
             <div>
-              <h1 className="max-w-4xl text-5xl font-bold tracking-[-0.035em] md:text-7xl lg:text-[5.5rem] lg:leading-[0.96]">
-                客户端
-                <br />
-                安装教程
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-black/70 md:text-xl">
-                从获取安装包到成功连接，按你的设备完成四个动作。整个过程通常只需要几分钟。
-              </p>
+              <p className="mb-5 flex items-center gap-3 text-sm font-black tracking-[0.2em] text-[#f7d744]"><span className="h-px w-10 bg-[#f7d744]" />安装与使用指南</p>
+              <h1 className="text-5xl font-black leading-[0.98] tracking-[-0.05em] sm:text-6xl md:text-8xl">GPT · Codex<br /><span className="text-[#f7d744]">Claude 教程</span></h1>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-white/60">按页面顺序完成手机端 GPT 安装、电脑端 Codex 使用，以及 Claude 套餐咨询。</p>
             </div>
+            <nav className="border-t border-white/20" aria-label="教程目录">
+              {[["#gpt-mobile", "01", "GPT 手机端"], ["#codex-desktop", "02", "Codex 电脑端"], ["#claude-plans", "03", "Claude 套餐"]].map(([href, number, label]) => (
+                <a key={href} href={href} className="flex items-center gap-4 border-b border-white/15 py-5 font-black transition hover:text-[#f7d744]"><span className="font-mono text-xs text-white/35">{number}</span>{label}<ArrowUpRight className="ml-auto h-4 w-4" aria-hidden="true" /></a>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </section>
 
-            <div className="border-t-2 border-black pt-6">
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-sm font-semibold">安装路径</span>
-                <span className="rounded-full bg-black px-3 py-1 text-xs font-semibold text-white">约 5 分钟</span>
+      <section id="gpt-mobile" className="scroll-mt-24 px-4 py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl">
+          <SectionTitle number="01" eyebrow="手机端安装" title="ChatGPT" icon={Smartphone} />
+          <div className="grid gap-10 py-14 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
+            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">1</span><h3 className="mt-5 text-3xl font-black tracking-tight">准备账号与网络</h3></div>
+            <div className="space-y-6">
+              <div className="border-l-4 border-[#f7d744] bg-white p-6 shadow-[0_16px_50px_rgba(0,0,0,0.05)] sm:p-8">
+                <div className="flex items-start gap-4"><KeyRound className="mt-1 h-6 w-6 shrink-0" aria-hidden="true" /><div><h4 className="text-xl font-black">准备 Google 账号</h4><p className="mt-2 leading-7 text-black/65">准备一个 Google 账号，邮箱地址应以 <strong className="font-black text-black">@gmail.com</strong> 结尾，后续用于打开 Google Play 并下载 ChatGPT。</p></div></div>
               </div>
-              <ol className="mt-7 space-y-4" aria-label="安装流程概览">
-                {["获取资料", "安装客户端", "导入订阅", "连接测试"].map((item, index) => (
-                  <li key={item} className="flex items-center gap-4">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black text-sm font-bold tabular-nums">
-                      {index + 1}
-                    </span>
-                    <span className="font-semibold">{item}</span>
-                    {index < 3 && <ArrowRight className="ml-auto hidden h-4 w-4 sm:block" aria-hidden="true" />}
-                  </li>
-                ))}
+              <div className="bg-[#151515] p-6 text-white sm:p-8">
+                <div className="flex flex-col justify-between gap-7 sm:flex-row sm:items-end">
+                  <div><div className="flex items-center gap-3 text-[#f7d744]"><Wifi className="h-6 w-6" aria-hidden="true" /><span className="text-sm font-black">推荐网络工具 · 注册链接</span></div><p className="mt-5 text-3xl font-black">¥49 / 季度</p><p className="mt-2 text-sm text-white/50">折合每月约 ¥16.33</p></div>
+                  <a href="https://www.xiguajiasu8.com/?path=register&code=U6gvvcEg" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f7d744] px-6 py-3 font-black text-black transition hover:bg-white">注册并登录<ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {networkSteps.map(([src, width, height, title, description], index) => (
+              <figure key={src} className="group overflow-hidden border border-black/10 bg-white">
+                <div className="relative overflow-hidden bg-[#e8e4dc]"><Image src={src} alt={`${index + 1}. ${title}`} width={width} height={height} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-auto w-full transition duration-500 group-hover:scale-[1.015]" /><span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#f7d744] font-mono text-sm font-black shadow">{index + 1}</span></div>
+                <figcaption className="p-5"><h4 className="font-black">{title}</h4><p className="mt-2 text-sm leading-6 text-black/60">{description}</p></figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <div className="mt-20 grid gap-10 border-t-2 border-black pt-12 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
+            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">2</span><h3 className="mt-5 text-3xl font-black tracking-tight">安装 Google Play 与 ChatGPT</h3><p className="mt-4 leading-7 text-black/60">国产安卓手机安装国外应用，需要先获取 GO 安装器和 Google Play 商店。</p></div>
+            <div>
+              <div className="bg-[#f7d744] p-6 sm:p-8">
+                <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+                  <div><div className="flex items-center gap-3"><MessageCircle className="h-6 w-6" aria-hidden="true" /><h4 className="text-xl font-black">联系客服获取安装包</h4></div><p className="mt-3 max-w-xl leading-7 text-black/65">GO 安装器和 Google Play 商店不在网站提供下载，请扫描本页客服二维码，由客服微信发送。</p></div>
+                  <a href="#customer-service" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-black px-6 py-3 font-black text-white transition hover:bg-white hover:text-black">查看客服二维码<ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
+                </div>
+              </div>
+              <ol className="mt-8 divide-y divide-black/15 border-y border-black/15">
+                {["先打开网络工具，选择节点并开启全局模式。", "联系客服获取安装包，安装并打开 GO 安装器。", "完成安装后打开 Google Play 商店，登录 Google 账号。", "在 Google Play 搜索 ChatGPT，下载并安装即可。"].map((text, index) => <li key={text} className="flex gap-5 py-5"><span className="font-mono text-sm font-black text-black/35">{String(index + 1).padStart(2, "0")}</span><span className="font-semibold leading-6">{text}</span></li>)}
               </ol>
             </div>
           </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {googleSteps.map(([src, width, height, title], index) => (
+              <figure key={src} className="overflow-hidden border border-black/10 bg-white">
+                <div className="relative overflow-hidden bg-[#e8e4dc]"><Image src={src} alt={title} width={width} height={height} sizes="(max-width: 768px) 100vw, 33vw" className="h-auto w-full" /><span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#f7d744] font-mono text-sm font-black shadow">{index + 1}</span></div>
+                <figcaption className="p-5 font-black">{title}</figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="px-4 py-12 md:py-16">
+      <section id="codex-desktop" className="scroll-mt-24 bg-[#151515] px-4 py-16 text-white md:py-24">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid gap-8 border-b border-black/15 pb-12 dark:border-white/15 md:grid-cols-[0.72fr_1.28fr] md:gap-16">
+          <SectionTitle number="02" eyebrow="电脑端安装" title="Codex / ChatGPT" icon={Laptop} />
+          <div className="grid gap-12 py-14 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
             <div>
-              <ShieldCheck className="h-8 w-8 text-[#1d1d1f] dark:text-yellow-300" aria-hidden="true" />
-              <h2 className="mt-5 text-3xl font-bold tracking-[-0.025em]">开始前准备</h2>
+              <p className="text-lg leading-8 text-white/65">先在电脑上打开已经安装好的网络工具，然后下载 ChatGPT Windows 桌面应用。Codex 已包含在 ChatGPT 桌面应用中。</p>
+              <a href="https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi" target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-14 items-center gap-3 rounded-full bg-[#f7d744] px-7 py-4 font-black text-black transition hover:bg-white"><ArrowUpRight className="h-5 w-5" aria-hidden="true" />官方下载 Windows 版</a>
+              <div className="mt-4 flex items-center gap-2 text-xs text-white/40"><BadgeCheck className="h-4 w-4" aria-hidden="true" />Microsoft 官方安装程序</div>
             </div>
+            <ol className="border-t border-white/20">
+              {[["打开网络工具", "在电脑上选择节点并开启全局模式。"], ["下载并安装", "点击左侧按钮，按照提示安装 ChatGPT Windows 桌面应用。"], ["登录同一账号", "可使用 Google 账号登录；也可以使用 QQ 邮箱注册 ChatGPT，再用该邮箱登录电脑端 Codex / ChatGPT。"], ["需要验证时联系客服", "如登录过程中需要账号验证，请扫描页面客服二维码联系处理。"]].map(([title, description], index) => (
+                <li key={title} className="grid gap-3 border-b border-white/20 py-6 sm:grid-cols-[3rem_1fr]"><span className="font-mono text-xl font-black text-[#f7d744]">{String(index + 1).padStart(2, "0")}</span><div><h3 className="text-lg font-black">{title}</h3><p className="mt-2 leading-7 text-white/55">{description}</p></div></li>
+              ))}
+            </ol>
+          </div>
+          <CustomerQr />
+        </div>
+      </section>
+      <section id="claude-plans" className="scroll-mt-24 px-4 py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl">
+          <SectionTitle number="03" eyebrow="套餐与采购" title="Claude" icon={CircleDollarSign} />
+          <div className="grid gap-10 py-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+            <p className="text-2xl font-black leading-tight">Claude 安装教程暂未开放，当前可查看套餐并联系客服采购。</p>
             <div className="grid gap-5 sm:grid-cols-2">
-              {[
-                ["下载方式", "向客服获取与你的设备对应的客户端下载地址。"],
-                ["订阅信息", "准备好客服发送的订阅地址，注意不要公开分享。"],
-                ["稳定网络", "安装和首次更新节点时，请保持网络连接稳定。"],
-                ["设备信息", "提前确认系统版本；Mac 用户还需要确认芯片类型。"],
-              ].map(([title, description]) => (
-                <div key={title} className="border-t border-black/20 pt-4 dark:border-white/20">
-                  <h3 className="font-bold">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-black/65 dark:text-white/65">{description}</p>
-                </div>
-              ))}
+              <div className="bg-white p-6"><ShieldCheck className="h-7 w-7" aria-hidden="true" /><h3 className="mt-7 text-lg font-black">个人套餐</h3><p className="mt-2 leading-7 text-black/60">根据下方图片选择需要的 Claude 套餐，扫码联系客服办理。</p></div>
+              <div className="bg-[#f7d744] p-6"><CircleDollarSign className="h-7 w-7" aria-hidden="true" /><h3 className="mt-7 text-lg font-black">企业采购与开票</h3><p className="mt-2 leading-7 text-black/60">企业采购、100–500 采购及开票需求，请联系客服确认价格与开票信息。</p></div>
             </div>
           </div>
-
-          <nav className="py-10" aria-label="选择设备">
-            <p className="mb-4 text-sm font-semibold text-black/60 dark:text-white/60">选择你的设备</p>
-            <div className="flex flex-wrap gap-3">
-              {platforms.map((platform) => {
-                const Icon = platform.icon
-                return (
-                  <a
-                    key={platform.id}
-                    href={`#${platform.id}`}
-                    className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-white px-5 py-3 text-sm font-semibold transition-colors hover:border-black hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 dark:border-white/20 dark:bg-white/5 dark:hover:bg-yellow-300 dark:hover:text-[#1d1d1f]"
-                  >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                    {platform.name}
-                  </a>
-                )
-              })}
-            </div>
-          </nav>
-        </div>
-      </section>
-
-      <section className="px-4 pb-16 md:pb-24">
-        <div className="container mx-auto max-w-6xl space-y-16 md:space-y-24">
-          {platforms.map((platform) => {
-            const Icon = platform.icon
-            return (
-              <article
-                key={platform.id}
-                id={platform.id}
-                className="scroll-mt-24 border-t-2 border-[#1d1d1f] pt-7 dark:border-white"
-              >
-                <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
-                  <div className="lg:sticky lg:top-24 lg:self-start">
-                    <Icon className="h-10 w-10 text-[#1d1d1f] dark:text-yellow-300" strokeWidth={1.7} aria-hidden="true" />
-                    <h2 className="mt-5 text-4xl font-bold tracking-[-0.03em]">{platform.name}</h2>
-                    <p className="mt-2 text-black/55 dark:text-white/55">{platform.note}</p>
-                  </div>
-
-                  <ol className="divide-y divide-black/15 border-b border-black/15 dark:divide-white/15 dark:border-white/15">
-                    {platform.steps.map(([title, description], index) => (
-                      <li key={title} className="grid gap-4 py-7 sm:grid-cols-[3rem_1fr] sm:gap-6">
-                        <span className="text-2xl font-bold tabular-nums text-black/35 dark:text-white/35">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <div>
-                          <h3 className="text-xl font-bold">{title}</h3>
-                          <p className="mt-2 max-w-2xl leading-7 text-black/65 dark:text-white/65">{description}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </article>
-            )
-          })}
-        </div>
-      </section>
-
-      <section className="bg-[#1d1d1f] px-4 py-16 text-white md:py-24">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
-            <div>
-              <CircleHelp className="h-9 w-9 text-yellow-300" aria-hidden="true" />
-              <h2 className="mt-6 text-4xl font-bold tracking-[-0.03em]">常见问题</h2>
-              <p className="mt-4 max-w-sm leading-7 text-white/60">先按对应方法排查；问题仍然存在时，把关键信息一次发给客服。</p>
-            </div>
-            <div className="divide-y divide-white/15 border-y border-white/15">
-              {troubleshooting.map(([title, answer]) => (
-                <div key={title} className="grid gap-2 py-6 sm:grid-cols-[0.65fr_1.35fr] sm:gap-8">
-                  <h3 className="font-bold text-yellow-300">{title}</h3>
-                  <p className="leading-7 text-white/70">{answer}</p>
-                </div>
-              ))}
-            </div>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {claudePosters.map(([src, title], index) => (
+              <figure key={src} className={`overflow-hidden bg-white ${index === 6 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.75rem)]" : ""}`}>
+                <Image src={src} alt={title} width={1254} height={1254} sizes="(max-width: 640px) 100vw, 50vw" className="h-auto w-full" />
+                <figcaption className="flex items-center justify-between border-t border-black/10 px-5 py-4"><span className="font-bold">{title}</span><span className="font-mono text-xs text-black/35">{String(index + 1).padStart(2, "0")}</span></figcaption>
+              </figure>
+            ))}
           </div>
+          <div id="customer-service" className="mt-12 scroll-mt-24"><CustomerQr /></div>
         </div>
       </section>
-
-      <section className="bg-yellow-300 px-4 py-16 text-[#1d1d1f] md:py-20">
-        <div className="container mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-end">
-          <div>
-            <Wifi className="h-9 w-9" aria-hidden="true" />
-            <h2 className="mt-6 max-w-3xl text-4xl font-bold tracking-[-0.03em] md:text-5xl">安装过程中遇到问题？</h2>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-black/70">联系客服获取适合你设备的安装包、订阅信息和一对一协助。</p>
-          </div>
-          <a
-            href="https://work.weixin.qq.com/ca/cawcdeac58029da582"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-3 rounded-full bg-[#1d1d1f] px-7 py-4 font-semibold text-white transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-yellow-300"
-          >
-            <MessageCircle className="h-5 w-5" aria-hidden="true" />
-            联系客服
-          </a>
-        </div>
-      </section>
-    </div>
+    </main>
   )
 }
