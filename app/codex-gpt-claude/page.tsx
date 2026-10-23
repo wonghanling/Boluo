@@ -157,7 +157,7 @@ export default function CodexGptClaudePage() {
                 </div>
               </div>
               <ol className="mt-8 divide-y divide-black/15 border-y border-black/15">
-                {["先打开网络工具，选择节点并开启全局模式。", "联系客服获取安装包，安装并打开 GO 安装器。", "完成安装后打开 Google Play 商店，登录 Google 账号。", "在 Google Play 搜索 ChatGPT，下载并安装即可。"].map((text, index) => <li key={text} className="flex gap-5 py-5"><span className="font-mono text-sm font-black text-black/35">{String(index + 1).padStart(2, "0")}</span><span className="font-semibold leading-6">{text}</span></li>)}
+                {["先打开网络工具，选择节点并开启全局模式。", "联系客服获取谷歌安装包和 GO 安装器，先安装并打开 GO 安装器。", "完成安装后打开 Google Play 商店，登录 Google 账号。", "在 Google Play 搜索 ChatGPT，下载并安装即可。"].map((text, index) => <li key={text} className="flex gap-5 py-5"><span className="font-mono text-sm font-black text-black/35">{String(index + 1).padStart(2, "0")}</span><span className="font-semibold leading-6">{text}</span></li>)}
               </ol>
             </div>
           </div>
