@@ -101,19 +101,23 @@ export default function CodexGptClaudePage() {
       <section id="gpt-mobile" className="scroll-mt-24 px-4 py-16 md:py-24">
         <div className="container mx-auto max-w-6xl">
           <SectionTitle number="01" eyebrow="手机端安装" title="ChatGPT" icon={Smartphone} />
+          <div className="grid border-b border-black/15 sm:grid-cols-3">
+            {[["1", "准备 Gmail 账号"], ["2", "连接网络工具"], ["3", "安装 ChatGPT"]].map(([number, label]) => (
+              <div key={number} className="flex items-center gap-4 border-t border-black/15 py-5 sm:border-l sm:px-5 first:sm:border-l-0"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f7d744] font-mono text-sm font-black">{number}</span><span className="font-black">{label}</span></div>
+            ))}
+          </div>
+
           <div className="grid gap-10 py-14 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
-            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">1</span><h3 className="mt-5 text-3xl font-black tracking-tight">准备账号与网络</h3><p className="mt-4 max-w-sm leading-7 text-black/60">先查看下方 6 张教程图，再点击右侧 ¥49 / 季度区域里的“注册并登录”按钮。</p></div>
-            <div className="space-y-6">
-              <div className="border-l-4 border-[#f7d744] bg-white p-6 shadow-[0_16px_50px_rgba(0,0,0,0.05)] sm:p-8">
-                <div className="flex items-start gap-4"><KeyRound className="mt-1 h-6 w-6 shrink-0" aria-hidden="true" /><div><h4 className="text-xl font-black">准备 Google 账号</h4><p className="mt-2 leading-7 text-black/65">准备一个 Google 账号，邮箱地址应以 <strong className="font-black text-black">@gmail.com</strong> 结尾，后续用于打开 Google Play 并下载 ChatGPT。</p></div></div>
-              </div>
-              <div className="bg-[#151515] p-6 text-white sm:p-8">
-                <div className="flex flex-col justify-between gap-7 sm:flex-row sm:items-end">
-                  <div><div className="flex items-center gap-3 text-[#f7d744]"><Wifi className="h-6 w-6" aria-hidden="true" /><span className="text-sm font-black">推荐网络工具 · 注册链接</span></div><p className="mt-5 text-3xl font-black">¥49 / 季度</p><p className="mt-2 text-sm text-white/50">折合每月约 ¥16.33</p></div>
-                  <a href="https://www.xiguajiasu8.com/?path=register&code=U6gvvcEg" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f7d744] px-6 py-3 font-black text-black transition hover:bg-white">注册并登录<ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
-                </div>
-              </div>
+            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">1</span><h3 className="mt-5 text-3xl font-black tracking-tight">准备 Gmail 账号</h3><p className="mt-4 max-w-sm leading-7 text-black/60">先把账号准备好，这一步不需要下载任何应用。</p></div>
+            <div className="border-l-4 border-[#f7d744] bg-white p-6 shadow-[0_16px_50px_rgba(0,0,0,0.05)] sm:p-8">
+              <div className="flex items-start gap-4"><KeyRound className="mt-1 h-6 w-6 shrink-0" aria-hidden="true" /><div><h4 className="text-xl font-black">你现在要做什么？</h4><p className="mt-2 leading-7 text-black/65">准备一个 Google 账号，邮箱地址应以 <strong className="font-black text-black">@gmail.com</strong> 结尾，后续用于登录 Google Play 并下载 ChatGPT。</p><p className="mt-5 border-t border-black/10 pt-4 text-sm font-black">完成标志：你已经知道自己的 Gmail 邮箱和密码。</p></div></div>
             </div>
+          </div>
+
+          <div className="mb-8 border-t-2 border-black pt-12">
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">2</span>
+            <h3 className="mt-5 text-3xl font-black tracking-tight">连接网络工具</h3>
+            <p className="mt-4 max-w-2xl leading-7 text-black/60">先按顺序查看下面 6 张图，点图片可以放大。全部看完后，再点击图片下方的“注册并登录”按钮。</p>
           </div>
           <div id="network-gallery" className="scroll-mt-24 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {networkSteps.map(([src, width, height, title, description], index) => (
@@ -135,8 +139,16 @@ export default function CodexGptClaudePage() {
             ))}
           </div>
 
+          <div className="mt-8 bg-[#151515] p-6 text-white sm:p-8">
+            <div className="flex flex-col justify-between gap-7 sm:flex-row sm:items-center">
+              <div><div className="flex items-center gap-3 text-[#f7d744]"><Wifi className="h-6 w-6" aria-hidden="true" /><span className="text-sm font-black">六张图看完后，从这里开始注册</span></div><p className="mt-5 text-3xl font-black">¥49 / 季度</p><p className="mt-2 text-sm text-white/50">折合每月约 ¥16.33</p></div>
+              <a href="https://www.xiguajiasu8.com/?path=register&code=U6gvvcEg" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f7d744] px-6 py-3 font-black text-black transition hover:bg-white">注册并登录<ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
+            </div>
+            <p className="mt-6 border-t border-white/15 pt-5 text-sm font-black text-white/80">完成标志：客户端已连接，手机顶部出现 VPN 标志。</p>
+          </div>
+
           <div className="mt-20 grid gap-10 border-t-2 border-black pt-12 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
-            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">2</span><h3 className="mt-5 text-3xl font-black tracking-tight">安装 Google Play 与 ChatGPT</h3><p className="mt-4 leading-7 text-black/60">国产安卓手机安装国外应用，需要先获取 GO 安装器和 Google Play 商店。</p></div>
+            <div><span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#f7d744] font-mono font-black">3</span><h3 className="mt-5 text-3xl font-black tracking-tight">安装 ChatGPT</h3><p className="mt-4 leading-7 text-black/60">确认手机顶部已有 VPN 标志，再联系客服获取 GO 安装器和 Google Play 商店。</p></div>
             <div>
               <div className="bg-[#f7d744] p-6 sm:p-8">
                 <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
@@ -157,6 +169,7 @@ export default function CodexGptClaudePage() {
               </figure>
             ))}
           </div>
+          <div className="mt-8 border-l-4 border-[#f7d744] bg-white p-6 text-sm font-black shadow-[0_16px_50px_rgba(0,0,0,0.05)]">完成标志：ChatGPT 已安装，并且可以打开登录页面。</div>
         </div>
       </section>
 
